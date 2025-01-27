@@ -12,7 +12,7 @@
 
 <body>
     <?php
-    include_once('header.php');
+    include_once('user_header.php');
     ?>
 
     <!-- Hero Section Begin -->
@@ -62,9 +62,9 @@
             </div>
         </div>
         <div class="hero-slider owl-carousel">
-            <div class="hs-item set-bg" data-setbg="assets/images/sliders/slider1.jpg"></div>
-            <div class="hs-item set-bg" data-setbg="assets/images/sliders/slider2.jpg"></div>
-            <div class="hs-item set-bg" data-setbg="assets/images/sliders/slider3.jpg"></div>
+            <div class="hs-item set-bg" data-setbg="../assets/images/sliders/slider1.jpg"></div>
+            <div class="hs-item set-bg" data-setbg="../assets/images/sliders/slider2.jpg"></div>
+            <div class="hs-item set-bg" data-setbg="../assets/images/sliders/slider3.jpg"></div>
         </div>
     </section>
     <!-- Hero Section End -->
@@ -91,10 +91,10 @@
                     <div class="about-pic">
                         <div class="row">
                             <div class="col-sm-6">
-                                <img src="assets/images/about/about-1.jpg" alt="">
+                                <img src="../assets/images/about/about-1.jpg" alt="">
                             </div>
                             <div class="col-sm-6">
-                                <img src="assets/images/about/about-2.jpg" alt="">
+                                <img src="../assets/images/about/about-2.jpg" alt="">
                             </div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
             <div class="hp-room-items">
                 <div class="row">
                     <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="assets/images/room/room-b1.jpg">
+                        <div class="hp-room-item set-bg" data-setbg="../assets/images/room/room-b1.jpg">
                             <div class="hr-text">
                                 <h3>Double Room</h3>
                                 <h2>199$<span>/Pernight</span></h2>
@@ -204,7 +204,7 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="assets/images/room/room-b2.jpg">
+                        <div class="hp-room-item set-bg" data-setbg="../assets/images/room/room-b2.jpg">
                             <div class="hr-text">
                                 <h3>Premium King Room</h3>
                                 <h2>159$<span>/Pernight</span></h2>
@@ -233,7 +233,7 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="assets/images/room/room-b3.jpg">
+                        <div class="hp-room-item set-bg" data-setbg="../assets/images/room/room-b3.jpg">
                             <div class="hr-text">
                                 <h3>Deluxe Room</h3>
                                 <h2>198$<span>/Pernight</span></h2>
@@ -262,7 +262,7 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="assets/images/room/room-b4.jpg">
+                        <div class="hp-room-item set-bg" data-setbg="../assets/images/room/room-b4.jpg">
                             <div class="hr-text">
                                 <h3>Family Room</h3>
                                 <h2>299$<span>/Pernight</span></h2>
@@ -326,7 +326,7 @@
                             </div>
                             <h5> - Alexander Vasquez</h5>
                         </div>
-                        <img src="./assets/images/testimonial-logo.png" alt="">
+                        <img src="../assets/images/testimonial-logo.png" alt="">
                     </div>
                 </div>
                 <div class="carousel-item">
@@ -345,7 +345,7 @@
                             </div>
                             <h5> - Alexander Vasquez</h5>
                         </div>
-                        <img src="./assets/images/testimonial-logo.png" alt="">
+                        <img src="../assets/images/testimonial-logo.png" alt="">
                     </div>
                 </div>
                 <div class="carousel-item">
@@ -364,7 +364,7 @@
                             </div>
                             <h5> - Alexander Vasquez</h5>
                         </div>
-                        <img src="./assets/images/testimonial-logo.png" alt="Testimonial">
+                        <img src="../assets/images/testimonial-logo.png" alt="Testimonial">
                     </div>
                 </div>
             </div>
@@ -381,7 +381,7 @@
     <!-- Testimonial Section End -->
 
     <?php
-    include('footer.php');
+    include('user_footer.php');
     ?>
 
     <script>

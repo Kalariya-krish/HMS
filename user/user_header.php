@@ -14,22 +14,17 @@
     <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="assets/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="assets/css/elegant-icons.css" type="text/css">
-    <link rel="stylesheet" href="assets/css/flaticon.css" type="text/css">
-    <link rel="stylesheet" href="assets/css/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="assets/css/nice-select.css" type="text/css">
-    <link rel="stylesheet" href="assets/css/jquery-ui.min.css" type="text/css">
-    <link rel="stylesheet" href="assets/css/magnific-popup.css" type="text/css">
-    <link rel="stylesheet" href="assets/css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="assets/css/style.css?v=1.0" type="text/css">
-    <link rel="stylesheet" href="assets/css/bootstrap.css" type="text/css">
-
-    <!-- Font Icon -->
-    <link rel="stylesheet" href="assets/fonts/material-icon/css/material-design-iconic-font.min.css">
-    <!-- Main css -->
-    <link rel="stylesheet" href="assets/css/register_style.css">
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="../assets/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="../assets/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="../assets/css/flaticon.css" type="text/css">
+    <link rel="stylesheet" href="../assets/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="../assets/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="../assets/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="../assets/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="../assets/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="../assets/css/style.css?v=1.0" type="text/css">
+    <link rel="stylesheet" href="../assets/css/bootstrap.css" type="text/css">
 
     <style>
         a{
@@ -71,18 +66,16 @@
         </div>
         <nav class="mainmenu mobile-menu">
             <ul>
-                <li class="active"><a href="index.php">Home</a></li>
-                <li><a href="about-us.php">About Us</a>
-                <li><a href="rooms.php">Rooms</a></li>
+                <li class="active"><a href="user_index.php">Home</a></li>
+                <li><a href="user_about_us.php">About Us</a>
+                <li><a href="user_rooms.php">Rooms</a></li>
                 <ul class="dropdown">
                     <li><a href="#">Deluxe Room</a></li>
                     <li><a href="#">Family Room</a></li>
                     <li><a href="#">Premium Room</a></li>
                 </ul>
                 </li>
-                <li><a href="contact_us.php">Contact Us</a></li>
-                <li><a href="contact_us.php">Login</a></li>
-                <li><a href="contact_us.php">Register</a></li>
+                <li><a href="user_contact_us.php">Contact Us</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -148,9 +141,9 @@
                         <div class="nav-menu">
                             <nav class="mainmenu">
                                 <ul>
-                                    <li class="active"><a href="index.php">Home</a></li>
-                                    <li><a href="about_us.php">About Us</a></li>
-                                    <li><a href="rooms.php">Rooms</a>
+                                    <li class="active"><a href="user_index.php">Home</a></li>
+                                    <li><a href="user_about_us.php">About Us</a></li>
+                                    <li><a href="user_rooms.php">Rooms</a>
                                         <ul class="dropdown">
                                             <li><a href="#">Deluxe Room</a></li>
                                             <li><a href="#">Luxury Room</a></li>
@@ -158,9 +151,7 @@
                                             <li><a href="#">Premium Room</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="contact_us.php">Contact Us</a></li>
-                                    <li><a href="login.php">Login</a></li>
-                                    <li><a href="register.php">Register</a></li>
+                                    <li><a href="user_contact_us.php">Contact Us</a></li>
                                 </ul>
                             </nav>
                             <!-- <div class="nav-right search-switch">
@@ -188,16 +179,16 @@
     <!-- Search model end -->
 
 
-    <script src="assets/js/jquery-3.3.1.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/jquery.magnific-popup.min.js"></script>
-    <script src="assets/js/jquery.nice-select.min.js"></script>
-    <script src="assets/js/jquery-ui.min.js"></script>
-    <script src="assets/js/jquery.slicknav.js"></script>
-    <script src="assets/js/owl.carousel.min.js?v=1.0"></script>
-    <script src="assets/js/main.js?v=1.0"></script>
-    <script src="assets/js/bootstrap.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/jquery-3.3.1.min.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
+    <script src="../assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="../assets/js/jquery.nice-select.min.js"></script>
+    <script src="../assets/js/jquery-ui.min.js"></script>
+    <script src="../assets/js/jquery.slicknav.js"></script>
+    <script src="../assets/js/owl.carousel.min.js?v=1.0"></script>
+    <script src="../assets/js/main.js?v=1.0"></script>
+    <script src="../assets/js/bootstrap.js"></script>
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
