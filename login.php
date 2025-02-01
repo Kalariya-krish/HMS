@@ -19,15 +19,14 @@
     ?>
 
     <!-- Sing in  Form -->
-    <section class="sign-in">
-        
-        <div class="signin-content">
-            <div class="signin-image">
-                <figure><img src="assets/images/signin-image.jpg" alt="sing up image"></figure>
-                <a href="#" class="signup-image-link">Create an account</a>
+    <div class="container" style="margin-top: 100px; margin-bottom:100px;">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-4">
+                <figure><img src="assets/images/about/about-2.jpg" alt="sing up image" style="height:300px;"></figure>
+                <a href="register.php" class="signup-image-link">Create an account</a>
             </div>
-
-            <div class="signin-form">
+            <div class="col-4">
                 <h2 class="form-title">Sign in</h2>
                 <form method="POST" class="register-form" id="login-form">
                     <div class="form-group">
@@ -46,17 +45,10 @@
                         <input type="submit" name="signin" id="signin" class="form-submit" value="Log in" />
                     </div>
                 </form>
-                <div class="social-login">
-                    <span class="social-label">Or login with</span>
-                    <ul class="socials">
-                        <li><a href="#"><i class="display-flex-center zmdi zmdi-facebook"></i></a></li>
-                        <li><a href="#"><i class="display-flex-center zmdi zmdi-twitter"></i></a></li>
-                        <li><a href="#"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
-                    </ul>
-                </div>
             </div>
+            <div class="col-2"></div>
         </div>
-    </section>
+    </div>
 
     <?php
     include('footer.php');

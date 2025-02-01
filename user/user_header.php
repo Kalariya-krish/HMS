@@ -31,8 +31,8 @@
     <link rel="stylesheet" href="../assets/css/bootstrap.css" type="text/css">
 
     <style>
-        a{
-            text-decoration:none !important;
+        a {
+            text-decoration: none !important;
         }
     </style>
 </head>

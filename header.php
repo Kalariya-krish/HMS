@@ -30,11 +30,6 @@
     <link rel="stylesheet" href="assets/css/style.css" type="text/css">
     <link rel="stylesheet" href="assets/css/bootstrap.css" type="text/css">
 
-    <!-- Font Icon -->
-    <link rel="stylesheet" href="assets/fonts/material-icon/css/material-design-iconic-font.min.css">
-    <!-- Main css -->
-    <link rel="stylesheet" href="assets/css/register_style.css">
-
     <style>
         a {
             text-decoration: none !important;

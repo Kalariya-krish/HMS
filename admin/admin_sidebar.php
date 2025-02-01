@@ -26,6 +26,12 @@
     <link rel="stylesheet" href="../assets/css/admin_style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="../assets/images/favicon.png" />
+    <style>
+        body,
+        a {
+            font-family: fantasy;
+        }
+    </style>
 </head>
 
 <body>
@@ -163,25 +169,26 @@
             </li>
             <li class="nav-item nav-category">Management</li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                <a class="nav-link" data-bs-toggle="collapse" href="#room-management" aria-expanded="false" aria-controls="room-management">
                     <i class="menu-icon mdi mdi-floor-plan"></i>
-                    <span class="menu-title">Room Management</span>
+                    <span class="menu-title">Rooms</span>
                     <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse" id="ui-basic">
+                <div class="collapse" id="room-management">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"> <a class="nav-link" href="admin_add_room.php">Add Room</a></li>
                         <li class="nav-item"> <a class="nav-link" href="admin_manage_rooms.php">Manage Rooms</a></li>
                     </ul>
                 </div>
             </li>
+
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+                <a class="nav-link" data-bs-toggle="collapse" href="#booking-management" aria-expanded="false" aria-controls="booking-management">
                     <i class="menu-icon mdi mdi-card-text-outline"></i>
-                    <span class="menu-title">Booking Management</span>
+                    <span class="menu-title">Bookings</span>
                     <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse" id="form-elements">
+                <div class="collapse" id="booking-management">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"><a class="nav-link" href="admin_manage_bookings.php">View All Bookings</a></li>
                         <li class="nav-item"><a class="nav-link" href="admin_pending_bookings.php">Pending Bookings</a></li>
@@ -189,44 +196,103 @@
                     </ul>
                 </div>
             </li>
+
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
-                    <i class="menu-icon mdi mdi-account-circle-outline"></i>
-                    <span class="menu-title">User Management</span>
+                <a class="nav-link" data-bs-toggle="collapse" href="#payment-management" aria-expanded="false" aria-controls="payment-management">
+                    <i class="menu-icon mdi mdi-credit-card"></i>
+                    <span class="menu-title">Payments</span>
                     <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse" id="charts">
+                <div class="collapse" id="payment-management">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href="admin_view_payments.php">View Payments</a></li>
+                        <li class="nav-item"><a class="nav-link" href="admin_refund_payments.php">Refund Payments</a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#discount-offer" aria-expanded="false" aria-controls="discount-offer">
+                    <i class="menu-icon mdi mdi-sale"></i>
+                    <span class="menu-title">Discounts & Offers</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="discount-offer">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href="admin_add_offer.php">Add New Offer</a></li>
+                        <li class="nav-item"><a class="nav-link" href="admin_manage_offers.php">Manage Offers</a></li>
+                        <li class="nav-item"><a class="nav-link" href="admin_expired_offers.php">Expired Offers</a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#review-management" aria-expanded="false" aria-controls="review-management">
+                    <i class="menu-icon mdi mdi-comment-text-outline"></i>
+                    <span class="menu-title">Reviews</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="review-management">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href="admin_view_reviews.php">View Reviews</a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#bill-management" aria-expanded="false" aria-controls="bill-management">
+                    <i class="menu-icon mdi mdi-file-document-outline"></i>
+                    <span class="menu-title">Bills</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="bill-management">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href="admin_view_bills.php">View All Bills</a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#contact-management" aria-expanded="false" aria-controls="contact-management">
+                    <i class="menu-icon mdi mdi-email-outline"></i>
+                    <span class="menu-title">Contacts</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="contact-management">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href="admin_view_contacts.php">View All Contacts</a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#user-management" aria-expanded="false" aria-controls="user-management">
+                    <i class="menu-icon mdi mdi-account-circle-outline"></i>
+                    <span class="menu-title">Users</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="user-management">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"> <a class="nav-link" href="admin_manage_users.php">View Users</a></li>
                         <li class="nav-item"> <a class="nav-link" href="admin_add_user.php">Add User</a></li>
                     </ul>
                 </div>
             </li>
+
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
+                <a class="nav-link" data-bs-toggle="collapse" href="#admin-management" aria-expanded="false" aria-controls="admin-management">
                     <i class="menu-icon mdi mdi-table"></i>
-                    <span class="menu-title">Admin Management</span>
+                    <span class="menu-title">Admins</span>
                     <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse" id="tables">
+                <div class="collapse" id="admin-management">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"> <a class="nav-link" href="admin_manage_admins.php">Manage Admins</a></li>
                         <li class="nav-item"> <a class="nav-link" href="admin_add_admin.php">Add Admin</a></li>
                     </ul>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
-                    <i class="menu-icon mdi mdi-layers-outline"></i>
-                    <span class="menu-title">Notification</span>
-                    <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="icons">
-                    <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"> <a class="nav-link" href="pages/icons/font-awesome.html">Notifications</a></li>
-                    </ul>
-                </div>
-            </li>
+
         </ul>
     </nav>
 

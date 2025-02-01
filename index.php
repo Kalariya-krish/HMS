@@ -60,7 +60,7 @@
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Check Availability</button>
                         </form>
-                    </div>  
+                    </div>
                 </div>
             </div>
         </div>
