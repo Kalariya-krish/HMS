@@ -29,7 +29,7 @@
     <style>
         body,
         a {
-            font-family: fantasy;
+            font-family: Georgia, 'Times New Roman', Times, serif;
         }
     </style>
 </head>
@@ -205,7 +205,7 @@
                 </a>
                 <div class="collapse" id="payment-management">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link" href="admin_view_payments.php">View Payments</a></li>
+                        <li class="nav-item"><a class="nav-link" href="admin_manage_payments.php">View Payments</a></li>
                         <li class="nav-item"><a class="nav-link" href="admin_refund_payments.php">Refund Payments</a></li>
                     </ul>
                 </div>
@@ -234,7 +234,7 @@
                 </a>
                 <div class="collapse" id="review-management">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link" href="admin_view_reviews.php">View Reviews</a></li>
+                        <li class="nav-item"><a class="nav-link" href="admin_manage_reviews.php">View Reviews</a></li>
                     </ul>
                 </div>
             </li>
@@ -247,7 +247,7 @@
                 </a>
                 <div class="collapse" id="bill-management">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link" href="admin_view_bills.php">View All Bills</a></li>
+                        <li class="nav-item"><a class="nav-link" href="admin_manage_bills.php">View All Bills</a></li>
                     </ul>
                 </div>
             </li>
@@ -260,7 +260,7 @@
                 </a>
                 <div class="collapse" id="contact-management">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link" href="admin_view_contacts.php">View All Contacts</a></li>
+                        <li class="nav-item"><a class="nav-link" href="admin_manage_contacts.php">View All Contacts</a></li>
                     </ul>
                 </div>
             </li>
@@ -293,6 +293,19 @@
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#admin-management" aria-expanded="false" aria-controls="admin-management">
+                    <i class="menu-icon mdi mdi-table"></i>
+                    <span class="menu-title">More</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="admin-management">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"> <a class="nav-link" href="admin_manage_sliders.php">Manage Sliders</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="admin_manage_about.php">Manage About Page</a></li>
+                    </ul>
+                </div>
+            </li>
         </ul>
     </nav>
 

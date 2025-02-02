@@ -64,6 +64,7 @@
                 </ul>
                 </li>
                 <li><a href="user_contact_us.php">Contact Us</a></li>
+                <a href="user_mybookings.php"><button class="btn btn-primary w-100">My Bookings</button></a>
             </ul>
         </nav>
     </div>
@@ -96,6 +97,7 @@
                                         </ul>
                                     </li>
                                     <li><a href="user_contact_us.php">Contact Us</a></li>
+                                    <a href="user_mybookings.php"><button class="btn btn-primary">My Bookings</button></a>
                                 </ul>
                             </nav>
                         </div>
