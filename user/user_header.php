@@ -34,6 +34,51 @@
         a {
             text-decoration: none !important;
         }
+
+        .nav-profile {
+            position: relative;
+            display: inline-block;
+            padding: 10px;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            /* Positions dropdown exactly below */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            z-index: 10;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .nav-profile:hover .dropdown-content {
+            display: block;
+        }
     </style>
 </head>
 
@@ -58,9 +103,10 @@
                 <li><a href="user_about_us.php">About Us</a>
                 <li><a href="user_rooms.php">Rooms</a></li>
                 <ul class="dropdown">
-                    <li><a href="#">Deluxe Room</a></li>
-                    <li><a href="#">Family Room</a></li>
-                    <li><a href="#">Premium Room</a></li>
+                    <li><a href="user_rooms.php">Deluxe Room</a></li>
+                    <li><a href="user_rooms.php">Luxury Room</a></li>
+                    <li><a href="user_rooms.php">Family Room</a></li>
+                    <li><a href="user_rooms.php">Premium Room</a></li>
                 </ul>
                 </li>
                 <li><a href="user_contact_us.php">Contact Us</a></li>
@@ -90,14 +136,25 @@
                                     <li><a href="user_about_us.php">About Us</a></li>
                                     <li><a href="user_rooms.php">Rooms</a>
                                         <ul class="dropdown">
-                                            <li><a href="#">Deluxe Room</a></li>
-                                            <li><a href="#">Luxury Room</a></li>
-                                            <li><a href="#">Family Room</a></li>
-                                            <li><a href="#">Premium Room</a></li>
+                                            <li><a href="user_rooms.php">Deluxe Room</a></li>
+                                            <li><a href="user_rooms.php">Luxury Room</a></li>
+                                            <li><a href="user_rooms.php">Family Room</a></li>
+                                            <li><a href="user_rooms.php">Premium Room</a></li>
                                         </ul>
                                     </li>
                                     <li><a href="user_contact_us.php">Contact Us</a></li>
-                                    <a href="user_mybookings.php"><button class="btn btn-primary">My Bookings</button></a>
+                                    <div class="nav-profile">
+                                        <img src="../assets/images/room/avatar/avatar-2.jpg" alt="Profile" class="profile-pic">
+                                        <div class="dropdown-content">
+                                            <a href="user_my_booking.php">My Bookings</a>
+                                            <a href="user_edit_profile.php">Edit Profile</a>
+                                            <a href="user_change_password.php">Change Password</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="logout.php" class="text-danger">Logout</a>
+                                        </div>
+                                    </div>
+
+                                    <!-- <a href="user_mybookings.php"><button class="btn btn-primary">My Bookings</button></a> -->
                                 </ul>
                             </nav>
                         </div>

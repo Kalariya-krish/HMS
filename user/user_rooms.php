@@ -40,7 +40,7 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="assets/images/room/room-1.jpg" alt="">
+                        <img src="../assets/images/room/room-1.jpg" alt="">
                         <div class="ri-text">
                             <h4>Premium King Room</h4>
                             <h3>159$<span>/Pernight</span></h3>
@@ -64,13 +64,13 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="#" class="primary-btn">More Details</a>
+                            <a href="user_room_detail.php" class="primary-btn">More Details</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="assets/images/room/room-2.jpg" alt="">
+                        <img src="../assets/images/room/room-2.jpg" alt="">
                         <div class="ri-text">
                             <h4>Deluxe Room</h4>
                             <h3>159$<span>/Pernight</span></h3>
@@ -94,13 +94,13 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="#" class="primary-btn">More Details</a>
+                            <a href="user_room_detail.php" class="primary-btn">More Details</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="assets/images/room/room-3.jpg" alt="">
+                        <img src="../assets/images/room/room-3.jpg" alt="">
                         <div class="ri-text">
                             <h4>Double Room</h4>
                             <h3>159$<span>/Pernight</span></h3>
@@ -124,13 +124,13 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="#" class="primary-btn">More Details</a>
+                            <a href="user_room_detail.php" class="primary-btn">More Details</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="assets/images/room/room-4.jpg" alt="">
+                        <img src="../assets/images/room/room-4.jpg" alt="">
                         <div class="ri-text">
                             <h4>Luxury Room</h4>
                             <h3>159$<span>/Pernight</span></h3>
@@ -154,13 +154,13 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="#" class="primary-btn">More Details</a>
+                            <a href="user_room_detail.php" class="primary-btn">More Details</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="assets/images/room/room-5.jpg" alt="">
+                        <img src="../assets/images/room/room-5.jpg" alt="">
                         <div class="ri-text">
                             <h4>Room With View</h4>
                             <h3>159$<span>/Pernight</span></h3>
@@ -184,13 +184,13 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="#" class="primary-btn">More Details</a>
+                            <a href="user_room_detail.php" class="primary-btn">More Details</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="assets/images/room/room-6.jpg" alt="">
+                        <img src="../assets/images/room/room-6.jpg" alt="">
                         <div class="ri-text">
                             <h4>Small View</h4>
                             <h3>159$<span>/Pernight</span></h3>
@@ -214,7 +214,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="#" class="primary-btn">More Details</a>
+                            <a href="user_room_detail.php" class="primary-btn">More Details</a>
                         </div>
                     </div>
                 </div>

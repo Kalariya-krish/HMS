@@ -21,10 +21,12 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <h2>Our Rooms</h2>
+                        <h2>Room Detail</h2>
                         <div class="bt-option">
-                            <a href="./home.html">Home</a>
-                            <span>Rooms</span>
+                            <a href="./index.php">Home</a>
+                            <a href="./rooms.php">Room</a>
+                            <!-- <span>Rooms </span> -->
+                            <span>Room Details</span>
                         </div>
                     </div>
                 </div>
@@ -158,33 +160,39 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="room-booking">
-                        <h3>Your Reservation</h3>
+                <div class="col-xl-4 col-lg-4">
+                    <div class="booking-form p-4 border rounded shadow">
+                        <h3 class="mb-4">Your Reservation</h3>
                         <form action="#">
-                            <div class="check-date">
-                                <label for="date-in">Check In:</label>
-                                <input type="text" class="date-input" id="date-in">
-                                <i class="icon_calendar"></i>
+                            <div class="mb-3">
+                                <label for="date-in" class="form-label">Check In:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    <input type="date" class="form-control" id="date-in">
+                                </div>
                             </div>
-                            <div class="check-date">
-                                <label for="date-out">Check Out:</label>
-                                <input type="text" class="date-input" id="date-out">
-                                <i class="icon_calendar"></i>
+                            <div class="mb-3">
+                                <label for="date-out" class="form-label">Check Out:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    <input type="date" class="form-control" id="date-out">
+                                </div>
                             </div>
-                            <div class="select-option">
-                                <label for="guest">Guests:</label>
-                                <select id="guest">
-                                    <option value="">3 Adults</option>
+                            <div class="mb-3">
+                                <label for="guest" class="form-label">Guests:</label>
+                                <select id="guest" class="form-select">
+                                    <option value="2">2 Adults</option>
+                                    <option value="3">3 Adults</option>
                                 </select>
                             </div>
-                            <div class="select-option">
-                                <label for="room">Room:</label>
-                                <select id="room">
-                                    <option value="">1 Room</option>
+                            <div class="mb-3">
+                                <label for="room" class="form-label">Rooms:</label>
+                                <select id="room" class="form-select">
+                                    <option value="1">1 Room</option>
+                                    <option value="2">2 Rooms</option>
                                 </select>
                             </div>
-                            <button type="submit">Check Availability</button>
+                            <button type="submit" class="btn btn-primary w-100">Check Availability</button>
                         </form>
                     </div>
                 </div>

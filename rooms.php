@@ -64,7 +64,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="#" class="primary-btn">More Details</a>
+                            <a href="room_detail.php" class="primary-btn">More Details</a>
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="#" class="primary-btn">More Details</a>
+                            <a href="room_detail.php" class="primary-btn">More Details</a>
                         </div>
                     </div>
                 </div>
@@ -124,7 +124,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="#" class="primary-btn">More Details</a>
+                            <a href="room_detail.php" class="primary-btn">More Details</a>
                         </div>
                     </div>
                 </div>
@@ -154,7 +154,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="#" class="primary-btn">More Details</a>
+                            <a href="room_detail.php" class="primary-btn">More Details</a>
                         </div>
                     </div>
                 </div>
@@ -184,7 +184,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="#" class="primary-btn">More Details</a>
+                            <a href="room_detail.php" class="primary-btn">More Details</a>
                         </div>
                     </div>
                 </div>
@@ -214,7 +214,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="#" class="primary-btn">More Details</a>
+                            <a href="room_detail.php" class="primary-btn">More Details</a>
                         </div>
                     </div>
                 </div>
