@@ -124,7 +124,7 @@
                     <div class="col-lg-2">
                         <div class="logo">
                             <a href="./index.html">
-                                <img src="img/logo.png" alt="">
+                                <img src="../assets/images/logo.png" alt="">
                             </a>
                         </div>
                     </div>
@@ -146,7 +146,7 @@
                                     <div class="nav-profile">
                                         <img src="../assets/images/room/avatar/avatar-2.jpg" alt="Profile" class="profile-pic">
                                         <div class="dropdown-content">
-                                            <a href="user_my_booking.php">My Bookings</a>
+                                            <a href="user_mybookings.php">My Bookings</a>
                                             <a href="user_edit_profile.php">Edit Profile</a>
                                             <a href="user_change_password.php">Change Password</a>
                                             <div class="dropdown-divider"></div>

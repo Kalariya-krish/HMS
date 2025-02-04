@@ -76,12 +76,12 @@
     <!-- Header Section Begin -->
     <header class="header-section">
         <div class="menu-item">
-            <div class="container">
+            <div class="container" >
                 <div class="row">
                     <div class="col-lg-2">
-                        <div class="logo">
+                        <div class="logo" >
                             <a href="./index.html">
-                                <img src="img/logo.png" alt="">
+                            <img src="assets/images/logo.png" alt="">
                             </a>
                         </div>
                     </div>
