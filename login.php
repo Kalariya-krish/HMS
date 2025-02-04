@@ -7,10 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Sign In</title>
 
-    <!-- Font Icon -->
-    <link rel="stylesheet" href="assets/fonts/material-icon/css/material-design-iconic-font.min.css">
-    <!-- Main css -->
-    <link rel="stylesheet" href="assets/css/register_style.css">
 </head>
 
 <body>
@@ -18,37 +14,41 @@
     include_once('header.php');
     ?>
 
-    <!-- Sing in  Form -->
-    <div class="container" style="margin-top: 100px; margin-bottom:100px;">
-        <div class="row">
-            <div class="col-2"></div>
-            <div class="col-4">
-                <figure><img src="assets/images/about/about-2.jpg" alt="sing up image" style="height:300px;"></figure>
-                <a href="register.php" class="signup-image-link">Create an account</a>
+    <section><br><br>
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body p-5">
+                            <h2 class="text-uppercase text-center mb-5">Login Here</h2>
+
+                            <form id="loginform" name="loginform" method="post">
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="email"><i class="fa fa-envelope"></i> Email</label>
+                                    <input type="email" id="email" name="email" class="form-control" required />
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="password"><i class="fa fa-lock"></i> Password</label>
+                                    <input type="password" id="password" name="password" class="form-control" required />
+                                </div>
+
+                                <div class="d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-success btn-md" style="background-color: #0B032D;">Login</button>
+                                </div>
+
+                                <p class="text-center text-muted mt-4">Don't have an account?
+                                    <a href="register.php" class="fw-bold text-body"><u>Register here</u></a>
+                                </p>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-4">
-                <h2 class="form-title">Sign in</h2>
-                <form method="POST" class="register-form" id="login-form">
-                    <div class="form-group">
-                        <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                        <input type="text" name="your_name" id="your_name" placeholder="Your Name" />
-                    </div>
-                    <div class="form-group">
-                        <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
-                        <input type="password" name="your_pass" id="your_pass" placeholder="Password" />
-                    </div>
-                    <div class="form-group">
-                        <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
-                        <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
-                    </div>
-                    <div class="form-group form-button">
-                        <input type="submit" name="signin" id="signin" class="form-submit" value="Log in" />
-                    </div>
-                </form>
-            </div>
-            <div class="col-2"></div>
         </div>
-    </div>
+    </section><br><br>
+
 
     <?php
     include('footer.php');
@@ -56,6 +56,57 @@
 
     <!-- JS -->
     <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery-3.7.1.min.js"></script>
+    <script src="assets/js/jquery.validate.min.js"></script>
+    <script src="assets/js/additional-methods.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#loginform").submit(function(e) {
+                e.preventDefault();
+                if ($('#loginform').valid()) {
+                    alert('Login successful');
+                    this.submit();
+                }
+            });
+
+            $('#loginform').validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 8,
+                        maxlength: 20
+                    }
+                },
+                messages: {
+                    email: {
+                        required: "Email is required",
+                        email: "Enter a valid email"
+                    },
+                    password: {
+                        required: "Password is required",
+                        minlength: "Password must be at least 8 characters",
+                        maxlength: "Password cannot exceed 20 characters"
+                    }
+                },
+                errorElement: "div",
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    error.insertAfter(element);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid').removeClass('is-valid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-valid').removeClass('is-invalid');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
