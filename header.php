@@ -76,12 +76,12 @@
     <!-- Header Section Begin -->
     <header class="header-section">
         <div class="menu-item">
-            <div class="container" >
+            <div class="container">
                 <div class="row">
                     <div class="col-lg-2">
-                        <div class="logo" >
+                        <div class="logo">
                             <a href="./index.html">
-                            <img src="assets/images/logo.png" alt="">
+                                <img src="assets/images/logo.png" alt="">
                             </a>
                         </div>
                     </div>
@@ -123,10 +123,6 @@
     <script src="assets/js/main.js"></script>
     <script src="assets/js/bootstrap.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
-
-    <script src="assets/js/jquery-3.7.1.min.js"></script>
-    <script src="assets/js/jquery.validate.min.js"></script>
-    <script src="assets/js/additional-methods.min.js"></script>
 
 </body>
 
