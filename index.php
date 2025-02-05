@@ -179,7 +179,7 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-6">
                         <div class="hp-room-item set-bg" data-setbg="assets/images/room/room-b1.jpg">
-                            <div class="hr-text">
+                            <!-- <div class="hr-text">
                                 <h3>Double Room</h3>
                                 <h2>1000Rs.<span>/Pernight</span></h2>
                                 <table>
@@ -203,12 +203,12 @@
                                     </tbody>
                                 </table>
                                 <a href="#" class="primary-btn">More Details</a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="hp-room-item set-bg" data-setbg="assets/images/room/room-b2.jpg">
-                            <div class="hr-text">
+                            <!-- <div class="hr-text">
                                 <h3>Premium King Room</h3>
                                 <h2>1000Rs.<span>/Pernight</span></h2>
                                 <table>
@@ -232,12 +232,12 @@
                                     </tbody>
                                 </table>
                                 <a href="#" class="primary-btn">More Details</a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="hp-room-item set-bg" data-setbg="assets/images/room/room-b3.jpg">
-                            <div class="hr-text">
+                            <!-- <div class="hr-text">
                                 <h3>Deluxe Room</h3>
                                 <h2>1000Rs.<span>/Pernight</span></h2>
                                 <table>
@@ -261,12 +261,12 @@
                                     </tbody>
                                 </table>
                                 <a href="#" class="primary-btn">More Details</a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="hp-room-item set-bg" data-setbg="assets/images/room/room-b4.jpg">
-                            <div class="hr-text">
+                            <!-- <div class="hr-text">
                                 <h3>Family Room</h3>
                                 <h2>1000Rs.<span>/Pernight</span></h2>
                                 <table>
@@ -290,7 +290,7 @@
                                     </tbody>
                                 </table>
                                 <a href="#" class="primary-btn">More Details</a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -329,7 +329,7 @@
                             </div>
                             <h5> - Alexander Vasquez</h5>
                         </div>
-                        <!-- <img src="./assets/images/testimonial-logo.png" alt=""> -->
+                        <img src="assets/images/room/avatar/avatar-1.jpg" alt="Testimonial" style="border-radius:50%;">
                     </div>
                 </div>
                 <div class="carousel-item">
@@ -348,7 +348,7 @@
                             </div>
                             <h5> - Alexander Vasquez</h5>
                         </div>
-                        <!-- <img src="./assets/images/testimonial-logo.png" alt=""> -->
+                        <img src="assets/images/room/avatar/avatar-1.jpg" alt="Testimonial" style="border-radius:50%;">
                     </div>
                 </div>
                 <div class="carousel-item">
@@ -367,7 +367,7 @@
                             </div>
                             <h5> - Alexander Vasquez</h5>
                         </div>
-                        <!-- <img src="./assets/images/testimonial-logo.png" alt="Testimonial"> -->
+                        <img src="assets/images/room/avatar/avatar-1.jpg" alt="Testimonial" style="border-radius:50%;">
                     </div>
                 </div>
             </div>
