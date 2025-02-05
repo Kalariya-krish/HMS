@@ -44,22 +44,22 @@
             </div>
             <div>
                 <a class="navbar-brand brand-logo" href="index.html">
-                    <img src="../assets/images/logo.svg" alt="logo" />
+                    <img src="../assets/images/logo.png" alt="logo" />
                 </a>
                 <a class="navbar-brand brand-logo-mini" href="index.html">
-                    <img src="../assets/images/logo-mini.svg" alt="logo" />
+                    <img src="../assets/images/logo.png" alt="logo" />
                 </a>
             </div>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-top">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <form class="search-form" action="#">
                         <i class="icon-search"></i>
                         <input type="search" class="form-control" placeholder="Search Here" title="Search here">
                     </form>
-                </li>
-                <li class="nav-item dropdown">
+                </li> -->
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link count-indicator" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
                         <i class="icon-bell"></i>
                         <span class="count"></span>
@@ -97,8 +97,8 @@
                             </div>
                         </a>
                     </div>
-                </li>
-                <li class="nav-item dropdown">
+                </li> -->
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link count-indicator" id="countDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="icon-mail icon-lg"></i>
                     </a>
@@ -136,13 +136,13 @@
                             </div>
                         </a>
                     </div>
-                </li>
+                </li> -->
                 <li class="nav-item dropdown d-none d-lg-block user-dropdown">
                     <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img class="img-xs rounded-circle" src="../assets/images/faces/face8.jpg" alt="Profile image"> </a>
+                        <img class="img-xs rounded-circle" src="../assets/images/room/avatar/avatar-1.jpg" alt="Profile image"> </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                         <div class="dropdown-header text-center">
-                            <img class="img-md rounded-circle" src="../assets/images/faces/face8.jpg" alt="Profile image">
+                            <img class="img-md rounded-circle" src="../assets/images/room/avatar/avatar-1.jpg" alt="Profile image">
                             <p class="mb-1 mt-3 fw-semibold">Allen Moreno</p>
                             <p class="fw-light text-muted mb-0">allenmoreno@gmail.com</p>
                         </div>

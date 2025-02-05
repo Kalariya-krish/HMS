@@ -34,9 +34,9 @@
                         <div class="ft-contact">
                             <h6>Contact Us</h6>
                             <ul>
-                                <li>(12) 345 67890</li>
-                                <li>info.colorlib@gmail.com</li>
-                                <li>856 Cordia Extension Apt. 356, Lake, United State</li>
+                                <li>+91 96528675663</li>
+                                <li>astoria@gmail.com</li>
+                                <li>astoria rajkot,gujrat,rajkot</li>
                             </ul>
                         </div>
                     </div>

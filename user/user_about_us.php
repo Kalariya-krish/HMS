@@ -40,10 +40,8 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="ap-title">
-                            <h2>Welcome To Sona.</h2>
-                            <p>Built in 1910 during the Belle Epoque period, this hotel is located in the center of
-                                Paris, with easy access to the city’s tourist attractions. It offers tastefully
-                                decorated rooms.</p>
+                            <h2>Welcome To Astoria.</h2>
+                            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Molestias molestiae eaque illum eum ipsum reprehenderit impedit nihil, sequi magni mollitia nemo necessitatibus excepturi tempora, sint ducimus iste quod cumque accusantium.</p>
                         </div>
                     </div>
                     <div class="col-lg-5 offset-lg-1">
@@ -60,21 +58,21 @@
             <div class="about-page-services">
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="ap-service-item set-bg" data-setbg="assets/images/about/about-p1.jpg">
+                        <div class="ap-service-item set-bg" data-setbg="../assets/images/about/about-p1.jpg">
                             <div class="api-text">
                                 <h3>Restaurants Services</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="ap-service-item set-bg" data-setbg="assets/images/about/about-p2.jpg">
+                        <div class="ap-service-item set-bg" data-setbg="../assets/images/about/about-p2.jpg">
                             <div class="api-text">
                                 <h3>Travel & Camping</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="ap-service-item set-bg" data-setbg="assets/images/about/about-p3.jpg">
+                        <div class="ap-service-item set-bg" data-setbg="../assets/images/about/about-p3.jpg">
                             <div class="api-text">
                                 <h3>Event & Party</h3>
                             </div>
@@ -87,7 +85,7 @@
     <!-- About Us Page Section End -->
 
     <!-- Video Section Begin -->
-    <section class="video-section set-bg" data-setbg="assets/images/video-bg.jpg">
+    <section class="video-section set-bg" data-setbg="../assets/images/video-bg.jpg">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -116,21 +114,21 @@
             </div>
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="gallery-item set-bg" data-setbg="assets/images/gallery/gallery-1.jpg">
+                    <div class="gallery-item set-bg" data-setbg="../assets/images/gallery/gallery-1.jpg">
                         <div class="gi-text">
                             <h3>Room Luxury</h3>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="gallery-item set-bg" data-setbg="assets/images/gallery/gallery-3.jpg">
+                            <div class="gallery-item set-bg" data-setbg="../assets/images/gallery/gallery-3.jpg">
                                 <div class="gi-text">
                                     <h3>Room Luxury</h3>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="gallery-item set-bg" data-setbg="assets/images/gallery/gallery-4.jpg">
+                            <div class="gallery-item set-bg" data-setbg="../assets/images/gallery/gallery-4.jpg">
                                 <div class="gi-text">
                                     <h3>Room Luxury</h3>
                                 </div>
@@ -139,7 +137,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="gallery-item large-item set-bg" data-setbg="assets/images/gallery/gallery-2.jpg">
+                    <div class="gallery-item large-item set-bg" data-setbg="../assets/images/gallery/gallery-2.jpg">
                         <div class="gi-text">
                             <h3>Room Luxury</h3>
                         </div>

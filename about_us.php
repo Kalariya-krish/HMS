@@ -40,10 +40,8 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="ap-title">
-                            <h2>Welcome To Sona.</h2>
-                            <p>Built in 1910 during the Belle Epoque period, this hotel is located in the center of
-                                Paris, with easy access to the city’s tourist attractions. It offers tastefully
-                                decorated rooms.</p>
+                            <h2>Welcome To Astoria.</h2>
+                            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Molestias molestiae eaque illum eum ipsum reprehenderit impedit nihil, sequi magni mollitia nemo necessitatibus excepturi tempora, sint ducimus iste quod cumque accusantium.</p>
                         </div>
                     </div>
                     <div class="col-lg-5 offset-lg-1">
