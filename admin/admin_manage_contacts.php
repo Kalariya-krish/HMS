@@ -38,7 +38,7 @@
                                                     <td>Need details about room availability.</td>
                                                     <td>2024-02-02</td>
                                                     <td>
-                                                        <button class="btn btn-info btn-sm">View</button>
+                                                        <!-- <button class="btn btn-info btn-sm">View</button> -->
                                                         <button class="btn btn-danger btn-sm">Delete</button>
                                                     </td>
                                                 </tr>
@@ -49,7 +49,7 @@
                                                     <td>My payment is not reflecting.</td>
                                                     <td>2024-02-01</td>
                                                     <td>
-                                                        <button class="btn btn-info btn-sm">View</button>
+                                                        <!-- <button class="btn btn-info btn-sm">View</button> -->
                                                         <button class="btn btn-danger btn-sm">Delete</button>
                                                     </td>
                                                 </tr>

@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Star Admin2 </title>
     <!-- plugins:css -->
+    <link rel="stylesheet" href="../assets/css/admin_style.css">
     <link rel="stylesheet" href="../assets/vendors/feather/feather.css">
     <link rel="stylesheet" href="../assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="../assets/vendors/ti-icons/css/themify-icons.css">
@@ -23,7 +24,6 @@
     <link rel="stylesheet" type="text/css" href="../assets/js/select.dataTables.min.css">
     <!-- End plugin css for this page -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="../assets/css/admin_style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="../assets/images/favicon.png" />
     <style>

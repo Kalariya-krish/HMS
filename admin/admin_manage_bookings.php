@@ -44,7 +44,7 @@
                                                     <td>250</td>
                                                     <td><label class="badge badge-success">Confirmed</label></td>
                                                     <td>
-                                                        <button class="btn btn-info btn-sm">Edit</button>
+                                                        <button class="btn btn-info btn-sm">Confirm</button>
                                                         <button class="btn btn-danger btn-sm">Cancel</button>
                                                     </td>
                                                 </tr>
@@ -57,7 +57,7 @@
                                                     <td>480</td>
                                                     <td><label class="badge badge-warning">Pending</label></td>
                                                     <td>
-                                                        <button class="btn btn-info btn-sm">Edit</button>
+                                                        <button class="btn btn-info btn-sm">Confirm</button>
                                                         <button class="btn btn-danger btn-sm">Cancel</button>
                                                     </td>
                                                 </tr>
@@ -70,7 +70,7 @@
                                                     <td>720</td>
                                                     <td><label class="badge badge-danger">Cancelled</label></td>
                                                     <td>
-                                                        <button class="btn btn-info btn-sm">Edit</button>
+                                                        <button class="btn btn-info btn-sm">Confirm</button>
                                                         <button class="btn btn-danger btn-sm">Cancel</button>
                                                     </td>
                                                 </tr>
@@ -83,7 +83,7 @@
                                                     <td>900</td>
                                                     <td><label class="badge badge-success">Confirmed</label></td>
                                                     <td>
-                                                        <button class="btn btn-info btn-sm">Edit</button>
+                                                        <button class="btn btn-info btn-sm">Confirm</button>
                                                         <button class="btn btn-danger btn-sm">Cancel</button>
                                                     </td>
                                                 </tr>
@@ -96,7 +96,7 @@
                                                     <td>250</td>
                                                     <td><label class="badge badge-warning">Pending</label></td>
                                                     <td>
-                                                        <button class="btn btn-info btn-sm">Edit</button>
+                                                        <button class="btn btn-info btn-sm">Confirm</button>
                                                         <button class="btn btn-danger btn-sm">Cancel</button>
                                                     </td>
                                                 </tr>

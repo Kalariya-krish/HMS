@@ -38,7 +38,7 @@
                                                     <td>200</td>
                                                     <td><label class="badge badge-success">Paid</label></td>
                                                     <td>
-                                                        <button class="btn btn-info btn-sm">View</button>
+                                                        <button class="btn btn-info btn-sm">Print</button>
                                                         <button class="btn btn-danger btn-sm">Delete</button>
                                                     </td>
                                                 </tr>
@@ -49,7 +49,7 @@
                                                     <td>350</td>
                                                     <td><label class="badge badge-warning">Pending</label></td>
                                                     <td>
-                                                        <button class="btn btn-info btn-sm">View</button>
+                                                        <button class="btn btn-info btn-sm">Print</button>
                                                         <button class="btn btn-danger btn-sm">Delete</button>
                                                     </td>
                                                 </tr>
@@ -60,7 +60,7 @@
                                                     <td>500</td>
                                                     <td><label class="badge badge-danger">Unpaid</label></td>
                                                     <td>
-                                                        <button class="btn btn-info btn-sm">View</button>
+                                                        <button class="btn btn-info btn-sm">Print</button>
                                                         <button class="btn btn-danger btn-sm">Delete</button>
                                                     </td>
                                                 </tr>
