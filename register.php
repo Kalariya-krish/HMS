@@ -75,7 +75,7 @@
                                 </div> -->
 
                                 <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-success btn-md" style="background-color: #0B032D;">Register</button>
+                                    <button type="submit" class="btn btn-success btn-md" style="background-color:rgb(0, 103, 193);">Register</button>
                                 </div>
 
                                 <p class="text-center text-muted mt-4">Already have an account?

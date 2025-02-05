@@ -294,12 +294,12 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#admin-management" aria-expanded="false" aria-controls="admin-management">
+                <a class="nav-link" data-bs-toggle="collapse" href="#more-management" aria-expanded="false" aria-controls="admin-management">
                     <i class="menu-icon mdi mdi-table"></i>
                     <span class="menu-title">More</span>
                     <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse" id="admin-management">
+                <div class="collapse" id="more-management">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"> <a class="nav-link" href="admin_manage_sliders.php">Manage Sliders</a></li>
                         <li class="nav-item"> <a class="nav-link" href="admin_manage_about.php">Manage About Page</a></li>
@@ -329,6 +329,11 @@
     <!-- <script src="../assets/js/jquery.cookie.js" type="text/javascript"></script> -->
     <script src="../assets/js/dashboard.js"></script>
     <!-- <script src="../assets/js/Chart.roundedBarCharts.js"></script> -->
+
+    <!-- JS -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.validate.min.js"></script>
+    <script src="../assets/js/additional-methods.min.js"></script>
     <!-- End custom js for this page-->
 </body>
 
