@@ -110,9 +110,19 @@
                 </ul>
                 </li>
                 <li><a href="user_contact_us.php">Contact Us</a></li>
-                <a href="user_mybookings.php"><button class="btn btn-primary w-100">My Bookings</button></a>
+                <div class="nav-profile">
+                                        <img src="../assets/images/room/avatar/avatar-1.jpg" alt="Profile" class="profile-pic">
+                                        <div class="dropdown-content">
+                                            <a href="user_mybookings.php">My Bookings</a>
+                                            <a href="user_edit_profile.php">Edit Profile</a>
+                                            <a href="user_change_password.php">Change Password</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="logout.php" class="text-danger">Logout</a>
+                                        </div>
+                                    </div>
             </ul>
         </nav>
+        <div id="mobile-menu-wrap"></div>
     </div>
     <!-- Offcanvas Menu Section End -->
 

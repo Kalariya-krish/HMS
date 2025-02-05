@@ -65,8 +65,8 @@
                 </ul>
                 </li>
                 <li><a href="contact_us.php">Contact Us</a></li>
-                <li><a href="contact_us.php">Login</a></li>
-                <li><a href="contact_us.php">Register</a></li>
+                <li><a href="login.php">Login</a></li>
+                <li><a href="register.php">Register</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
