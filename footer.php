@@ -20,7 +20,7 @@
                                     <img src="img/footer-logo.png" alt="">
                                 </a>
                             </div>
-                            <p>We inspire and reach millions of travelers<br /> across 90 local websites</p>
+                            <!-- <p>We inspire and reach millions of travelers<br /> across 90 local websites</p> -->
                             <div class="fa-social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
                                 <a href="#"><i class="fa fa-twitter"></i></a>
@@ -58,10 +58,10 @@
                 <div class="row">
                     <div class="col-lg-7">
                         <ul>
-                            <li><a href="#">Contact</a></li>
-                            <li><a href="#">Terms of use</a></li>
-                            <li><a href="#">Privacy</a></li>
-                            <li><a href="#">Environmental Policy</a></li>
+                            <li><a href="index.php">Home</a></li>
+                            <li><a href="about_us.php">About Us</a></li>
+                            <li><a href="contact_us.php">Contact Us</a></li>
+                            <li><a href="rooms.php">Rooms</a></li>
                         </ul>
                     </div>
                 </div>

@@ -43,7 +43,7 @@
                         <img src="../assets/images/room/room-1.jpg" alt="">
                         <div class="ri-text">
                             <h4>Premium King Room</h4>
-                            <h3>159$<span>/Pernight</span></h3>
+                            <h3>1000Rs.<span>/Pernight</span></h3>
                             <table>
                                 <tbody>
                                     <tr>
@@ -73,7 +73,7 @@
                         <img src="../assets/images/room/room-2.jpg" alt="">
                         <div class="ri-text">
                             <h4>Deluxe Room</h4>
-                            <h3>159$<span>/Pernight</span></h3>
+                            <h3>1000Rs.<span>/Pernight</span></h3>
                             <table>
                                 <tbody>
                                     <tr>
@@ -103,7 +103,7 @@
                         <img src="../assets/images/room/room-3.jpg" alt="">
                         <div class="ri-text">
                             <h4>Double Room</h4>
-                            <h3>159$<span>/Pernight</span></h3>
+                            <h3>1000Rs.<span>/Pernight</span></h3>
                             <table>
                                 <tbody>
                                     <tr>
@@ -133,7 +133,7 @@
                         <img src="../assets/images/room/room-4.jpg" alt="">
                         <div class="ri-text">
                             <h4>Luxury Room</h4>
-                            <h3>159$<span>/Pernight</span></h3>
+                            <h3>1000Rs.<span>/Pernight</span></h3>
                             <table>
                                 <tbody>
                                     <tr>
@@ -163,7 +163,7 @@
                         <img src="../assets/images/room/room-5.jpg" alt="">
                         <div class="ri-text">
                             <h4>Room With View</h4>
-                            <h3>159$<span>/Pernight</span></h3>
+                            <h3>1000Rs.<span>/Pernight</span></h3>
                             <table>
                                 <tbody>
                                     <tr>
@@ -193,7 +193,7 @@
                         <img src="../assets/images/room/room-6.jpg" alt="">
                         <div class="ri-text">
                             <h4>Small View</h4>
-                            <h3>159$<span>/Pernight</span></h3>
+                            <h3>1000Rs.<span>/Pernight</span></h3>
                             <table>
                                 <tbody>
                                     <tr>
@@ -218,13 +218,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12">
+                <!-- <div class="col-lg-12">
                     <div class="room-pagination">
                         <a href="#">1</a>
                         <a href="#">2</a>
                         <a href="#">Next <i class="fa fa-long-arrow-right"></i></a>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>

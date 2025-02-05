@@ -56,7 +56,7 @@
                                     <a href="#">Booking Now</a>
                                 </div>
                             </div>
-                            <h2>159$<span>/Pernight</span></h2>
+                            <h2>1000Rs.<span>/Pernight</span></h2>
                             <table>
                                 <tbody>
                                     <tr>

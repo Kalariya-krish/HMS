@@ -23,7 +23,7 @@
                     <div class="hero-text">
                         <h1>Astoria A Luxury Hotel</h1>
                         <p>Here are the best hotel booking sites, including recommendations for international travel and for finding low-priced hotel rooms.</p>
-                        <a href="#" class="primary-btn">Discover Now</a>
+                        <!-- <a href="#" class="primary-btn">Discover Now</a> -->
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1 mt-4">
@@ -87,7 +87,7 @@
                             languages.</p>
                         <p class="s-para">So when it comes to booking the perfect hotel, vacation rental, resort,
                             apartment, guest house, or tree house, we’ve got you covered.</p>
-                        <a href="#" class="primary-btn about-btn">Read More</a>
+                        <!-- <a href="#" class="primary-btn about-btn">Read More</a> -->
                     </div>
                 </div>
                 <div class="col-lg-6">
