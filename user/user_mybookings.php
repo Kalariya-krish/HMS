@@ -7,126 +7,7 @@
     <title>My Bookings</title>
 
     <link rel="stylesheet" href="../assets/css/user_mybooking_style.css">
-    <!-- <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            /* Subtle gradient background */
-            color: #333;
-            /* Darker text for better contrast */
-        }
 
-        .table-container {
-            background-color: #fff;
-            border-radius: 15px;
-            /* More rounded corners */
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-            /* More prominent shadow */
-            padding: 30px;
-            /* Increased padding */
-            margin-top: 40px;
-            overflow-x: auto;
-            animation: fadeInUp 1s ease-in-out;
-            /* Animation on load */
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 0;
-            border-radius: 15px 15px 0 0;
-            overflow: hidden;
-        }
-
-        .table thead th {
-            background-color: #4285f4;
-            /* Google Blue header */
-            color: white;
-            text-align: left;
-            padding: 20px;
-            /* Increased padding */
-            border-bottom: 2px solid #357ae8;
-            /* Slightly darker blue border */
-            font-weight: 600;
-            /* Semi-bold header text */
-            text-transform: uppercase;
-            /* Uppercase header text */
-            letter-spacing: 0.5px;
-            /* Add some letter spacing */
-            white-space: nowrap;
-        }
-
-        .table tbody tr {
-            transition: background-color 0.3s, transform 0.2s;
-            /* Smooth hover and transform */
-        }
-
-        .table tbody tr:hover {
-            background-color: #f5f5f5;
-            transform: scale(1.02);
-            /* Scale up slightly on hover */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            /* Add a subtle shadow on hover */
-        }
-
-        .table tbody td {
-            padding: 20px;
-            /* Increased padding */
-            border-bottom: 1px solid #eee;
-            vertical-align: middle;
-        }
-
-        .table tbody tr:last-of-type td {
-            border-bottom: none;
-        }
-
-        .btn-primary {
-            background-color: #4285f4;
-            /* Google Blue */
-            border-color: #4285f4;
-            transition: all 0.2s;
-            /* Smooth transition for hover effect */
-        }
-
-        .btn-primary:hover {
-            background-color: #357ae8;
-            border-color: #357ae8;
-            transform: scale(1.05);
-            /* Scale up on hover */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            /* Add a subtle shadow on hover */
-        }
-
-        .btn-danger {
-            background-color: #ea4335;
-            /* Google Red */
-            border-color: #ea4335;
-            transition: all 0.2s;
-            /* Smooth transition for hover effect */
-        }
-
-        .btn-danger:hover {
-            background-color: #d13123;
-            border-color: #d13123;
-            transform: scale(1.05);
-            /* Scale up on hover */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            /* Add a subtle shadow on hover */
-        }
-
-
-        /* Animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style> -->
 </head>
 
 <body>
@@ -134,69 +15,71 @@
     include_once('user_header.php');
     ?>
 
-    <!-- Breadcrumb Section Begin -->
-    <div class="breadcrumb-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb-text">
-                        <h2>My Bookings</h2>
-                        <div class="bt-option">
-                            <a href="./home.html">Home</a>
-                            <span>My Bookings</span>
+    <div class="container py-5">
+        <!-- Page Header -->
+        <div class="page-header text-center">
+            <h1>&nbsp;&nbsp;&nbsp;Bookings</h1>
+            <p class="overlay-text">My Reservations</p>
+        </div>
+        <!-- Breadcrumb Section End -->
+
+        <!-- Bookings Section -->
+        <div class="row">
+            <div class="col-12">
+                <!-- Booking Card 1 -->
+                <div class="booking-card p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <img src="../assets/images/room/room1.jpg" alt="Room Image" class="img-fluid rounded">
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Deluxe Sea View Room</h4>
+                            <p>
+                                <strong>Booking ID:</strong> #B12345<br>
+                                <strong>Check-in:</strong> 15 March 2024<br>
+                                <strong>Check-out:</strong> 18 March 2024<br>
+                                <strong>Guests:</strong> 2 Adults
+                            </p>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <span class="booking-status status-confirmed">Confirmed</span>
+                            <button class="booking-detail view-detail">View Details</button>
                         </div>
                     </div>
                 </div>
+
+                <!-- Booking Card 2 -->
+                <div class="booking-card p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <img src="../assets/images/room/room2.jpg" alt="Room Image" class="img-fluid rounded">
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Standard Room</h4>
+                            <p>
+                                <strong>Booking ID:</strong> #B12346<br>
+                                <strong>Check-in:</strong> 22 April 2024<br>
+                                <strong>Check-out:</strong> 25 April 2024<br>
+                                <strong>Guests:</strong> 1 Adult
+                            </p>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <span class="booking-status status-pending">Pending</span>
+                            <button class="booking-detail view-detail">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No Bookings Message (Conditionally Shown) -->
+                <div class="text-center py-5" id="no-bookings" style="display: none;">
+                    <h4>You have no current bookings</h4>
+                    <p>Explore our rooms and make a reservation!</p>
+                    <a href="rooms.html" class="btn btn-primary">Browse Rooms</a>
+                </div>
             </div>
         </div>
+        <br><br>
     </div>
-    <!-- Breadcrumb Section End -->
-
-    <div class="container">
-        <div class="table-container">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Booking ID</th>
-                        <th>Hotel</th>
-                        <th>Check-in</th>
-                        <th>Check-out</th>
-                        <th>Guests</th>
-                        <th>Location</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>#12345</td>
-                        <td>Grand Hotel</td>
-                        <td>2024-03-10</td>
-                        <td>2024-03-15</td>
-                        <td>2 Adults, 1 Child</td>
-                        <td>New York City</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm">View</button>
-                            <button class="btn btn-danger btn-sm">Cancel</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#67890</td>
-                        <td>Beach Resort</td>
-                        <td>2024-04-01</td>
-                        <td>2024-04-05</td>
-                        <td>2 Adults</td>
-                        <td>Miami Beach</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm">View</button>
-                            <button class="btn btn-danger btn-sm">Cancel</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <br><br>
-
     <?php
     include_once('user_footer.php');
     ?>

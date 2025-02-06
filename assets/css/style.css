@@ -2287,3 +2287,151 @@ ul, ol {
 		margin-bottom: 10px;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+/* contact style */
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .page-title {
+            position: relative;
+            margin-bottom: 4rem;
+        }
+
+        .page-title h1 {
+            color: rgba(0, 0, 0, 0.05);
+            font-size: 6rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .page-title .overlay-text {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 1rem;
+            color: #fca311;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-icon {
+            background-color: rgba(252, 163, 17, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-icon svg {
+            color: #fca311;
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .form-control:focus {
+            border-color: #fca311;
+            box-shadow: 0 0 0 0.2rem rgba(252, 163, 17, 0.25);
+        }
+
+        .btn-submit {
+            background-color: #fca311;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #f9a826;
+            transform: translateY(-3px);
+        }
+
+
+
+
+
+
+/* My booking style */
+        .page-header {
+            position: relative;
+            margin-bottom: 4rem;
+        }
+
+        .page-header h1 {
+            color: rgba(0, 0, 0, 0.05);
+            font-size: 6rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .page-header .overlay-text {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 1rem;
+            color: #fca311;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .booking-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .booking-status,.booking-detail {
+			text-transform: uppercase;
+			padding: 5px 10px;
+			border-radius: 5px;
+			display: inline-block;
+			height: 38px; /* Match the Bootstrap button height */
+			line-height: 28px; /* Vertically center the text */
+        }
+
+        .status-confirmed {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .status-pending {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .status-cancelled {
+            background-color: #dc3545;
+            color: white;
+        }
+
+		.view-detail{
+			background-color: #35b0dc;
+            color: black;
+		}
