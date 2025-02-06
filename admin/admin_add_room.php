@@ -150,94 +150,94 @@
 
 
     <script>
-    $(document).ready(function() {
-        // Custom file size validation method
-        $.validator.addMethod("filesize", function(value, element, param) {
-            return this.optional(element) || (element.files[0].size <= param);
-        }, "File size must be less than 2MB");
+        $(document).ready(function() {
+            // Custom file size validation method
+            $.validator.addMethod("filesize", function(value, element, param) {
+                return this.optional(element) || (element.files[0].size <= param);
+            }, "File size must be less than 2MB");
 
-        $('#addroom').validate({
-            rules: {
-                room_number: {
-                    required: true,
-                    digits: true,
-                    minlength: 1,
-                    maxlength: 4
+            $('#addroom').validate({
+                rules: {
+                    room_number: {
+                        required: true,
+                        digits: true,
+                        minlength: 1,
+                        maxlength: 4
+                    },
+                    room_type: {
+                        required: true
+                    },
+                    price: {
+                        required: true,
+                        number: true,
+                        min: 1
+                    },
+                    beds: {
+                        required: true,
+                        digits: true,
+                        min: 1,
+                        max: 10
+                    },
+                    room_status: {
+                        required: true
+                    },
+                    room_image: {
+                        required: true,
+                        extension: "jpg|jpeg|png",
+                        filesize: 2097152 // 2MB
+                    }
                 },
-                room_type: {
-                    required: true
+                messages: {
+                    room_number: {
+                        required: "Room number is required",
+                        digits: "Only numeric values are allowed",
+                        minlength: "Room number must be at least 1 digit",
+                        maxlength: "Room number cannot exceed 4 digits"
+                    },
+                    room_type: {
+                        required: "Please select a room type"
+                    },
+                    price: {
+                        required: "Price is required",
+                        number: "Enter a valid number",
+                        min: "Price must be greater than $0"
+                    },
+                    beds: {
+                        required: "Number of beds is required",
+                        digits: "Only numeric values are allowed",
+                        min: "At least one bed is required",
+                        max: "Cannot exceed 10 beds"
+                    },
+                    room_status: {
+                        required: "Please select room status"
+                    },
+                    room_image: {
+                        required: "Room image is required",
+                        extension: "Only JPG, JPEG, PNG files are allowed",
+                        filesize: "File size must be less than 2MB"
+                    }
                 },
-                price: {
-                    required: true,
-                    number: true,
-                    min: 1
+                errorElement: "div",
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    error.insertAfter(element);
                 },
-                beds: {
-                    required: true,
-                    digits: true,
-                    min: 1,
-                    max: 10
+                highlight: function(element) {
+                    $(element).addClass('is-invalid').removeClass('is-valid');
                 },
-                room_status: {
-                    required: true
-                },
-                room_image: {
-                    required: true,
-                    extension: "jpg|jpeg|png",
-                    filesize: 2097152 // 2MB
+                unhighlight: function(element) {
+                    $(element).addClass('is-valid').removeClass('is-invalid');
                 }
-            },
-            messages: {
-                room_number: {
-                    required: "Room number is required",
-                    digits: "Only numeric values are allowed",
-                    minlength: "Room number must be at least 1 digit",
-                    maxlength: "Room number cannot exceed 4 digits"
-                },
-                room_type: {
-                    required: "Please select a room type"
-                },
-                price: {
-                    required: "Price is required",
-                    number: "Enter a valid number",
-                    min: "Price must be greater than $0"
-                },
-                beds: {
-                    required: "Number of beds is required",
-                    digits: "Only numeric values are allowed",
-                    min: "At least one bed is required",
-                    max: "Cannot exceed 10 beds"
-                },
-                room_status: {
-                    required: "Please select room status"
-                },
-                room_image: {
-                    required: "Room image is required",
-                    extension: "Only JPG, JPEG, PNG files are allowed",
-                    filesize: "File size must be less than 2MB"
-                }
-            },
-            errorElement: "div",
-            errorPlacement: function(error, element) {
-                error.addClass('invalid-feedback');
-                error.insertAfter(element);
-            },
-            highlight: function(element) {
-                $(element).addClass('is-invalid').removeClass('is-valid');
-            },
-            unhighlight: function(element) {
-                $(element).addClass('is-valid').removeClass('is-invalid');
-            }
-        });
+            });
 
-        // Prevent form submission if validation fails
-        $('#addroom').submit(function(e) {
-            if (!$(this).valid()) {
-                e.preventDefault();
-            }
+            // Prevent form submission if validation fails
+            $('#addroom').submit(function(e) {
+                if (!$(this).valid()) {
+                    e.preventDefault();
+                }
+            });
         });
-    });
-</script>
+    </script>
 </body>
 
 </html>

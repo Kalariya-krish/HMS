@@ -18,14 +18,14 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Manage Home Page Slider</h4>
-                                    <form class="form-sample" action="upload_slider.php" method="POST" enctype="multipart/form-data">
+                                    <form class="form-sample" action="upload_slider.php" method="POST" enctype="multipart/form-data" id="addSlider">
                                         <p class="card-description"> Add New Slider Image </p>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Slider Title</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" name="slider_title" placeholder="Enter slider title" required>
+                                                        <input type="text" class="form-control" name="slider_title" placeholder="Enter slider title">
                                                     </div>
                                                 </div>
                                             </div>
@@ -34,7 +34,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Upload Image</label>
                                                     <div class="col-sm-9">
-                                                        <input type="file" class="form-control" name="slider_image" accept="image/*" required>
+                                                        <input type="file" class="form-control" name="slider_image" accept="image/*">
                                                     </div>
                                                 </div>
                                             </div>
@@ -87,6 +87,64 @@
             </div>
         </div>
     </div>
+
+
+
+
+    <script>
+        $(document).ready(function() {
+            // Custom method for file size validation (max 2MB)
+            $.validator.addMethod("filesize", function(value, element, param) {
+                return this.optional(element) || (element.files[0].size <= param);
+            }, "File size must be less than 2MB");
+
+            $("#addSlider").validate({
+                rules: {
+                    slider_title: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 50
+                    },
+                    slider_image: {
+                        required: true,
+                        extension: "jpg|jpeg|png",
+                        filesize: 2097152 // 2MB
+                    }
+                },
+                messages: {
+                    slider_title: {
+                        required: "Please enter a slider title",
+                        minlength: "Title must be at least 3 characters",
+                        maxlength: "Title cannot exceed 50 characters"
+                    },
+                    slider_image: {
+                        required: "Please upload an image",
+                        extension: "Only JPG, JPEG, and PNG formats are allowed",
+                        filesize: "File size must be less than 2MB"
+                    }
+                },
+                errorElement: "div",
+                errorPlacement: function(error, element) {
+                    error.addClass("invalid-feedback");
+                    error.insertAfter(element);
+                },
+                highlight: function(element) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function(element) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
+                }
+            });
+
+            // Prevent form submission if validation fails
+            $("#addSlider").submit(function(e) {
+                if (!$(this).valid()) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

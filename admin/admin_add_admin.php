@@ -104,80 +104,79 @@
 
     <script>
         $(document).ready(function() {
-    // Custom file size validation method
-    $.validator.addMethod("filesize", function(value, element, param) {
-        return this.optional(element) || (element.files[0].size <= param);
-    }, "File size must be less than 2MB");
+            // Custom file size validation method
+            $.validator.addMethod("filesize", function(value, element, param) {
+                return this.optional(element) || (element.files[0].size <= param);
+            }, "File size must be less than 2MB");
 
-    // Form Validation
-    $('#addadmin').validate({
-        rules: {
-            admin_name: {
-                required: true,
-                minlength: 3,
-                maxlength: 50
-            },
-            admin_email: {
-                required: true,
-                email: true
-            },
-            admin_password: {
-                required: true,
-                minlength: 6
-            },
-            admin_status: {
-                required: true
-            },
-            admin_profile_picture: {
-                required: true,
-                extension: "jpg|jpeg|png|gif",
-                filesize: 2097152 // 2MB
-            }
-        },
-        messages: {
-            admin_name: {
-                required: "Admin name is required",
-                minlength: "Admin name must be at least 3 characters",
-                maxlength: "Admin name cannot exceed 50 characters"
-            },
-            admin_email: {
-                required: "Email is required",
-                email: "Please enter a valid email address"
-            },
-            admin_password: {
-                required: "Password is required",
-                minlength: "Password must be at least 6 characters"
-            },
-            admin_status: {
-                required: "Please select a status"
-            },
-            admin_profile_picture: {
-                required: "Profile picture is required",
-                extension: "Only JPG, JPEG, PNG, or GIF files are allowed",
-                filesize: "File size must be less than 2MB"
-            }
-        },
-        errorElement: "div",
-        errorPlacement: function(error, element) {
-            error.addClass('invalid-feedback');
-            error.insertAfter(element);
-        },
-        highlight: function(element) {
-            $(element).addClass('is-invalid').removeClass('is-valid');
-        },
-        unhighlight: function(element) {
-            $(element).addClass('is-valid').removeClass('is-invalid');
-        }
-    });
+            // Form Validation
+            $('#addadmin').validate({
+                rules: {
+                    admin_name: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 50
+                    },
+                    admin_email: {
+                        required: true,
+                        email: true
+                    },
+                    admin_password: {
+                        required: true,
+                        minlength: 6
+                    },
+                    admin_status: {
+                        required: true
+                    },
+                    admin_profile_picture: {
+                        required: true,
+                        extension: "jpg|jpeg|png|gif",
+                        filesize: 2097152 // 2MB
+                    }
+                },
+                messages: {
+                    admin_name: {
+                        required: "Admin name is required",
+                        minlength: "Admin name must be at least 3 characters",
+                        maxlength: "Admin name cannot exceed 50 characters"
+                    },
+                    admin_email: {
+                        required: "Email is required",
+                        email: "Please enter a valid email address"
+                    },
+                    admin_password: {
+                        required: "Password is required",
+                        minlength: "Password must be at least 6 characters"
+                    },
+                    admin_status: {
+                        required: "Please select a status"
+                    },
+                    admin_profile_picture: {
+                        required: "Profile picture is required",
+                        extension: "Only JPG, JPEG, PNG, or GIF files are allowed",
+                        filesize: "File size must be less than 2MB"
+                    }
+                },
+                errorElement: "div",
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    error.insertAfter(element);
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid').removeClass('is-valid');
+                },
+                unhighlight: function(element) {
+                    $(element).addClass('is-valid').removeClass('is-invalid');
+                }
+            });
 
-    // Prevent form submission if validation fails
-    $('#addadmin').submit(function(e) {
-        if (!$(this).valid()) {
-            e.preventDefault();
-        }
-    });
-});
-
+            // Prevent form submission if validation fails
+            $('#addadmin').submit(function(e) {
+                if (!$(this).valid()) {
+                    e.preventDefault();
+                }
+            });
+        });
     </script>
 </body>
 

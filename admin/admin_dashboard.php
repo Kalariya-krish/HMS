@@ -20,7 +20,7 @@
                             <div class="home-tab">
                                 <!-- Tab Navigation -->
                                 <div class="d-sm-flex align-items-center justify-content-between border-bottom">
-                                    <ul class="nav nav-tabs" role="tablist">
+                                    <!-- <ul class="nav nav-tabs" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
                                         </li>
@@ -33,9 +33,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link border-0" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-selected="false">More</a>
                                         </li>
-                                    </ul>
+                                    </ul> -->
                                     <div>
-                                        <div class="btn-wrapper">
+                                        <!-- <div class="btn-wrapper">
                                             <a href="#" class="btn btn-outline-dark align-items-center">
                                                 <i class="icon-share"></i> Share
                                             </a>
@@ -45,7 +45,7 @@
                                             <a href="#" class="btn btn-primary text-white me-0">
                                                 <i class="icon-download"></i> Export
                                             </a>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                                 <!-- Tab Content -->
@@ -55,11 +55,11 @@
                                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 grid-margin stretch-card">
                                             <div class="card bg-primary card-rounded">
                                                 <div class="card-body pb-0">
-                                                    <h4 class="card-title card-title-dash text-white mb-4">Status Summary</h4>
+                                                    <h4 class="card-title card-title-dash text-white mb-4">Rooms</h4>
                                                     <div class="row">
                                                         <div class="col-sm-4">
-                                                            <p class="status-summary-light-white mb-1">Closed Value</p>
-                                                            <h2 class="text-info">357</h2>
+                                                            <!-- <p class="status-summary-light-white mb-1">Closed Value</p> -->
+                                                            <h2 class="text-info">20</h2>
                                                         </div>
                                                         <div class="col-sm-8">
                                                             <div class="status-summary-chart-wrapper pb-4">
@@ -74,11 +74,11 @@
                                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 grid-margin stretch-card">
                                             <div class="card bg-primary card-rounded">
                                                 <div class="card-body pb-0">
-                                                    <h4 class="card-title card-title-dash text-white mb-4">Status Summary</h4>
+                                                    <h4 class="card-title card-title-dash text-white mb-4">Bookings</h4>
                                                     <div class="row">
                                                         <div class="col-sm-4">
-                                                            <p class="status-summary-light-white mb-1">Closed Value</p>
-                                                            <h2 class="text-info">357</h2>
+                                                            <!-- <p class="status-summary-light-white mb-1">Closed Value</p> -->
+                                                            <h2 class="text-info">10</h2>
                                                         </div>
                                                         <div class="col-sm-8">
                                                             <div class="status-summary-chart-wrapper pb-4">
@@ -93,11 +93,11 @@
                                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 grid-margin stretch-card">
                                             <div class="card bg-primary card-rounded">
                                                 <div class="card-body pb-0">
-                                                    <h4 class="card-title card-title-dash text-white mb-4">Status Summary</h4>
+                                                    <h4 class="card-title card-title-dash text-white mb-4">Reviews</h4>
                                                     <div class="row">
                                                         <div class="col-sm-4">
-                                                            <p class="status-summary-light-white mb-1">Closed Value</p>
-                                                            <h2 class="text-info">357</h2>
+                                                            <!-- <p class="status-summary-light-white mb-1">Closed Value</p> -->
+                                                            <h2 class="text-info">20</h2>
                                                         </div>
                                                         <div class="col-sm-8">
                                                             <div class="status-summary-chart-wrapper pb-4">
