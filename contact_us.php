@@ -22,8 +22,7 @@
                 <div class="col-lg-4">
                     <div class="contact-text">
                         <h2>Contact Info</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua.</p>
+                        <p>Have questions or need assistance with your booking? Our team is here to help! Contact us for reservations, special offers, or any inquiries regarding your stay at our hotel.</p>
                         <table>
                             <tbody>
                                 <tr>
@@ -50,13 +49,13 @@
                     <form action="#" class="contact-form">
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Your Name">
+                                <input type="text" name="name" placeholder="Your Name">
                             </div>
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Your Email">
+                                <input type="text" name="email" placeholder="Your Email">
                             </div>
                             <div class="col-lg-12">
-                                <textarea placeholder="Your Message"></textarea>
+                                <textarea name="message" placeholder="Your Message"></textarea>
                                 <button type="submit">Submit Now</button>
                             </div>
                         </div>
@@ -75,6 +74,63 @@
     <?php
     include('footer.php');
     ?>
+
+    <script src="assets/js/jquery-3.7.1.min.js"></script>
+    <script src="assets/js/jquery.validate.min.js"></script>
+    <script src="assets/js/additional-methods.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $(".contact-form").validate({
+                rules: {
+                    name: {
+                        required: true,
+                        minlength: 3
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    message: {
+                        required: true,
+                        minlength: 10
+                    }
+                },
+                messages: {
+                    name: {
+                        required: "Please enter your name",
+                        minlength: "Name must be at least 3 characters"
+                    },
+                    email: {
+                        required: "Please enter your email",
+                        email: "Enter a valid email address"
+                    },
+                    message: {
+                        required: "Please enter your message",
+                        minlength: "Message must be at least 10 characters"
+                    }
+                },
+                errorElement: "div",
+                errorPlacement: function(error, element) {
+                    error.addClass("invalid-feedback");
+                    error.insertAfter(element);
+                },
+                highlight: function(element) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function(element) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
+                }
+            });
+
+            // Prevent form submission if validation fails
+            $(".contact-form").submit(function(e) {
+                if (!$(this).valid()) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
 
 </body>
 

@@ -23,7 +23,7 @@
                     <div class="breadcrumb-text">
                         <h2>About Us</h2>
                         <div class="bt-option">
-                            <a href="./index.html">Home</a>
+                            <a href="./index.php">Home</a>
                             <span>About Us</span>
                         </div>
                     </div>
@@ -41,16 +41,17 @@
                     <div class="col-lg-6">
                         <div class="ap-title">
                             <h2>Welcome To Astoria.</h2>
-                            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Molestias molestiae eaque illum eum ipsum reprehenderit impedit nihil, sequi magni mollitia nemo necessitatibus excepturi tempora, sint ducimus iste quod cumque accusantium.</p>
+                            <p class="f-para">Astoria Hotel offers a seamless and luxurious booking experience. Whether you’re traveling for business or leisure, our world-class hospitality ensures your stay is unforgettable.</p>
+                            <p class="s-para">With modern amenities, comfortable accommodations, and exclusive offers, we make sure every moment of your stay is exceptional. Book with us today and experience elegance at its finest.</p>
                         </div>
                     </div>
                     <div class="col-lg-5 offset-lg-1">
                         <ul class="ap-services">
-                            <li><i class="icon_check"></i> 20% Off On Accommodation.</li>
-                            <li><i class="icon_check"></i> Complimentary Daily Breakfast</li>
-                            <li><i class="icon_check"></i> 3 Pcs Laundry Per Day</li>
-                            <li><i class="icon_check"></i> Free Wifi.</li>
-                            <li><i class="icon_check"></i> Discount 20% On F&B</li>
+                            <li><i class="icon_check"></i> Easy & Secure Online Booking</li>
+                            <li><i class="icon_check"></i> Best Price Guarantee</li>
+                            <li><i class="icon_check"></i> Complimentary Breakfast</li>
+                            <li><i class="icon_check"></i> High-Speed Free WiFi</li>
+                            <li><i class="icon_check"></i> 24/7 Customer Support</li>
                         </ul>
                     </div>
                 </div>
@@ -85,7 +86,7 @@
     <!-- About Us Page Section End -->
 
     <!-- Video Section Begin -->
-    <section class="video-section set-bg" data-setbg="assets/images/video-bg.jpg">
+    <!-- <section class="video-section set-bg" data-setbg="assets/images/video-bg.jpg">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -98,7 +99,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- Video Section End -->
 
     <!-- Gallery Section Begin -->

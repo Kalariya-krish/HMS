@@ -22,9 +22,8 @@
                 <div class="col-lg-4">
                     <div class="contact-text">
                         <h2>Contact Info</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua.</p>
-                            <table>
+                        <p>Have questions or need assistance with your booking? Our team is here to help! Contact us for reservations, special offers, or any inquiries regarding your stay at our hotel.</p>
+                        <table>
                             <tbody>
                                 <tr>
                                     <td class="c-o">Address:</td>
@@ -50,13 +49,13 @@
                     <form action="#" class="contact-form">
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Your Name">
+                                <input type="text" name="name" placeholder="Your Name">
                             </div>
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Your Email">
+                                <input type="text" name="email" placeholder="Your Email">
                             </div>
                             <div class="col-lg-12">
-                                <textarea placeholder="Your Message"></textarea>
+                                <textarea name="message" placeholder="Your Message"></textarea>
                                 <button type="submit">Submit Now</button>
                             </div>
                         </div>
@@ -64,7 +63,7 @@
                 </div>
             </div>
             <div class="map">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3692.9911006588422!2d70.89784917500707!3d22.240416445063865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959b4a660019ee9%3A0x3d6254f36ed0e794!2sRK%20University%20Main%20Campus!5e0!3m2!1sen!2sin!4v1738688058827!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3692.9911006588422!2d70.89784917500707!3d22.240416445063865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959b4a660019ee9%3A0x3d6254f36ed0e794!2sRK%20University%20Main%20Campus!5e0!3m2!1sen!2sin!4v1738688058827!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
     </section>
@@ -74,6 +73,62 @@
     include('user_footer.php');
     ?>
 
+    <script src="../assets/js/jquery-3.7.1.min.js"></script>
+    <script src="../assets/js/jquery.validate.min.js"></script>
+    <script src="../assets/js/additional-methods.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $(".contact-form").validate({
+                rules: {
+                    name: {
+                        required: true,
+                        minlength: 3
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    message: {
+                        required: true,
+                        minlength: 10
+                    }
+                },
+                messages: {
+                    name: {
+                        required: "Please enter your name",
+                        minlength: "Name must be at least 3 characters"
+                    },
+                    email: {
+                        required: "Please enter your email",
+                        email: "Enter a valid email address"
+                    },
+                    message: {
+                        required: "Please enter your message",
+                        minlength: "Message must be at least 10 characters"
+                    }
+                },
+                errorElement: "div",
+                errorPlacement: function(error, element) {
+                    error.addClass("invalid-feedback");
+                    error.insertAfter(element);
+                },
+                highlight: function(element) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function(element) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
+                }
+            });
+
+            // Prevent form submission if validation fails
+            $(".contact-form").submit(function(e) {
+                if (!$(this).valid()) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

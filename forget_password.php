@@ -5,14 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sign In</title>
-
+    <title>Forgot Password</title>
 </head>
 
 <body>
-    <?php
-    include_once('header.php');
-    ?>
+    <?php include_once('header.php'); ?>
 
     <section><br><br>
         <div class="container h-100">
@@ -20,26 +17,21 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body p-5">
-                            <h2 class="text-uppercase text-center mb-5">Login Here</h2>
+                            <h2 class="text-uppercase text-center mb-5">Forgot Password</h2>
 
-                            <form id="loginform" name="loginform" method="post">
+                            <form id="forgotPasswordForm" name="forgotPasswordForm" method="post">
                                 <div class="form-outline mb-4">
-                                    <label class="form-label" for="email"><i class="fa fa-envelope"></i> Email</label>
+                                    <label class="form-label" for="email"><i class="fa fa-envelope"></i> Enter Your Registered Email</label>
                                     <input type="email" id="email" name="email" class="form-control" required />
                                 </div>
 
-                                <div class="form-outline mb-4">
-                                    <label class="form-label" for="password"><i class="fa fa-lock"></i> Password</label>
-                                    <input type="password" id="password" name="password" class="form-control" required />
-                                </div>
-
-                                <a href="forget_password.php" class="fw-bold text-body"><u>Forget Password</u></a>
                                 <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-success btn-md" style="background-color:rgb(0, 103, 193);">Login</button>
+                                    <button type="submit" class="btn btn-success btn-md" style="background-color:rgb(0, 103, 193);">Reset Password</button>
                                 </div>
 
-                                <p class="text-center text-muted mt-4">Don't have an account?
-                                    <a href="register.php" class="fw-bold text-body"><u>Register here</u></a>
+                                <p class="text-center text-muted mt-4">
+                                    Remember your password?
+                                    <a href="login.php" class="fw-bold text-body"><u>Login here</u></a>
                                 </p>
                             </form>
 
@@ -50,10 +42,7 @@
         </div>
     </section><br><br>
 
-
-    <?php
-    include('footer.php');
-    ?>
+    <?php include('footer.php'); ?>
 
     <!-- JS -->
     <script src="assets/js/jquery.min.js"></script>
@@ -63,35 +52,25 @@
 
     <script>
         $(document).ready(function() {
-            $("#loginform").submit(function(e) {
+            $("#forgotPasswordForm").submit(function(e) {
                 e.preventDefault();
-                if ($('#loginform').valid()) {
-                    alert('Login successful');
+                if ($('#forgotPasswordForm').valid()) {
+                    alert('Password reset link sent to your email');
                     this.submit();
                 }
             });
 
-            $('#loginform').validate({
+            $('#forgotPasswordForm').validate({
                 rules: {
                     email: {
                         required: true,
                         email: true
-                    },
-                    password: {
-                        required: true,
-                        minlength: 8,
-                        maxlength: 20
                     }
                 },
                 messages: {
                     email: {
                         required: "Email is required",
                         email: "Enter a valid email"
-                    },
-                    password: {
-                        required: "Password is required",
-                        minlength: "Password must be at least 8 characters",
-                        maxlength: "Password cannot exceed 20 characters"
                     }
                 },
                 errorElement: "div",
@@ -99,10 +78,10 @@
                     error.addClass('invalid-feedback');
                     error.insertAfter(element);
                 },
-                highlight: function(element, errorClass, validClass) {
+                highlight: function(element) {
                     $(element).addClass('is-invalid').removeClass('is-valid');
                 },
-                unhighlight: function(element, errorClass, validClass) {
+                unhighlight: function(element) {
                     $(element).addClass('is-valid').removeClass('is-invalid');
                 }
             });

@@ -82,12 +82,8 @@
                             <span>About Us</span>
                             <h2>Welcome to <br />Astoria Hotel</h2>
                         </div>
-                        <p class="f-para">Sona.com is a leading online accommodation site. We’re passionate about
-                            travel. Every day, we inspire and reach millions of travelers across 90 local websites in 41
-                            languages.</p>
-                        <p class="s-para">So when it comes to booking the perfect hotel, vacation rental, resort,
-                            apartment, guest house, or tree house, we’ve got you covered.</p>
-                        <!-- <a href="#" class="primary-btn about-btn">Read More</a> -->
+                        <p class="f-para">Astoria Hotel is your ideal destination for luxury and comfort. With top-notch services and modern amenities, we ensure an unforgettable stay.</p>
+                        <p class="s-para">Whether you're here for business or leisure, our dedicated team is committed to providing a seamless and enjoyable experience for you.</p>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -107,14 +103,14 @@
     </section>
     <!-- About Us Section End -->
 
-    <!-- Services Section End -->
+    <!-- Services Section Begin -->
     <section class="services-section spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <span>What We Do</span>
-                        <h2>Discover Our Services</h2>
+                        <span>Our Services</span>
+                        <h2>Experience the Best</h2>
                     </div>
                 </div>
             </div>
@@ -122,55 +118,29 @@
                 <div class="col-lg-4 col-sm-6">
                     <div class="service-item">
                         <i class="flaticon-036-parking"></i>
-                        <h4>Travel Plan</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna.</p>
+                        <h4>Exclusive Travel Plans</h4>
+                        <p>Plan your perfect vacation with our expert travel assistance and exclusive packages.</p>
                     </div>
                 </div>
                 <div class="col-lg-4 col-sm-6">
                     <div class="service-item">
                         <i class="flaticon-033-dinner"></i>
-                        <h4>Catering Service</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna.</p>
+                        <h4>Gourmet Dining</h4>
+                        <p>Enjoy exquisite cuisines from around the world at our in-house restaurants.</p>
                     </div>
                 </div>
                 <div class="col-lg-4 col-sm-6">
                     <div class="service-item">
                         <i class="flaticon-026-bed"></i>
-                        <h4>Babysitting</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service-item">
-                        <i class="flaticon-024-towel"></i>
-                        <h4>Laundry</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service-item">
-                        <i class="flaticon-044-clock-1"></i>
-                        <h4>Hire Driver</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service-item">
-                        <i class="flaticon-012-cocktail"></i>
-                        <h4>Bar & Drink</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna.</p>
+                        <h4>Luxury Accommodation</h4>
+                        <p>Stay in our well-furnished rooms designed for comfort and relaxation.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
     <!-- Services Section End -->
+
 
     <!-- Home Room Section Begin -->
     <section class="hp-room-section">
@@ -305,8 +275,8 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="section-title">
-                        <span>Testimonials</span>
-                        <h2>What Customers Say?</h2>
+                        <span>Guest Reviews</span>
+                        <h2>What Our Guests Say</h2>
                     </div>
                 </div>
             </div>
@@ -315,10 +285,27 @@
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <div class="ts-item text-center">
-                        <p>After a construction project took longer than expected, my husband, my daughter and I
-                            needed a place to stay for a few nights. As a Chicago resident, we know a lot about our
-                            city, neighborhood and the types of housing options available and absolutely love our
-                            vacation at Astoria Hotel.</p>
+                        <p>Booking a stay at this hotel was the best decision! The room was spotless, the staff was
+                            incredibly friendly, and the entire process was seamless. Highly recommend for anyone looking
+                            for a stress-free vacation!</p>
+                        <div class="ti-author">
+                            <div class="rating">
+                                <i class="icon_star"></i>
+                                <i class="icon_star"></i>
+                                <i class="icon_star"></i>
+                                <i class="icon_star"></i>
+                                <i class="icon_star"></i>
+                            </div>
+                            <h5> - Emily Johnson</h5>
+                        </div>
+                        <img src="assets/images/room/avatar/avatar-2.jpg" alt="Testimonial" style="border-radius:50%;">
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="ts-item text-center">
+                        <p>Fantastic experience from start to finish! Booking online was simple, and the hotel exceeded my
+                            expectations. The ocean-view room was breathtaking, and the service was top-notch. Will definitely
+                            book again.</p>
                         <div class="ti-author">
                             <div class="rating">
                                 <i class="icon_star"></i>
@@ -327,45 +314,24 @@
                                 <i class="icon_star"></i>
                                 <i class="icon_star-half_alt"></i>
                             </div>
-                            <h5> - Alexander Vasquez</h5>
+                            <h5> - Michael Roberts</h5>
                         </div>
                         <img src="assets/images/room/avatar/avatar-1.jpg" alt="Testimonial" style="border-radius:50%;">
                     </div>
                 </div>
                 <div class="carousel-item">
                     <div class="ts-item text-center">
-                        <p>After a construction project took longer than expected, my husband, my daughter and I
-                            needed a place to stay for a few nights. As a Chicago resident, we know a lot about our
-                            city, neighborhood and the types of housing options available and absolutely love our
-                            vacation at Astoria Hotel.</p>
+                        <p>I travel frequently, and this hotel truly stands out! The seamless online booking, warm
+                            welcome upon arrival, and luxurious room made my trip unforgettable. I can't wait to return!</p>
                         <div class="ti-author">
                             <div class="rating">
                                 <i class="icon_star"></i>
                                 <i class="icon_star"></i>
                                 <i class="icon_star"></i>
                                 <i class="icon_star"></i>
-                                <i class="icon_star-half_alt"></i>
+                                <i class="icon_star"></i>
                             </div>
-                            <h5> - Alexander Vasquez</h5>
-                        </div>
-                        <img src="assets/images/room/avatar/avatar-1.jpg" alt="Testimonial" style="border-radius:50%;">
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="ts-item text-center">
-                        <p>After a construction project took longer than expected, my husband, my daughter and I
-                            needed a place to stay for a few nights. As a Chicago resident, we know a lot about our
-                            city, neighborhood and the types of housing options available and absolutely love our
-                            vacation at Astoria Hotel.</p>
-                        <div class="ti-author">
-                            <div class="rating">
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star-half_alt"></i>
-                            </div>
-                            <h5> - Alexander Vasquez</h5>
+                            <h5> - Sarah Thompson</h5>
                         </div>
                         <img src="assets/images/room/avatar/avatar-1.jpg" alt="Testimonial" style="border-radius:50%;">
                     </div>

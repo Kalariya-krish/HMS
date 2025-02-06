@@ -85,7 +85,7 @@
     <!-- About Us Page Section End -->
 
     <!-- Video Section Begin -->
-    <section class="video-section set-bg" data-setbg="../assets/images/video-bg.jpg">
+    <!-- <section class="video-section set-bg" data-setbg="../assets/images/video-bg.jpg">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -98,7 +98,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- Video Section End -->
 
     <!-- Gallery Section Begin -->
