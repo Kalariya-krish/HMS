@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Astoria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
@@ -72,201 +73,141 @@
     </section>
     <!-- Hero Section End -->
 
-    <!-- About Us Section Begin -->
-    <section class="aboutus-section spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="about-text">
-                        <div class="section-title">
-                            <span>About Us</span>
-                            <h2>Welcome to <br />Astoria Hotel</h2>
-                        </div>
-                        <p class="f-para">Astoria Hotel is your ideal destination for luxury and comfort. With top-notch services and modern amenities, we ensure an unforgettable stay.</p>
-                        <p class="s-para">Whether you're here for business or leisure, our dedicated team is committed to providing a seamless and enjoyable experience for you.</p>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="about-pic">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <img src="../assets/images/about/about-1.jpg" alt="">
-                            </div>
-                            <div class="col-sm-6">
-                                <img src="../assets/images/about/about-2.jpg" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- About Us Section End -->
+    <section class="aboutus-section py-5">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-7 order-lg-2">
+                <div class="about-gallery position-relative">
+                    <div class="row g-3">
+                        <div class="col-md-8 col-12">
+                            <img src="../assets/images/about/about1.jpg"   
+                                class="img-fluid rounded-4 w-100 h-auto main-image shadow-lg transition-transform duration-300 hover:scale-95"   
+                                alt="Astoria Hotel Exterior">  
+                        </div>  
+                        <div class="col-md-4 col-12">
+                            <img src="../assets/images/about/about2.jpg"   
+                                class="img-fluid rounded-4 w-100 h-100 secondary-image shadow-lg transition-transform duration-300 hover:scale-95"   
+                                alt="Astoria Hotel Interior">   
+                        </div>  
+                    </div>  
+                </div>  
+            </div>  
+            <div class="col-lg-5 order-lg-1">
+                <div class="about-content pe-lg-4 text-center text-lg-start">
+                    <div class="section-header mb-4">
+                        <span class="text-uppercase font-bold text-blue-800 small mb-2 d-block">Our Story</span>  
+                        <h2 class="display-6 mb-3">Redefining Hospitality <br>with Passion</h2>  
+                    </div>  
+                    <div class="about-details">
+                        <p class="lead text-muted mb-4">  
+                            Astoria Hotel represents the pinnacle of luxury and comfort,   
+                            offering an unparalleled experience that transforms ordinary   
+                            stays into extraordinary memories.  
+                        </p>  
+                        <div class="feature-list mb-4">
+                            <div class="feature-item d-flex align-items-center mb-3">
+                                <div class="icon-box me-3">  
+                                    <i class="fas fa-check-circle text-primary"></i>  
+                                </div>  
+                                <span>Premium Accommodations</span>  
+                            </div>  
+                            <div class="feature-item d-flex align-items-center mb-3">  
+                                <div class="icon-box me-3">  
+                                    <i class="fas fa-check-circle text-primary"></i>  
+                                </div>  
+                                <span>World-Class Dining</span>  
+                            </div>  
+                            <div class="feature-item d-flex align-items-center">  
+                                <div class="icon-box me-3">  
+                                    <i class="fas fa-check-circle text-primary"></i>  
+                                </div>  
+                                <span>Exceptional Service</span>  
+                            </div>  
+                        </div>  
+                        <div class="cta-buttons d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start">
+                            <a href="#" class="btn btn-primary rounded-pill px-4 py-2 me-sm-3 mb-2 mb-sm-0">  
+                                Discover More  
+                            </a>  
+                            <a href="#" class="btn btn-outline-secondary rounded-pill px-4 py-2">  
+                                Contact Us  
+                            </a>  
+                        </div>  
+                    </div>  
+                </div>  
+            </div>  
+        </div>  
+    </div>  
+</section>
 
-    <!-- Services Section Begin -->
-    <section class="services-section spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="section-title">
-                        <span>Our Services</span>
-                        <h2>Experience the Best</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service-item">
-                        <i class="flaticon-036-parking"></i>
-                        <h4>Exclusive Travel Plans</h4>
-                        <p>Plan your perfect vacation with our expert travel assistance and exclusive packages.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service-item">
-                        <i class="flaticon-033-dinner"></i>
-                        <h4>Gourmet Dining</h4>
-                        <p>Enjoy exquisite cuisines from around the world at our in-house restaurants.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service-item">
-                        <i class="flaticon-026-bed"></i>
-                        <h4>Luxury Accommodation</h4>
-                        <p>Stay in our well-furnished rooms designed for comfort and relaxation.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Services Section End -->
+            <!-- About Us Section End -->
 
-    <!-- Home Room Section Begin -->
-    <section class="hp-room-section">
-        <div class="container-fluid">
-            <div class="hp-room-items">
-                <div class="row">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="../assets/images/room/room-b1.jpg">
-                            <!-- <div class="hr-text">
-                                <h3>Double Room</h3>
-                                <h2>1000Rs. <span>/Pernight</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="user_" class="primary-btn">More Details</a>
-                            </div> -->
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="../assets/images/room/room-b2.jpg">
-                            <!-- <div class="hr-text">
-                                <h3>Premium King Room</h3>
-                                <h2>1000Rs.<span>/Pernight</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="#" class="primary-btn">More Details</a>
-                            </div> -->
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="../assets/images/room/room-b3.jpg">
-                            <!-- <div class="hr-text">
-                                <h3>Deluxe Room</h3>
-                                <h2>1000Rs.<span>/Pernight</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="#" class="primary-btn">More Details</a>
-                            </div> -->
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="../assets/images/room/room-b4.jpg">
-                            <!-- <div class="hr-text">
-                                <h3>Family Room</h3>
-                                <h2>1000Rs.<span>/Pernight</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="#" class="primary-btn">More Details</a>
-                            </div> -->
-                        </div>
-                    </div>
+            <!-- Services Section End -->
+            <section id="rooms" class="container mx-auto py-8 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl text-center font-serif mb-6 sm:mb-8 md:mb-10 lg:mb-12">Our Rooms</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
+        <!-- Room Card 1 -->
+        <div class="bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 shadow">
+            <img src="../assets/images/room/room4.jpg" alt="Double Room" class="w-full h-48 sm:h-56 md:h-64 lg:h-80 object-cover">
+            <div class="p-4 sm:p-5 lg:p-6">
+                <h3 class="text-xl sm:text-2xl font-serif mb-2 sm:mb-3 lg:mb-4">Double Room</h3>
+                <p class="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4">Spacious room with modern amenities and king beds.</p>
+                <div class="flex flex-col sm:flex-row justify-between items-center">
+                    <span class="text-lg sm:text-xl font-bold">₹1,000/night</span>
+                    <a href="rooms.php" class="w-full sm:w-auto text-center text-black font-medium hover:bg-blue-600 hover:text-white transition-colors duration-300 px-2 py-2 rounded-xl bg-gray-300">
+                        Book Now →
+                    </a>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- Home Room Section End -->
+
+        <!-- Room Card 2 -->
+        <div class="bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 shadow">
+            <img src="../assets/images/room/room1.jpg" alt="Premium Room" class="w-full h-48 sm:h-56 md:h-64 lg:h-80 object-cover">
+            <div class="p-4 sm:p-5 lg:p-6">
+                <h3 class="text-xl sm:text-2xl font-serif mb-2 sm:mb-3 lg:mb-4">Premium Room</h3>
+                <p class="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4">Luxurious suite with panoramic city views and premium services.</p>
+                <div class="flex flex-col sm:flex-row justify-between items-center">
+                    <span class="text-lg sm:text-xl font-bold">₹2,000/night</span>
+                    <a href="rooms.php" class="w-full sm:w-auto text-center text-black font-medium hover:bg-blue-600 hover:text-white transition-colors duration-300 px-2 py-2 rounded-xl bg-gray-300">
+                        Book Now →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Card 3 -->
+        <div class="bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 shadow">
+            <img src="../assets/images/room/room2.jpg" alt="Family Room" class="w-full h-48 sm:h-56 md:h-64 lg:h-80 object-cover">
+            <div class="p-4 sm:p-5 lg:p-6">
+                <h3 class="text-xl sm:text-2xl font-serif mb-2 sm:mb-3 lg:mb-4">Family Room</h3>
+                <p class="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4">Spacious accommodation perfect for families with children.</p>
+                <div class="flex flex-col sm:flex-row justify-between items-center">
+                    <span class="text-lg sm:text-xl font-bold">₹1,500/night</span>
+                    <a href="rooms.php" class="w-full sm:w-auto text-center text-black font-medium hover:bg-blue-600 hover:text-white transition-colors duration-300 px-2 py-2 rounded-xl bg-gray-300">
+                        Book Now →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Card 4 -->
+        <div class="bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 shadow">
+            <img src="../assets/images/room/room3.jpg" alt="Presidential Suite" class="w-full h-48 sm:h-56 md:h-64 lg:h-80 object-cover">
+            <div class="p-4 sm:p-5 lg:p-6">
+                <h3 class="text-xl sm:text-2xl font-serif mb-2 sm:mb-3 lg:mb-4">Presidential Suite</h3>
+                <p class="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4">Ultimate luxury experience with extensive amenities and services.</p>
+                <div class="flex flex-col sm:flex-row justify-between items-center">
+                    <span class="text-lg sm:text-xl font-bold">₹5,000/night</span>
+                    <a href="rooms.php" class="w-full sm:w-auto text-center text-black font-medium hover:bg-blue-600 hover:text-white transition-colors duration-300 px-2 py-2 rounded-xl bg-gray-300">
+                        Book Now →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 
     <!-- Testimonial Section Begin -->
     <section class="testimonial-section spad">
@@ -297,7 +238,7 @@
                             </div>
                             <h5> - Emily Johnson</h5>
                         </div>
-                        <img src="../assets/images/room/avatar/avatar-2.jpg" alt="Testimonial" style="border-radius:50%;">
+                        <img src="assets/images/room/avatar/avatar-2.jpg" alt="Testimonial" style="border-radius:50%;">
                     </div>
                 </div>
                 <div class="carousel-item">
@@ -315,7 +256,7 @@
                             </div>
                             <h5> - Michael Roberts</h5>
                         </div>
-                        <img src="../assets/images/room/avatar/avatar-1.jpg" alt="Testimonial" style="border-radius:50%;">
+                        <img src="assets/images/room/avatar/avatar-1.jpg" alt="Testimonial" style="border-radius:50%;">
                     </div>
                 </div>
                 <div class="carousel-item">
@@ -332,7 +273,7 @@
                             </div>
                             <h5> - Sarah Thompson</h5>
                         </div>
-                        <img src="../assets/images/room/avatar/avatar-1.jpg" alt="Testimonial" style="border-radius:50%;">
+                        <img src="assets/images/room/avatar/avatar-1.jpg" alt="Testimonial" style="border-radius:50%;">
                     </div>
                 </div>
             </div>
