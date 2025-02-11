@@ -27,7 +27,7 @@
                         <!-- <a href="#" class="primary-btn">Discover Now</a> -->
                     </div>
                 </div>
-                <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1 mt-4">
+                <!-- <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1 mt-4">
                     <div class="booking-form p-4 border rounded shadow">
                         <h3 class="mb-4">Booking Your Hotel</h3>
                         <form action="#">
@@ -62,7 +62,7 @@
                             <button type="submit" class="btn btn-primary w-100">Check Availability</button>
                         </form>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="hero-slider owl-carousel">

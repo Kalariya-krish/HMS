@@ -2319,7 +2319,7 @@ ul, ol {
             top: 50%;
             transform: translateY(-50%);
             left: 1rem;
-            color: #fca311;
+            color: #c69039;
             font-size: 2.5rem;
             font-weight: bold;
         }
@@ -2332,7 +2332,7 @@ ul, ol {
         }
 
         .contact-card:hover {
-            transform: translateY(-10px);
+            transform: translate(-10px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
