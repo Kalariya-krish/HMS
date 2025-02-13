@@ -14,7 +14,7 @@ $t1 = "CREATE TABLE Users(
         );";
 
 $t2 = "CREATE TABLE Rooms (
-            room_no INT PRIMARY KEY AUTO_INCREMENT,
+            room_no INT PRIMARY KEY,
             room_type VARCHAR(50) NOT NULL,
             room_price DECIMAL(10,2) NOT NULL,
             no_of_beds INT NOT NULL,
