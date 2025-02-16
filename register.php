@@ -1,3 +1,21 @@
+<?php
+session_start();
+include_once("db_connection.php");
+if (isset($_SESSION['reg_msg'])) {
+?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="alertmsg">
+        <strong>Success</strong> <?php echo $_SESSION['reg_msg']; ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <script>
+        setTimeout("", 5000);
+    </script>
+<?php
+    unset($_SESSION['reg_msg']);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,23 +40,23 @@
                         <div class="card-body p-5">
                             <h2 class="text-uppercase text-center mb-5">Register Hear ...</h2>
 
-                            <form id="registerform" name="registerform" method="post" enctype="multipart/form-data">
+                            <form id="registerform" action="register_insert_data.php" method="post" enctype="multipart/form-data">
                                 <div class="row">
                                     <!-- Left Column -->
                                     <div class="col-md-6">
                                         <div class="form-outline mb-4">
                                             <label class="form-label" for="fullname"><i class="fa fa-user"></i> Full Name</label>
-                                            <input type="text" id="fullname" name="fullname" class="form-control" required />
+                                            <input type="text" id="fullname" name="fullname" class="form-control" />
                                         </div>
 
                                         <div class="form-outline mb-4">
                                             <label class="form-label" for="mobile"><i class="fa fa-phone"></i> Mobile No</label>
-                                            <input type="text" id="mobileno" name="mobileno" class="form-control" required />
+                                            <input type="text" id="mobileno" name="mobileno" class="form-control" />
                                         </div>
 
                                         <div class="form-outline mb-4">
                                             <label class="form-label" for="email"><i class="fa fa-envelope"></i> Email</label>
-                                            <input type="email" id="email" name="email" class="form-control" required />
+                                            <input type="email" id="email" name="email" class="form-control" />
                                         </div>
                                     </div>
 
@@ -46,12 +64,12 @@
                                     <div class="col-md-6">
                                         <div class="form-outline mb-4">
                                             <label class="form-label" for="password"><i class="fa fa-lock"></i> Password</label>
-                                            <input type="password" id="password" name="password" class="form-control" required />
+                                            <input type="password" id="password" name="password" class="form-control" />
                                         </div>
 
                                         <div class="form-outline mb-4">
                                             <label class="form-label" for="confirm_password"><i class="fa fa-lock"></i> Confirm Password</label>
-                                            <input type="password" id="c_password" name="c_password" class="form-control" required />
+                                            <input type="password" id="confirm_password" name="confirm_password" class="form-control" />
                                         </div>
 
                                         <div class="form-outline mb-4">
@@ -75,7 +93,7 @@
                                 </div> -->
 
                                 <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-success btn-md" style="background-color:rgb(0, 103, 193);">Register</button>
+                                    <button type="submit" name="submit" class="btn btn-success btn-md" style="background-color:rgb(0, 103, 193);">Register</button>
                                 </div>
 
                                 <p class="text-center text-muted mt-4">Already have an account?
@@ -109,10 +127,8 @@
     <script>
         $(document).ready(function() {
             $("#registerform").submit(function(e) {
-                e.preventDefault();
-                if ($('#registerform').valid()) {
-                    alert('Form is valid');
-                    this.submit();
+                if (!$('#registerform').valid()) {
+                    e.preventDefault();
                 }
             });
 
@@ -139,7 +155,7 @@
                         minlength: 8,
                         maxlength: 20
                     },
-                    c_password: {
+                    confirm_password: {
                         required: true,
                         equalTo: "#password"
                     },
@@ -176,9 +192,9 @@
                         minlength: "Password must be at least 8 characters",
                         maxlength: "Password cannot exceed 20 characters"
                     },
-                    c_password: {
+                    confirm_password: {
                         required: "Confirm password is required",
-                        equalTo: "Passwords do not match"
+                        equalTo: "Confirm passwords do not match with password"
                     },
                     address: {
                         required: "Address is required",

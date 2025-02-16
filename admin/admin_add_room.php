@@ -1,3 +1,50 @@
+<?php
+include '../db_connection.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get form data
+    $room_no = mysqli_real_escape_string($con, $_POST['room_number']);
+    $room_type = mysqli_real_escape_string($con, $_POST['room_type']);
+    $price = mysqli_real_escape_string($con, $_POST['price']);
+    $beds = mysqli_real_escape_string($con, $_POST['beds']);
+    $status = mysqli_real_escape_string($con, $_POST['room_status']);
+
+    // Handle features array
+    $features = isset($_POST['features']) ? $_POST['features'] : array();
+    $features_string = mysqli_real_escape_string($con, implode(', ', $features));
+
+    // Handle file upload
+    $image_name = '';
+    if (isset($_FILES['room_image'])) {
+        $image_name = uniqid() . '_' . $_FILES['room_image']['name'];
+        $upload_path = "../assets/images/rooms/" . $image_name;
+        move_uploaded_file($_FILES['room_image']['tmp_name'], $upload_path);
+    }
+
+    // Check if room number already exists
+    $check_query = "SELECT room_no FROM rooms WHERE room_no = '$room_no'";
+    $check_result = mysqli_query($con, $check_query);
+
+    if (mysqli_num_rows($check_result) > 0) {
+        echo "<script>alert('Room number already exists!'); window.location='admin_add_room.php';</script>";
+        exit();
+    }
+
+    // Insert query
+    $query = "INSERT INTO rooms (room_no, room_type, room_price, no_of_beds, room_status, room_features, room_image) 
+              VALUES ('$room_no', '$room_type', '$price', '$beds', '$status', '$features_string', '$image_name')";
+
+    // Execute query
+    if (mysqli_query($con, $query)) {
+        echo "<script>alert('Room added successfully!'); window.location='admin_manage_rooms.php';</script>";
+    } else {
+        echo "<script>alert('Error adding room: " . mysqli_error($con) . "'); window.location='add_room.php';</script>";
+    }
+
+    mysqli_close($con);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +67,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Add Room</h4>
-                                    <form class="form-sample" id="addroom" enctype="multipart/form-data">
+                                    <form class="form-sample" id="addroom" enctype="multipart/form-data" method="POST">
                                         <p class="card-description"> Room Details </p>
                                         <div class="row">
                                             <!-- Room Number -->
@@ -99,22 +146,22 @@
                                                     <div class="col-sm-9">
                                                         <div class="form-check">
                                                             <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" value="ac"> Air Conditioning <i class="input-helper"></i>
+                                                                <input type="checkbox" class="form-check-input" value="ac" name="features[]"> Air Conditioning <i class="input-helper"></i>
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
                                                             <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" value="wifi"> Wi-Fi <i class="input-helper"></i>
+                                                                <input type="checkbox" class="form-check-input" value="wifi" name="features[]"> Wi-Fi <i class="input-helper"></i>
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
                                                             <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" value="tv"> TV <i class="input-helper"></i>
+                                                                <input type="checkbox" class="form-check-input" value="tv" name="features[]"> TV <i class="input-helper"></i>
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
                                                             <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" value="minibar"> Mini Bar <i class="input-helper"></i>
+                                                                <input type="checkbox" class="form-check-input" value="minibar" name="features[]"> Mini Bar <i class="input-helper"></i>
                                                             </label>
                                                         </div>
                                                     </div>

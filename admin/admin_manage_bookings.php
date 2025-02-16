@@ -1,18 +1,39 @@
+<?php
+include '../db_connection.php';
+
+// Fetch booking data
+$query = "SELECT * FROM bookings";
+$result = mysqli_query($con, $query);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $booking_id = $_POST['booking_id'];
+
+    $query = "DELETE FROM bookings WHERE booking_id = ?";
+    $stmt = $con->prepare($query);
+    $stmt->bind_param("i", $booking_id);
+
+    if ($stmt->execute()) {
+        echo "Booking deleted successfully!";
+    } else {
+        echo "Error deleting booking.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Manage Bookings</title>
+    <link rel="stylesheet" href="../assets/css/admin_editform_style.css">
 </head>
 
 <body>
     <div class="container-scroller">
-        <!-- Sidebar -->
         <div class="container-fluid page-body-wrapper">
             <?php include 'admin_sidebar.php'; ?>
-            <!-- Main Panel -->
             <div class="main-panel">
                 <div class="content-wrapper">
                     <div class="row">
@@ -27,91 +48,70 @@
                                                     <th>Booking ID</th>
                                                     <th>Guest Name</th>
                                                     <th>Room Number</th>
-                                                    <th>Check-In Date</th>
-                                                    <th>Check-Out Date</th>
+                                                    <th>Check-In</th>
+                                                    <th>Check-Out</th>
                                                     <th>Total Amount ($)</th>
                                                     <th>Status</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>#B001</td>
-                                                    <td>John Doe</td>
-                                                    <td>101</td>
-                                                    <td>2025-01-10</td>
-                                                    <td>2025-01-15</td>
-                                                    <td>250</td>
-                                                    <td><label class="badge badge-success">Confirmed</label></td>
-                                                    <td>
-                                                        <button class="btn btn-info btn-sm">Confirm</button>
-                                                        <button class="btn btn-danger btn-sm">Cancel</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#B002</td>
-                                                    <td>Jane Smith</td>
-                                                    <td>102</td>
-                                                    <td>2025-01-12</td>
-                                                    <td>2025-01-18</td>
-                                                    <td>480</td>
-                                                    <td><label class="badge badge-warning">Pending</label></td>
-                                                    <td>
-                                                        <button class="btn btn-info btn-sm">Confirm</button>
-                                                        <button class="btn btn-danger btn-sm">Cancel</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#B003</td>
-                                                    <td>Mark Wilson</td>
-                                                    <td>103</td>
-                                                    <td>2025-01-14</td>
-                                                    <td>2025-01-20</td>
-                                                    <td>720</td>
-                                                    <td><label class="badge badge-danger">Cancelled</label></td>
-                                                    <td>
-                                                        <button class="btn btn-info btn-sm">Confirm</button>
-                                                        <button class="btn btn-danger btn-sm">Cancel</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#B004</td>
-                                                    <td>Emily Davis</td>
-                                                    <td>104</td>
-                                                    <td>2025-01-16</td>
-                                                    <td>2025-01-22</td>
-                                                    <td>900</td>
-                                                    <td><label class="badge badge-success">Confirmed</label></td>
-                                                    <td>
-                                                        <button class="btn btn-info btn-sm">Confirm</button>
-                                                        <button class="btn btn-danger btn-sm">Cancel</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#B005</td>
-                                                    <td>Chris Brown</td>
-                                                    <td>105</td>
-                                                    <td>2025-01-18</td>
-                                                    <td>2025-01-23</td>
-                                                    <td>250</td>
-                                                    <td><label class="badge badge-warning">Pending</label></td>
-                                                    <td>
-                                                        <button class="btn btn-info btn-sm">Confirm</button>
-                                                        <button class="btn btn-danger btn-sm">Cancel</button>
-                                                    </td>
-                                                </tr>
+                                                <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                                                    <tr id="booking_<?php echo $row['booking_id']; ?>">
+                                                        <td>#B<?php echo $row['booking_id']; ?></td>
+                                                        <td><?php echo $row['guest_name']; ?></td>
+                                                        <td><?php echo $row['room_no']; ?></td>
+                                                        <td><?php echo $row['check_in']; ?></td>
+                                                        <td><?php echo $row['check_out']; ?></td>
+                                                        <td><?php echo $row['total_price']; ?></td>
+                                                        <td>
+                                                            <label class="badge badge-<?php echo ($row['status'] == 'Confirmed') ? 'success' : (($row['status'] == 'Pending') ? 'warning' : 'danger'); ?>">
+                                                                <?php echo $row['status']; ?>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-info btn-sm confirm-btn" data-id="<?php echo $row['booking_id']; ?>">Confirm</button>
+                                                            <button class="btn btn-danger btn-sm cancel-btn" data-id="<?php echo $row['booking_id']; ?>">Cancel</button>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).on("click", ".confirm-btn", function() {
+            let bookingId = $(this).data("id");
+            $.post("update_booking.php", {
+                booking_id: bookingId,
+                status: "Confirmed"
+            }, function(response) {
+                alert(response);
+                location.reload();
+            });
+        });
+
+        $(document).on("click", ".cancel-btn", function() {
+            let bookingId = $(this).data("id");
+            if (confirm("Are you sure you want to cancel this booking?")) {
+                $.post("update_booking.php", {
+                    booking_id: bookingId,
+                    status: "Cancelled"
+                }, function(response) {
+                    alert(response);
+                    location.reload();
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

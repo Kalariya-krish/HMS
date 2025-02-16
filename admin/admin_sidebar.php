@@ -26,6 +26,7 @@
     <!-- inject:css -->
     <!-- endinject -->
     <link rel="shortcut icon" href="../assets/images/favicon.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         body,
         a {

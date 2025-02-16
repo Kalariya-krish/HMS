@@ -1,69 +1,117 @@
 <?php
 include '../db_connection.php';
-$query = "SELECT * FROM rooms";
-$result = mysqli_query($con, $query);
-?>
 
+// Handle Room Update
+if (isset($_POST['update_room'])) {
+    $room_no = $_POST['room_number'];
+    $room_type = $_POST['room_type'];
+    $price = $_POST['price'];
+    $beds = $_POST['beds'];
+    $status = $_POST['room_status'];
+    $features = implode(', ', $_POST['features'] ?? []);
+
+    $image_name = $_POST['current_image'];
+    if (!empty($_FILES['room_image']['name'])) {
+        $image_name = uniqid() . "_" . $_FILES['room_image']['name'];
+        move_uploaded_file($_FILES['room_image']['tmp_name'], "../assets/images/rooms/$image_name");
+    }
+
+    $query = "UPDATE rooms SET room_type='$room_type', room_price='$price', no_of_beds='$beds', room_status='$status', room_features='$features', room_image='$image_name' WHERE room_no='$room_no'";
+    mysqli_query($con, $query);
+    header("Location: manage_rooms.php");
+    exit();
+}
+
+// Handle Room Deletion
+if (isset($_GET['delete_id'])) {
+    $room_no = $_GET['delete_id'];
+
+    // Delete related bookings first
+    $deleteBookings = "DELETE FROM bookings WHERE room_no = '$room_no'";
+    mysqli_query($con, $deleteBookings);
+
+    // Now delete the room
+    $deleteRoom = "DELETE FROM rooms WHERE room_no = '$room_no'";
+    if (mysqli_query($con, $deleteRoom)) {
+        echo "<script>alert('Room deleted successfully!'); window.location='admin_manage_rooms.php';</script>";
+    } else {
+        echo "<script>alert('Error deleting room!');</script>";
+    }
+}
+
+
+// Handle Status Change
+if (isset($_GET['status_id']) && isset($_GET['status'])) {
+    $room_no = $_GET['status_id'];
+    $new_status = $_GET['status'];
+    mysqli_query($con, "UPDATE rooms SET room_status='$new_status' WHERE room_no='$room_no'");
+    header("Location: admin_manage_rooms.php");
+    exit();
+}
+
+// Fetch Rooms Data
+$result = mysqli_query($con, "SELECT * FROM rooms");
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Manage Rooms</title>
     <link rel="stylesheet" href="../assets/css/admin_editform_style.css">
 </head>
 
 <body>
     <div class="container-scroller">
-        <!-- Sidebar -->
         <div class="container-fluid page-body-wrapper">
             <?php include 'admin_sidebar.php'; ?>
-            <!-- Main Panel -->
             <div class="main-panel">
                 <div class="content-wrapper">
-                    <div class="row">
-                        <div class="col-12 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Manage Rooms</h4>
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Image</th>
-                                                    <th>Room Number</th>
-                                                    <th>Room Type</th>
-                                                    <th>Price ($)</th>
-                                                    <th>No. of Beds</th>
-                                                    <th>Features</th>
-                                                    <th>Status</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                                                    <tr>
-                                                        <td>
-                                                            <img src="../assets/images/rooms/<?php echo $row['room_image']; ?>" alt="Room Image" class="img-fluid rounded">
-                                                        </td>
-                                                        <td><?php echo $row['room_no']; ?></td>
-                                                        <td><?php echo $row['room_type']; ?></td>
-                                                        <td><?php echo $row['room_price']; ?></td>
-                                                        <td><?php echo $row['no_of_beds']; ?></td>
-                                                        <td><?php echo $row['room_features']; ?></td>
-                                                        <td><label class="badge badge-<?php echo $row['room_status'] == 'Available' ? 'success' : ($row['room_status'] == 'Occupied' ? 'warning' : 'danger'); ?>">
-                                                                <?php echo ucfirst($row['room_status']); ?></label></td>
-                                                        <td>
-                                                            <button class="btn btn-info btn-sm edit-btn" data-room="102" data-type="Double" data-price="80">Edit</button>
-                                                            <button href="?delete_id=<?php echo $row['room_no']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</button>
-                                                        </td>
-                                                    </tr>
-                                                <?php } ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Manage Rooms</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Room Number</th>
+                                            <th>Room Type</th>
+                                            <th>Price ($)</th>
+                                            <th>No. of Beds</th>
+                                            <th>Features</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                                            <tr>
+                                                <td><img src="../assets/images/rooms/<?php echo $row['room_image']; ?>" class="img-fluid rounded" width="80"></td>
+                                                <td><?php echo $row['room_no']; ?></td>
+                                                <td><?php echo ucfirst($row['room_type']); ?></td>
+                                                <td><?php echo $row['room_price']; ?></td>
+                                                <td><?php echo $row['no_of_beds']; ?></td>
+                                                <td><?php echo $row['room_features']; ?></td>
+                                                <td>
+                                                    <a href="?status_id=<?php echo $row['room_no']; ?>&status=<?php echo ($row['room_status'] == 'Available') ? 'Occupied' : 'Available'; ?>" class="btn btn-sm btn-<?php echo ($row['room_status'] == 'Available') ? 'success' : 'danger'; ?>">
+                                                        <i class="fas fa-toggle-<?php echo ($row['room_status'] == 'Available') ? 'on' : 'off'; ?>"></i>
+                                                        <?php echo ucfirst($row['room_status']); ?>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-info btn-sm edit-btn" data-room='<?php echo json_encode($row); ?>'>
+                                                        <i class="fas fa-edit"></i> Edit
+                                                    </button>
+                                                    <a href="?delete_id=<?php echo $row['room_no']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -71,8 +119,7 @@ $result = mysqli_query($con, $query);
             </div>
         </div>
 
-
-        <!-- Edit Modal -->
+        <!-- Edit Modal Start -->
         <div class="overlay" id="editModal">
             <div class="popup-card">
                 <h4 class="card-title">Edit Room</h4><br><br>
@@ -189,121 +236,54 @@ $result = mysqli_query($con, $query);
                 </form>
             </div>
         </div>
+        <!-- Edit Modal End -->
 
         <script>
-            const editButtons = document.querySelectorAll(".edit-btn");
-            const editModal = document.getElementById("editModal");
-            const closeModal = document.getElementById("closeModal");
-
-            editButtons.forEach(button => {
+            document.querySelectorAll(".edit-btn").forEach(button => {
                 button.addEventListener("click", () => {
-                    document.getElementById("editRoomNumber").value = button.getAttribute("data-room");
-                    document.getElementById("editRoomType").value = button.getAttribute("data-type");
-                    document.getElementById("editPrice").value = button.getAttribute("data-price");
+                    let data = JSON.parse(button.getAttribute("data-room"));
 
-                    editModal.style.display = "flex";
+                    // Populate text fields
+                    document.getElementById("editRoomNumber").value = data.room_no;
+                    document.getElementById("editRoomType").value = data.room_type.toLowerCase(); // Convert to lowercase to match option values
+                    document.getElementById("editPrice").value = data.room_price;
+                    document.getElementById("editBeds").value = data.no_of_beds;
+                    document.getElementById("editStatus").value = data.room_status.toLowerCase(); // Convert to lowercase to match option values
+
+                    // Update image preview
+                    let imageElement = document.querySelector("#editModal img");
+                    imageElement.src = "../assets/images/rooms/" + data.room_image;
+                    imageElement.alt = "Room Image";
+
+                    // Handle features checkboxes
+                    let featureCheckboxes = document.querySelectorAll(".form-check-input");
+                    let currentFeatures = data.room_features
+                        .split(", ")
+                        .map(feature => feature.toLowerCase().trim()); // Convert to lowercase and trim whitespace
+
+                    featureCheckboxes.forEach(checkbox => {
+                        // Check if the checkbox value exists in the currentFeatures array
+                        checkbox.checked = currentFeatures.includes(checkbox.value);
+                    });
+
+                    // Add hidden input for current image
+                    let currentImageInput = document.createElement('input');
+                    currentImageInput.type = 'hidden';
+                    currentImageInput.name = 'current_image';
+                    currentImageInput.value = data.room_image;
+                    document.getElementById("editForm").appendChild(currentImageInput);
+
+                    // Show the modal
+                    document.getElementById("editModal").style.display = "flex";
                 });
             });
 
-            closeModal.addEventListener("click", () => {
-                editModal.style.display = "none";
-            });
-
-            // Close modal when clicking outside the card
-            editModal.addEventListener("click", (e) => {
-                if (e.target === editModal) {
-                    editModal.style.display = "none";
-                }
-            });
-
-            $(document).ready(function() {
-                // Custom file size validation method
-                $.validator.addMethod("filesize", function(value, element, param) {
-                    return this.optional(element) || (element.files[0].size <= param);
-                }, "File size must be less than 2MB");
-
-                $('#editForm').validate({
-                    rules: {
-                        room_number: {
-                            required: true,
-                            digits: true,
-                            minlength: 1,
-                            maxlength: 4
-                        },
-                        room_type: {
-                            required: true
-                        },
-                        price: {
-                            required: true,
-                            number: true,
-                            min: 1
-                        },
-                        beds: {
-                            required: true,
-                            digits: true,
-                            min: 1,
-                            max: 10
-                        },
-                        room_status: {
-                            required: true
-                        },
-                        room_image: {
-                            required: true,
-                            extension: "jpg|jpeg|png",
-                            filesize: 2097152 // 2MB
-                        }
-                    },
-                    messages: {
-                        room_number: {
-                            required: "Room number is required",
-                            digits: "Only numeric values are allowed",
-                            minlength: "Room number must be at least 1 digit",
-                            maxlength: "Room number cannot exceed 4 digits"
-                        },
-                        room_type: {
-                            required: "Please select a room type"
-                        },
-                        price: {
-                            required: "Price is required",
-                            number: "Enter a valid number",
-                            min: "Price must be greater than $0"
-                        },
-                        beds: {
-                            required: "Number of beds is required",
-                            digits: "Only numeric values are allowed",
-                            min: "At least one bed is required",
-                            max: "Cannot exceed 10 beds"
-                        },
-                        room_status: {
-                            required: "Please select room status"
-                        },
-                        room_image: {
-                            required: "Room image is required",
-                            extension: "Only JPG, JPEG, PNG files are allowed",
-                            filesize: "File size must be less than 2MB"
-                        }
-                    },
-                    errorElement: "div",
-                    errorPlacement: function(error, element) {
-                        error.addClass('invalid-feedback');
-                        error.insertAfter(element);
-                    },
-                    highlight: function(element) {
-                        $(element).addClass('is-invalid').removeClass('is-valid');
-                    },
-                    unhighlight: function(element) {
-                        $(element).addClass('is-valid').removeClass('is-invalid');
-                    }
-                });
-
-                // Prevent form submission if validation fails
-                $('#editForm').submit(function(e) {
-                    if (!$(this).valid()) {
-                        e.preventDefault();
-                    }
-                });
+            // Close modal
+            document.getElementById("closeModal").addEventListener("click", () => {
+                document.getElementById("editModal").style.display = "none";
             });
         </script>
+
 </body>
 
 </html>
