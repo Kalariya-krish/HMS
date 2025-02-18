@@ -1,3 +1,37 @@
+<?php
+include '../db_connection.php'; // Include database connection
+
+// Handle Delete Payment
+if (isset($_POST['delete_payment'])) {
+    $payment_id = $_POST['payment_id'];
+    $deleteQuery = "DELETE FROM payments WHERE payment_id = ?";
+    $stmt = $con->prepare($deleteQuery);
+    $stmt->bind_param("i", $payment_id);
+    $stmt->execute();
+    $stmt->close();
+    header("Location: admin_manage_payments.php");
+    exit();
+}
+
+// Handle Update Payment Status
+if (isset($_POST['update_status'])) {
+    $payment_id = $_POST['payment_id'];
+    $new_status = $_POST['new_status'];
+    $updateQuery = "UPDATE payments SET payment_status = ? WHERE payment_id = ?";
+    $stmt = $con->prepare($updateQuery);
+    $stmt->bind_param("si", $new_status, $payment_id);
+    $stmt->execute();
+    $stmt->close();
+    header("Location: admin_manage_payments.php");
+    exit();
+}
+
+// Fetch Payments from Database
+$query = "SELECT p.payment_id, p.transaction_id, u.fullname, p.amount, p.payment_method, p.payment_status 
+          FROM payments p JOIN users u ON p.user_id = u.id";
+$result = $con->query($query);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,62 +66,47 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>TXN123456</td>
-                                                    <td>John Doe</td>
-                                                    <td>150.00</td>
-                                                    <td>Credit Card</td>
-                                                    <td><label class="badge badge-success">Completed</label></td>
-                                                    <td>
-                                                        <button class="btn btn-info btn-sm view-btn"
-                                                            data-transaction="TXN123456"
-                                                            data-user="John Doe"
-                                                            data-amount="150.00"
-                                                            data-method="Credit Card"
-                                                            data-status="Completed">
-                                                            View
-                                                        </button>
-                                                        <button class="btn btn-danger btn-sm">Delete</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>TXN654321</td>
-                                                    <td>Jane Smith</td>
-                                                    <td>200.00</td>
-                                                    <td>PayPal</td>
-                                                    <td><label class="badge badge-warning">Pending</label></td>
-                                                    <td>
-                                                        <button class="btn btn-info btn-sm view-btn"
-                                                            data-transaction="TXN654321"
-                                                            data-user="Jane Smith"
-                                                            data-amount="200.00"
-                                                            data-method="PayPal"
-                                                            data-status="Pending">
-                                                            View
-                                                        </button>
-                                                        <button class="btn btn-danger btn-sm">Delete</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>TXN789012</td>
-                                                    <td>Michael Brown</td>
-                                                    <td>120.00</td>
-                                                    <td>Bank Transfer</td>
-                                                    <td><label class="badge badge-danger">Failed</label></td>
-                                                    <td>
-                                                        <button class="btn btn-info btn-sm view-btn"
-                                                            data-transaction="TXN789012"
-                                                            data-user="Michael Brown"
-                                                            data-amount="120.00"
-                                                            data-method="Bank Transfer"
-                                                            data-status="Failed">
-                                                            View
-                                                        </button>
-                                                        <button class="btn btn-danger btn-sm">Delete</button>
-                                                    </td>
-                                                </tr>
+                                                <?php while ($row = $result->fetch_assoc()) { ?>
+                                                    <tr>
+                                                        <td><?php echo $row['transaction_id']; ?></td>
+                                                        <td><?php echo $row['fullname']; ?></td>
+                                                        <td><?php echo $row['amount']; ?></td>
+                                                        <td><?php echo $row['payment_method']; ?></td>
+                                                        <td>
+                                                            <label class="badge <?php
+                                                                                echo ($row['payment_status'] == 'Completed') ? 'badge-success' : (($row['payment_status'] == 'Pending') ? 'badge-warning' : 'badge-danger');
+                                                                                ?>">
+                                                                <?php echo $row['payment_status']; ?>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-info btn-sm view-btn"
+                                                                data-transaction="<?php echo $row['transaction_id']; ?>"
+                                                                data-user="<?php echo $row['fullname']; ?>"
+                                                                data-amount="<?php echo $row['amount']; ?>"
+                                                                data-method="<?php echo $row['payment_method']; ?>"
+                                                                data-status="<?php echo $row['payment_status']; ?>">
+                                                                View
+                                                            </button>
+                                                            <form method="POST" style="display:inline;">
+                                                                <input type="hidden" name="payment_id" value="<?php echo $row['payment_id']; ?>">
+                                                                <select name="new_status" class="form-control-sm">
+                                                                    <option value="Pending" <?php if ($row['payment_status'] == 'Pending') echo 'selected'; ?>>Pending</option>
+                                                                    <option value="Completed" <?php if ($row['payment_status'] == 'Completed') echo 'selected'; ?>>Completed</option>
+                                                                    <option value="Failed" <?php if ($row['payment_status'] == 'Failed') echo 'selected'; ?>>Failed</option>
+                                                                </select>
+                                                                <button type="submit" name="update_status" class="btn btn-success btn-sm">Update</button>
+                                                            </form>
+                                                            <form method="POST" style="display:inline;">
+                                                                <input type="hidden" name="payment_id" value="<?php echo $row['payment_id']; ?>">
+                                                                <button type="submit" name="delete_payment" class="btn btn-danger btn-sm">Delete</button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
                                             </tbody>
                                         </table>
+                                        <?php if ($result->num_rows == 0) echo "<p>No payments found.</p>"; ?>
                                     </div>
                                 </div>
                             </div>
@@ -112,33 +131,27 @@
         </div>
     </div>
 
-
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const viewButtons = document.querySelectorAll(".view-btn"); // Fix variable name
+            const viewButtons = document.querySelectorAll(".view-btn");
             const paymentModal = document.getElementById("paymentModal");
             const closeModal = document.getElementById("closeModal");
 
             viewButtons.forEach(button => {
                 button.addEventListener("click", () => {
-                    // Populate modal with data from button attributes
                     document.getElementById("modalTransaction").textContent = button.dataset.transaction;
                     document.getElementById("modalUser").textContent = button.dataset.user;
                     document.getElementById("modalAmount").textContent = button.dataset.amount;
                     document.getElementById("modalMethod").textContent = button.dataset.method;
                     document.getElementById("modalStatus").textContent = button.dataset.status;
-
-                    // Show modal
                     paymentModal.style.display = "flex";
                 });
             });
 
-            // Close modal when clicking the "Close" button
             closeModal.addEventListener("click", () => {
                 paymentModal.style.display = "none";
             });
 
-            // Close modal when clicking outside the modal content
             paymentModal.addEventListener("click", (e) => {
                 if (e.target === paymentModal) {
                     paymentModal.style.display = "none";

@@ -106,7 +106,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Upload Picture</label>
                                                     <div class="col-sm-9">
-                                                        <input type="file" class="form-control" accept="image/*"  name="profile_picture">
+                                                        <input type="file" class="form-control" accept="image/*" name="profile_picture">
                                                     </div>
                                                 </div>
                                             </div>
@@ -131,94 +131,93 @@
 
     <script>
         $(document).ready(function() {
-    // Custom method to validate file size (max 2MB)
-    $.validator.addMethod("filesize", function(value, element, param) {
-        return this.optional(element) || (element.files[0].size <= param);
-    }, "File size must be less than 2MB");
+            // Custom method to validate file size (max 2MB)
+            $.validator.addMethod("filesize", function(value, element, param) {
+                return this.optional(element) || (element.files[0].size <= param);
+            }, "File size must be less than 2MB");
 
-    // Form validation
-    $('.form-sample').validate({
-        rules: {
-            username: {
-                required: true,
-                minlength: 3,
-                maxlength: 50
-            },
-            email: {
-                required: true,
-                email: true
-            },
-            password: {
-                required: true,
-                minlength: 6
-            },
-            confirm_password: {
-                required: true,
-                equalTo: "[name='password']"
-            },
-            role: {
-                required: true
-            },
-            status: {
-                required: true
-            },
-            profile_picture: {
-                required: true,
-                extension: "jpg|jpeg|png|gif",
-                filesize: 2097152 // 2MB in bytes
-            }
-        },
-        messages: {
-            username: {
-                required: "Username is required",
-                minlength: "Username must be at least 3 characters",
-                maxlength: "Username cannot exceed 50 characters"
-            },
-            email: {
-                required: "Email is required",
-                email: "Please enter a valid email address"
-            },
-            password: {
-                required: "Password is required",
-                minlength: "Password must be at least 6 characters"
-            },
-            confirm_password: {
-                required: "Please confirm your password",
-                equalTo: "Passwords do not match"
-            },
-            role: {
-                required: "Please select a role"
-            },
-            status: {
-                required: "Please select a status"
-            },
-            profile_picture: {
-                required: "Profile picture is required",
-                extension: "Only JPG, JPEG, PNG, or GIF files are allowed",
-                filesize: "File size must be less than 2MB"
-            }
-        },
-        errorElement: "div",
-        errorPlacement: function(error, element) {
-            error.addClass('invalid-feedback');
-            error.insertAfter(element);
-        },
-        highlight: function(element) {
-            $(element).addClass('is-invalid').removeClass('is-valid');
-        },
-        unhighlight: function(element) {
-            $(element).addClass('is-valid').removeClass('is-invalid');
-        }
-    });
+            // Form validation
+            $('.form-sample').validate({
+                rules: {
+                    username: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 50
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6
+                    },
+                    confirm_password: {
+                        required: true,
+                        equalTo: "[name='password']"
+                    },
+                    role: {
+                        required: true
+                    },
+                    status: {
+                        required: true
+                    },
+                    profile_picture: {
+                        required: true,
+                        extension: "jpg|jpeg|png|gif",
+                        filesize: 2097152 // 2MB in bytes
+                    }
+                },
+                messages: {
+                    username: {
+                        required: "Username is required",
+                        minlength: "Username must be at least 3 characters",
+                        maxlength: "Username cannot exceed 50 characters"
+                    },
+                    email: {
+                        required: "Email is required",
+                        email: "Please enter a valid email address"
+                    },
+                    password: {
+                        required: "Password is required",
+                        minlength: "Password must be at least 6 characters"
+                    },
+                    confirm_password: {
+                        required: "Please confirm your password",
+                        equalTo: "Passwords do not match"
+                    },
+                    role: {
+                        required: "Please select a role"
+                    },
+                    status: {
+                        required: "Please select a status"
+                    },
+                    profile_picture: {
+                        required: "Profile picture is required",
+                        extension: "Only JPG, JPEG, PNG, or GIF files are allowed",
+                        filesize: "File size must be less than 2MB"
+                    }
+                },
+                errorElement: "div",
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    error.insertAfter(element);
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid').removeClass('is-valid');
+                },
+                unhighlight: function(element) {
+                    $(element).addClass('is-valid').removeClass('is-invalid');
+                }
+            });
 
-    // Prevent form submission if validation fails
-    $('.form-sample').submit(function(e) {
-        if (!$(this).valid()) {
-            e.preventDefault();
-        }
-    });
-});
-
+            // Prevent form submission if validation fails
+            $('.form-sample').submit(function(e) {
+                if (!$(this).valid()) {
+                    e.preventDefault();
+                }
+            });
+        });
     </script>
 </body>
 

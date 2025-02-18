@@ -1,10 +1,50 @@
+<?php
+include '../db_connection.php'; // Database connection
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $offer_title = $_POST['offer_title'];
+    $discount = $_POST['discount'];
+    $valid_from = $_POST['valid_from'];
+    $valid_to = $_POST['valid_until'];
+    $offer_description = $_POST['offer_description'];
+    $status = 'Active'; // Default status
+
+    // File upload handling
+    $target_dir = "../assets/images/offers/";
+    $offer_image = uniqid() . basename($_FILES["offer_image"]["name"]);
+    $target_file = $target_dir . $offer_image;
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    $uploadOk = 1;
+
+    // Move file to target directory
+    if (move_uploaded_file($_FILES["offer_image"]["tmp_name"], $target_file)) {
+        // Insert into database
+        $query = "INSERT INTO offers (offer_title, discount_percentage, valid_from, valid_to, offer_description, offer_image, status) 
+                  VALUES ('$offer_title', '$discount', '$valid_from', '$valid_to', '$offer_description', '$offer_image', '$status')";
+
+        if (mysqli_query($con, $query)) {
+            header("Location: admin_add_offer.php?success=Offer added successfully.");
+            exit();
+        } else {
+            header("Location: admin_add_offer.php?error=Database error: " . mysqli_error($con));
+            exit();
+        }
+    } else {
+        header("Location: admin_add_offer.php?error=Error uploading image.");
+        exit();
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Add Offer</title>
+    <link rel="stylesheet" href="../assets/css/admin_style.css">
 </head>
 
 <body>
@@ -18,14 +58,27 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Add Offer</h4>
-                                    <form class="form-sample" id="addoffer" enctype="multipart/form-data">
-                                        <p class="card-description"> Offer Details </p>
+
+                                    <!-- Success/Error Message -->
+                                    <?php if (isset($_GET['success']) || isset($_GET['error'])) { ?>
+                                        <div id="alert-box" class="alert <?= isset($_GET['success']) ? 'alert-success' : 'alert-danger' ?>" role="alert">
+                                            <?= isset($_GET['success']) ? $_GET['success'] : $_GET['error'] ?>
+                                        </div>
+                                        <script>
+                                            setTimeout(() => {
+                                                document.getElementById('alert-box').style.display = 'none';
+                                            }, 3000);
+                                        </script>
+                                    <?php } ?>
+
+                                    <form class="form-sample" id="addoffer" action="" method="POST" enctype="multipart/form-data">
+                                        <p class="card-description">Offer Details</p>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Offer Title</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" placeholder="Enter offer title" name="offer_title">
+                                                        <input type="text" class="form-control" placeholder="Enter offer title" name="offer_title" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -34,7 +87,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Discount (%)</label>
                                                     <div class="col-sm-9">
-                                                        <input type="number" class="form-control" placeholder="Enter discount percentage" step="0.01" name="discount">
+                                                        <input type="number" class="form-control" placeholder="Enter discount percentage" name="discount" min="0" max="100" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -45,7 +98,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Valid From</label>
                                                     <div class="col-sm-9">
-                                                        <input type="date" class="form-control" name="valid_from">
+                                                        <input type="date" class="form-control" name="valid_from" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -54,7 +107,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Valid Until</label>
                                                     <div class="col-sm-9">
-                                                        <input type="date" class="form-control" name="valid_until">
+                                                        <input type="date" class="form-control" name="valid_until" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -65,7 +118,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Offer Description</label>
                                                     <div class="col-sm-9">
-                                                        <textarea class="form-control" rows="3" placeholder="Enter offer details" name="offer_description"></textarea>
+                                                        <textarea class="form-control" rows="3" placeholder="Enter offer details" name="offer_description" required></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -74,7 +127,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Offer Image</label>
                                                     <div class="col-sm-9">
-                                                        <input type="file" class="form-control" accept="image/*" name="offer_image">
+                                                        <input type="file" class="form-control" accept="image/*" name="offer_image" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -86,6 +139,7 @@
                                             </div>
                                         </div>
                                     </form>
+
                                 </div>
                             </div>
                         </div>
@@ -94,8 +148,6 @@
             </div>
         </div>
     </div>
-
-
 
     <script>
         $(document).ready(function() {

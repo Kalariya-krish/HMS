@@ -1,3 +1,31 @@
+<?php
+include '../db_connection.php'; // Include your database connection file
+
+// Handle Delete Bill action
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_bill'])) {
+    $bill_id = $_POST['bill_id'];
+
+    $delete_query = "DELETE FROM bills WHERE bill_id='$bill_id'";
+
+    if (mysqli_query($con, $delete_query)) {
+        header("Location: admin_manage_bills.php?success=Bill Deleted Successfully");
+        exit();
+    } else {
+        header("Location: admin_manage_bills.php?error=Database error: " . mysqli_error($con));
+        exit();
+    }
+}
+
+// Fetch bills with customer name and room number using JOINs.
+// Adjust the table and column names as per your schema.
+$query = "SELECT b.*, u.fullname AS customer_name, bk.room_no 
+          FROM bills b 
+          JOIN users u ON b.user_id = u.id 
+          JOIN bookings bk ON b.booking_id = bk.booking_id
+          ORDER BY b.generated_at DESC";
+$result = mysqli_query($con, $query);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,6 +33,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Bills</title>
+    <link rel="stylesheet" href="../assets/css/admin_style.css">
 </head>
 
 <body>
@@ -18,6 +47,19 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Manage Bills</h4>
+
+                                    <!-- Display success/error messages -->
+                                    <?php if (isset($_GET['success']) || isset($_GET['error'])) { ?>
+                                        <div id="alert-box" class="alert <?= isset($_GET['success']) ? 'alert-success' : 'alert-danger' ?>" role="alert">
+                                            <?= isset($_GET['success']) ? $_GET['success'] : $_GET['error'] ?>
+                                        </div>
+                                        <script>
+                                            setTimeout(() => {
+                                                document.getElementById('alert-box').style.display = 'none';
+                                            }, 5000);
+                                        </script>
+                                    <?php } ?>
+
                                     <div class="table-responsive">
                                         <table class="table">
                                             <thead>
@@ -31,42 +73,48 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1001</td>
-                                                    <td>John Doe</td>
-                                                    <td>101</td>
-                                                    <td>200</td>
-                                                    <td><label class="badge badge-success">Paid</label></td>
-                                                    <td>
-                                                        <button class="btn btn-info btn-sm">Print</button>
-                                                        <button class="btn btn-danger btn-sm">Delete</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>1002</td>
-                                                    <td>Jane Smith</td>
-                                                    <td>102</td>
-                                                    <td>350</td>
-                                                    <td><label class="badge badge-warning">Pending</label></td>
-                                                    <td>
-                                                        <button class="btn btn-info btn-sm">Print</button>
-                                                        <button class="btn btn-danger btn-sm">Delete</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>1003</td>
-                                                    <td>Michael Johnson</td>
-                                                    <td>103</td>
-                                                    <td>500</td>
-                                                    <td><label class="badge badge-danger">Unpaid</label></td>
-                                                    <td>
-                                                        <button class="btn btn-info btn-sm">Print</button>
-                                                        <button class="btn btn-danger btn-sm">Delete</button>
-                                                    </td>
-                                                </tr>
+                                                <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                                                    <tr>
+                                                        <td><?= $row['bill_id'] ?></td>
+                                                        <td><?= htmlspecialchars($row['customer_name']) ?></td>
+                                                        <td><?= $row['room_no'] ?></td>
+                                                        <td><?= number_format($row['amount'], 2) ?></td>
+                                                        <td>
+                                                            <?php
+                                                            $status = $row['payment_status'];
+                                                            if ($status == 'Paid') {
+                                                                echo '<label class="badge badge-success">Paid</label>';
+                                                            } elseif ($status == 'Pending') {
+                                                                echo '<label class="badge badge-warning">Pending</label>';
+                                                            } elseif ($status == 'Unpaid') {
+                                                                echo '<label class="badge badge-danger">Unpaid</label>';
+                                                            } else {
+                                                                echo '<label class="badge badge-secondary">' . htmlspecialchars($status) . '</label>';
+                                                            }
+                                                            ?>
+                                                        </td>
+                                                        <td>
+                                                            <!-- Print Bill Button: Calls the PDF generation script -->
+                                                            <a href="generate_bill_pdf.php?bill_id=<?= $row['bill_id'] ?>" target="_blank" class="btn btn-info btn-sm">Print</a>
+
+                                                            <!-- Delete Bill Button -->
+                                                            <form method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this bill?');">
+                                                                <input type="hidden" name="bill_id" value="<?= $row['bill_id'] ?>">
+                                                                <input type="hidden" name="delete_bill" value="1">
+                                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                                <?php if (mysqli_num_rows($result) == 0) { ?>
+                                                    <tr>
+                                                        <td colspan="6">No bills found.</td>
+                                                    </tr>
+                                                <?php } ?>
                                             </tbody>
                                         </table>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
