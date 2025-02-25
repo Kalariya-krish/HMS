@@ -1,3 +1,49 @@
+<?php
+include '../db_connection.php'; // Include your database connection file
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $fullname = $_POST['fullname'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
+    $mobile_no = $_POST['mobile_no'];
+    $address = $_POST['address'];
+    $role = $_POST['role'];
+    $status = $_POST['status'];
+
+    // Handling file upload
+    $profile_picture = $_FILES['profile_picture']['name'];
+    $file_name = uniqid() . $_FILES['profile_picture']['name'];
+    $target_dir = "../assets/images/profile_picture/";
+    $target_file = $target_dir . $file_name;
+
+    // Move the uploaded file to the server directory
+    if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $target_file)) {
+        // Insert into the database (now includes confirm_password)
+        $sql = "INSERT INTO users (fullname, email, password, confirm_password, mobile_no, address, role, status, profile_picture) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = $con->prepare($sql);
+        $stmt->bind_param("sssssssss", $fullname, $email, $password, $confirm_password, $mobile_no, $address, $role, $status, $file_name);
+
+        if ($stmt->execute()) {
+            header("Location: admin_add_user.php?success=User added successfully.");
+            exit();
+        } else {
+            header("Location: admin_add_user.php?error=Database error: " . mysqli_error($con));
+            exit();
+        }
+
+        $stmt->close();
+    } else {
+        header("Location: add_user.php?error=Error uploading profile picture.");
+        exit();
+    }
+
+    $con->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +66,20 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Add User</h4>
-                                    <form class="form-sample">
+
+                                    <!-- Success/Error Message -->
+                                    <?php if (isset($_GET['success']) || isset($_GET['error'])) { ?>
+                                        <div id="alert-box" class="alert <?= isset($_GET['success']) ? 'alert-success' : 'alert-danger' ?>" role="alert">
+                                            <?= isset($_GET['success']) ? $_GET['success'] : $_GET['error'] ?>
+                                        </div>
+                                        <script>
+                                            setTimeout(() => {
+                                                document.getElementById('alert-box').style.display = 'none';
+                                            }, 3000);
+                                        </script>
+                                    <?php } ?>
+
+                                    <form class="form-sample" action="" method="POST" enctype="multipart/form-data">
                                         <p class="card-description"> User Details </p>
                                         <div class="row">
                                             <!-- Username -->
@@ -28,7 +87,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Username</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" placeholder="Enter username" name="username">
+                                                        <input type="text" class="form-control" placeholder="Enter username" name="fullname">
                                                     </div>
                                                 </div>
                                             </div>
@@ -67,18 +126,12 @@
                                         </div>
 
                                         <div class="row">
-                                            <!-- Role -->
+                                            <!-- Mobile no -->
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Role</label>
+                                                    <label class="col-sm-3 col-form-label">Mobile no</label>
                                                     <div class="col-sm-9">
-                                                        <select class="form-select" name="role">
-                                                            <option value="" disabled selected>Select Role</option>
-                                                            <option value="admin">Admin</option>
-                                                            <option value="manager">Manager</option>
-                                                            <option value="staff">Staff</option>
-                                                            <option value="guest">Guest</option>
-                                                        </select>
+                                                        <input type="text" class="form-control" placeholder="Enter mobile no" name="mobile_no">
                                                     </div>
                                                 </div>
                                             </div>
@@ -86,37 +139,64 @@
                                             <!-- Status -->
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Status</label>
+                                                    <label class="col-sm-3 col-form-label">Address</label>
                                                     <div class="col-sm-9">
-                                                        <select class="form-select" name="status">
-                                                            <option value="" disabled selected>Select Status</option>
-                                                            <option value="active">Active</option>
-                                                            <option value="inactive">Inactive</option>
-                                                            <option value="banned">Banned</option>
-                                                        </select>
+                                                        <textarea class="form-control" rows="3" placeholder="Enter address" name="address"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <p class="card-description"> Profile Picture </p>
-                                        <div class="row">
-                                            <!-- Profile Picture -->
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Upload Picture</label>
-                                                    <div class="col-sm-9">
-                                                        <input type="file" class="form-control" accept="image/*" name="profile_picture">
+                                            <div class="row">
+                                                <!-- Role -->
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Role</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="form-select" name="role">
+                                                                <option value="" disabled selected>Select Role</option>
+                                                                <option value="admin">Admin</option>
+                                                                <option value="manager">Manager</option>
+                                                                <option value="staff">Staff</option>
+                                                                <option value="guest">Guest</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Status -->
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Status</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="form-select" name="status">
+                                                                <option value="" disabled selected>Select Status</option>
+                                                                <option value="active">Active</option>
+                                                                <option value="inactive">Inactive</option>
+                                                                <option value="banned">Banned</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <button type="submit" class="btn btn-primary" style="background-color:rgb(0, 103, 193);">Add User</button>
+                                            <p class="card-description"> Profile Picture </p>
+                                            <div class="row">
+                                                <!-- Profile Picture -->
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Upload Picture</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="file" class="form-control" accept="image/*" name="profile_picture">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <button type="submit" class="btn btn-primary" style="background-color:rgb(0, 103, 193);">Add User</button>
+                                                </div>
+                                            </div>
                                     </form>
                                 </div>
                             </div>
@@ -139,7 +219,7 @@
             // Form validation
             $('.form-sample').validate({
                 rules: {
-                    username: {
+                    fullname: {
                         required: true,
                         minlength: 3,
                         maxlength: 50
@@ -156,6 +236,17 @@
                         required: true,
                         equalTo: "[name='password']"
                     },
+                    mobile_no: {
+                        required: true,
+                        digits: true,
+                        minlength: 10,
+                        maxlength: 10
+                    },
+                    address: {
+                        required: true,
+                        minlength: 5,
+                        maxlength: 255
+                    },
                     role: {
                         required: true
                     },
@@ -169,7 +260,7 @@
                     }
                 },
                 messages: {
-                    username: {
+                    fullname: {
                         required: "Username is required",
                         minlength: "Username must be at least 3 characters",
                         maxlength: "Username cannot exceed 50 characters"
@@ -185,6 +276,17 @@
                     confirm_password: {
                         required: "Please confirm your password",
                         equalTo: "Passwords do not match"
+                    },
+                    mobile_no: {
+                        required: "Mobile number is required",
+                        digits: "Please enter a valid 10-digit mobile number",
+                        minlength: "Mobile number must be at least 10 digits",
+                        maxlength: "Mobile number cannot exceed 10 digits"
+                    },
+                    address: {
+                        required: "Address is required",
+                        minlength: "Address must be at least 5 characters",
+                        maxlength: "Address cannot exceed 255 characters"
                     },
                     role: {
                         required: "Please select a role"

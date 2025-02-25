@@ -1,3 +1,58 @@
+<?php
+include '../db_connection.php'; // Include your database connection file
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $fullname = $_POST['admin_name'];
+    $email = $_POST['admin_email'];
+    $password = $_POST['admin_password'];
+    $confirm_password = $_POST['admin_password']; // Using the same password as confirm_password
+    $role = 'admin';
+    $status = $_POST['admin_status'];
+
+    // Handling file upload
+    $profile_picture = $_FILES['admin_profile_picture']['name'];
+    $file_name = uniqid() . '_' . $_FILES['admin_profile_picture']['name'];
+    $target_dir = "../assets/images/profile_picture/";
+    $target_file = $target_dir . $file_name;
+
+    // Move the uploaded file to the server directory
+    if (move_uploaded_file($_FILES['admin_profile_picture']['tmp_name'], $target_file)) {
+        // Insert into the database
+        $sql = "INSERT INTO users (fullname, email, password, confirm_password, role, status, profile_picture) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = $con->prepare($sql);
+
+        // Note: We now have 7 parameters, so we use 'sssssss'
+        $stmt->bind_param(
+            "sssssss",
+            $fullname,
+            $email,
+            $password,
+            $confirm_password,
+            $role,
+            $status,
+            $file_name  // Store the new filename with unique ID
+        );
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            $con->close();
+            header("Location: admin_add_admin.php?success=Admin added successfully.");
+            exit();
+        } else {
+            $stmt->close();
+            $con->close();
+            header("Location: admin_add_admin.php?error=Database error: " . mysqli_error($con));
+            exit();
+        }
+    } else {
+        header("Location: admin_add_admin.php?error=Error uploading profile picture.");
+        exit();
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -56,6 +111,21 @@
                                             </div>
 
 
+                                            <!-- Password -->
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Confirm Password</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" placeholder="Enter confirm password" name="admin_confirm_password">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <!-- <p class="card-description"> Profile Picture </p> -->
+                                        <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Status</label>
@@ -68,12 +138,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-
-
-                                        <p class="card-description"> Profile Picture </p>
-                                        <div class="row">
                                             <!-- Profile Picture -->
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -125,6 +190,10 @@
                         required: true,
                         minlength: 6
                     },
+                    admin_confirm_password: {
+                        required: true,
+                        equalTo: "[name='admin_password']"
+                    },
                     admin_status: {
                         required: true
                     },
@@ -147,6 +216,10 @@
                     admin_password: {
                         required: "Password is required",
                         minlength: "Password must be at least 6 characters"
+                    },
+                    admin_confirm_password: {
+                        required: "Please confirm your password",
+                        equalTo: "Passwords do not match"
                     },
                     admin_status: {
                         required: "Please select a status"

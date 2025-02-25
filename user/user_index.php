@@ -1,3 +1,17 @@
+<?php
+include '../db_connection.php';
+
+$slider_query = "SELECT * FROM sliders WHERE status = 'Active'";
+$slider_result = mysqli_query($con, $slider_query);
+
+$room_query = "SELECT * FROM rooms WHERE room_status = 'Available'";
+$room_result = mysqli_query($con, $room_query);
+
+$review_query = "SELECT * FROM reviews";
+$review_result = mysqli_query($con, $review_query);
+?>
+
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -8,7 +22,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Astoria</title>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
@@ -22,53 +35,24 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="hero-text">
-                        <h1>Astoria A Luxury Hotel</h1>
-                        <p>Here are the best hotel booking sites, including recommendations for international travel and for finding low-priced hotel rooms.</p>
-                        <!-- <a href="#" class="primary-btn">Discover Now</a> -->
+                        <!-- Default title and description (will be updated dynamically) -->
+                        <h1 id="slider-title">Welcome to Astoria</h1>
+                        <p id="slider-description">Experience luxury like never before.</p>
                     </div>
                 </div>
-                <!-- <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1 mt-4">
-                    <div class="booking-form p-4 border rounded shadow">
-                        <h3 class="mb-4">Booking Your Hotel</h3>
-                        <form action="#">
-                            <div class="mb-3">
-                                <label for="date-in" class="form-label">Check In:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                                    <input type="date" class="form-control" id="date-in">
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="date-out" class="form-label">Check Out:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                                    <input type="date" class="form-control" id="date-out">
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="guest" class="form-label">Guests:</label>
-                                <select id="guest" class="form-select">
-                                    <option value="2">2 Adults</option>
-                                    <option value="3">3 Adults</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="room" class="form-label">Rooms:</label>
-                                <select id="room" class="form-select">
-                                    <option value="1">1 Room</option>
-                                    <option value="2">2 Rooms</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Check Availability</button>
-                        </form>
-                    </div>
-                </div> -->
             </div>
         </div>
         <div class="hero-slider owl-carousel">
-            <div class="hs-item set-bg" data-setbg="../assets/images/sliders/slider1.jpg"></div>
-            <div class="hs-item set-bg" data-setbg="../assets/images/sliders/slider2.jpg"></div>
-            <div class="hs-item set-bg" data-setbg="../assets/images/sliders/slider3.jpg"></div>
+            <?php
+            // Fetch all sliders
+            $sliders = [];
+            while ($slider = mysqli_fetch_assoc($slider_result)) {
+                $sliders[] = $slider; // Store slider data in an array
+            }
+            ?>
+            <?php foreach ($sliders as $index => $slider): ?>
+                <div class="hs-item set-bg" data-setbg="../assets/images/sliders/<?php echo $slider['slider_image']; ?>" data-title="<?php echo $slider['slider_title']; ?>" data-description="<?php echo $slider['slider_description']; ?>"></div>
+            <?php endforeach; ?>
         </div>
     </section>
     <!-- Hero Section End -->
@@ -142,71 +126,26 @@
     <!-- About Us Section End -->
 
     <!-- Services Section End -->
-    <section id="rooms" class="container mx-auto py-8 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl text-center font-serif mb-6 sm:mb-8 md:mb-10 lg:mb-12">Our Rooms</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
-            <!-- Room Card 1 -->
-            <div class="bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 shadow">
-                <img src="../assets/images/room/room4.jpg" alt="Double Room" class="w-full h-48 sm:h-56 md:h-64 lg:h-80 object-cover">
-                <div class="p-4 sm:p-5 lg:p-6">
-                    <h3 class="text-xl sm:text-2xl font-serif mb-2 sm:mb-3 lg:mb-4">Double Room</h3>
-                    <p class="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4">Spacious room with modern amenities and king beds.</p>
-                    <div class="flex flex-col sm:flex-row justify-between items-center">
-                        <span class="text-lg sm:text-xl font-bold">₹1,000/night</span>
-                        <a href="rooms.php" class="w-full sm:w-auto text-center text-black font-medium hover:bg-blue-600 hover:text-white transition-colors duration-300 px-2 py-2 rounded-xl bg-gray-300">
-                            Book Now →
-                        </a>
+    <section id="rooms" class="container py-5">
+        <h2 class="text-center mb-5 display-5">Our Rooms</h2>
+        <div class="row g-4">
+            <?php while ($room = mysqli_fetch_assoc($room_result)): ?>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card shadow-sm border-0 rounded-4">
+                        <img src="../assets/images/rooms/<?php echo $room['room_image']; ?>" alt="<?php echo $room['room_type']; ?>" class="card-img-top rounded-top-4" style="height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h3 class="h5"><?php echo $room['room_type']; ?></h3>
+                            <p class="text-muted"><?php echo $room['room_features']; ?></p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold">₹<?php echo $room['room_price']; ?>/night</span>
+                                <a href="rooms.php" class="btn btn-dark">Book Now →</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Room Card 2 -->
-            <div class="bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 shadow">
-                <img src="../assets/images/room/room1.jpg" alt="Premium Room" class="w-full h-48 sm:h-56 md:h-64 lg:h-80 object-cover">
-                <div class="p-4 sm:p-5 lg:p-6">
-                    <h3 class="text-xl sm:text-2xl font-serif mb-2 sm:mb-3 lg:mb-4">Premium Room</h3>
-                    <p class="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4">Luxurious suite with panoramic city views and premium services.</p>
-                    <div class="flex flex-col sm:flex-row justify-between items-center">
-                        <span class="text-lg sm:text-xl font-bold">₹2,000/night</span>
-                        <a href="rooms.php" class="w-full sm:w-auto text-center text-black font-medium hover:bg-blue-600 hover:text-white transition-colors duration-300 px-2 py-2 rounded-xl bg-gray-300">
-                            Book Now →
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Room Card 3 -->
-            <div class="bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 shadow">
-                <img src="../assets/images/room/room2.jpg" alt="Family Room" class="w-full h-48 sm:h-56 md:h-64 lg:h-80 object-cover">
-                <div class="p-4 sm:p-5 lg:p-6">
-                    <h3 class="text-xl sm:text-2xl font-serif mb-2 sm:mb-3 lg:mb-4">Family Room</h3>
-                    <p class="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4">Spacious accommodation perfect for families with children.</p>
-                    <div class="flex flex-col sm:flex-row justify-between items-center">
-                        <span class="text-lg sm:text-xl font-bold">₹1,500/night</span>
-                        <a href="rooms.php" class="w-full sm:w-auto text-center text-black font-medium hover:bg-blue-600 hover:text-white transition-colors duration-300 px-2 py-2 rounded-xl bg-gray-300">
-                            Book Now →
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Room Card 4 -->
-            <div class="bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 shadow">
-                <img src="../assets/images/room/room3.jpg" alt="Presidential Suite" class="w-full h-48 sm:h-56 md:h-64 lg:h-80 object-cover">
-                <div class="p-4 sm:p-5 lg:p-6">
-                    <h3 class="text-xl sm:text-2xl font-serif mb-2 sm:mb-3 lg:mb-4">Presidential Suite</h3>
-                    <p class="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4">Ultimate luxury experience with extensive amenities and services.</p>
-                    <div class="flex flex-col sm:flex-row justify-between items-center">
-                        <span class="text-lg sm:text-xl font-bold">₹5,000/night</span>
-                        <a href="rooms.php" class="w-full sm:w-auto text-center text-black font-medium hover:bg-blue-600 hover:text-white transition-colors duration-300 px-2 py-2 rounded-xl bg-gray-300">
-                            Book Now →
-                        </a>
-                    </div>
-                </div>
-            </div>
+            <?php endwhile; ?>
         </div>
     </section>
-
 
 
     <!-- Testimonial Section Begin -->
@@ -223,59 +162,24 @@
         </div>
         <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="ts-item text-center">
-                        <p>Booking a stay at this hotel was the best decision! The room was spotless, the staff was
-                            incredibly friendly, and the entire process was seamless. Highly recommend for anyone looking
-                            for a stress-free vacation!</p>
-                        <div class="ti-author">
-                            <div class="rating">
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
+                <?php $index = 0; ?>
+                <?php while ($review = mysqli_fetch_assoc($review_result)): ?>
+                    <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
+                        <div class="ts-item text-center">
+                            <p><?php echo $review['review_text']; ?></p>
+                            <div class="ti-author">
+                                <div class="rating">
+                                    <?php for ($i = 0; $i < $review['rating']; $i++): ?>
+                                        <i class="icon_star"></i>
+                                    <?php endfor; ?>
+                                </div>
+                                <h5> - User <?php echo $review['user_id']; ?></h5>
                             </div>
-                            <h5> - Emily Johnson</h5>
+                            <img src="../assets/images/room/avatar/avatar-<?php echo $review['user_id']; ?>.jpg" alt="Testimonial" class="mx-auto d-block" style="border-radius:50%;">
                         </div>
-                        <img src="../assets/images/room/avatar/avatar-2.jpg" alt="Testimonial" class="mx-auto d-block" style="border-radius:50%;">
                     </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="ts-item text-center">
-                        <p>Fantastic experience from start to finish! Booking online was simple, and the hotel exceeded my
-                            expectations. The ocean-view room was breathtaking, and the service was top-notch. Will definitely
-                            book again.</p>
-                        <div class="ti-author">
-                            <div class="rating">
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star-half_alt"></i>
-                            </div>
-                            <h5> - Michael Roberts</h5>
-                        </div>
-                        <img src="../assets/images/room/avatar/avatar-1.jpg" alt="Testimonial" class="mx-auto d-block" style="border-radius:50%;">
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="ts-item text-center">
-                        <p>I travel frequently, and this hotel truly stands out! The seamless online booking, warm
-                            welcome upon arrival, and luxurious room made my trip unforgettable. I can't wait to return!</p>
-                        <div class="ti-author">
-                            <div class="rating">
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                            </div>
-                            <h5> - Sarah Thompson</h5>
-                        </div>
-                        <img src="../assets/images/room/avatar/avatar-1.jpg" alt="Testimonial" class="mx-auto d-block" style="border-radius:50%;">
-                    </div>
-                </div>
+                    <?php $index++; ?>
+                <?php endwhile; ?>
             </div>
             <a class="carousel-control-prev" href="#testimonialCarousel" role="button" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -301,9 +205,27 @@
                 autoplay: true, // Enable auto sliding
                 autoplayTimeout: 3000, // Time between slides (in ms)
                 dots: true, // Enable navigation dots
-                nav: true // Enable navigation arrows
+                nav: true, // Enable navigation arrows
+                onChanged: function(event) {
+                    // Get the active slide
+                    const activeSlide = event.item.index;
+                    const $activeSlide = $(".hs-item").eq(activeSlide);
+
+                    // Get the title and description from the active slide's data attributes
+                    const title = $activeSlide.attr("data-title");
+                    const description = $activeSlide.attr("data-description");
+
+                    // Update the hero-text content
+                    $("#slider-title").text(title);
+                    $("#slider-description").text(description);
+                }
             });
         });
+        // Set the initial title and description for the first slide
+        const $firstSlide = $(".hs-item").eq(0);
+        $("#slider-title").text($firstSlide.attr("data-title"));
+        $("#slider-description").text($firstSlide.attr("data-description"));
+
         $(document).ready(function() {
             $(".set-bg").each(function() {
                 var bg = $(this).data("setbg");

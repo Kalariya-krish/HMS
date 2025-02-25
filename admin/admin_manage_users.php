@@ -20,7 +20,7 @@ if (isset($_POST['update_user'])) {
     $profile_picture = $_POST['current_picture'];
     if (!empty($_FILES['profile_picture']['name'])) {
         $profile_picture = uniqid() . "_" . $_FILES['profile_picture']['name'];
-        move_uploaded_file($_FILES['profile_picture']['tmp_name'], "../uploads/$profile_picture");
+        move_uploaded_file($_FILES['profile_picture']['tmp_name'], "../assets/images/profile_picture/" . $profile_picture);
     }
 
     $query = "UPDATE users SET fullname='$username', email='$email', role='$role', status='$status', profile_picture='$profile_picture' $password_update WHERE id='$user_id'";
@@ -95,7 +95,7 @@ $result = mysqli_query($con, "SELECT * FROM users");
                                         <?php while ($user = mysqli_fetch_assoc($result)) { ?>
                                             <tr>
                                                 <td>
-                                                    <img src="../uploads/<?php echo $user['profile_picture']; ?>"
+                                                    <img src="../assets/images/profile_picture/<?php echo $user['profile_picture']; ?>"
                                                         alt="User Image" class="img-fluid rounded-circle" width="50">
                                                 </td>
                                                 <td>#<?php echo $user['id']; ?></td>
@@ -207,7 +207,7 @@ $result = mysqli_query($con, "SELECT * FROM users");
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Profile Picture</label>
                             <div class="col-sm-10">
-                                <img id="profilePreview" src="" alt="Profile Picture" style="border-radius: 50%; height:100px; width:100px;"><br><br>
+                                <img id="profilePreview" src="../assets/images/profile_picture/<?php echo $user['profile_picture']; ?>" alt="Profile Picture" style="border-radius: 50%; height:100px; width:100px;"><br><br>
                                 <input type="file" class="form-control" name="profile_picture">
                                 <input type="hidden" name="current_picture" id="currentPicture">
                             </div>
@@ -234,17 +234,22 @@ $result = mysqli_query($con, "SELECT * FROM users");
                 document.getElementById("editRole").value = data.role;
                 document.getElementById("editStatus").value = data.status;
 
-                // Update image preview
-                let imageElement = document.getElementById("profilePreview");
-                imageElement.src = "../uploads/" + data.profile_picture;
-
                 // Store current picture value
                 document.getElementById("currentPicture").value = data.profile_picture;
+
+                // Update image preview only if profile picture exists
+                let imageElement = document.getElementById("profilePreview");
+                if (data.profile_picture) {
+                    imageElement.src = "../assets/images/profile_picture/" + data.profile_picture;
+                } else {
+                    imageElement.src = "../assets/images/default_profile.png"; // Use a default image if none exists
+                }
 
                 // Show the modal
                 document.getElementById("editModal").style.display = "flex";
             });
         });
+
 
         // Close modal
         document.getElementById("closeModal").addEventListener("click", () => {
