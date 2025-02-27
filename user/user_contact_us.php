@@ -1,3 +1,28 @@
+<?php
+include_once('../db_connection.php');
+
+if (isset($_POST['submit'])) {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $subject = $_POST['subject'];
+    $message = $_POST['message'];
+
+    if ($subject === "Other") {
+        $subject = $_POST['other_subject'];
+    }
+
+    $q = "INSERT INTO contact_inquiries (name, email, subject, message, sent_at) 
+        VALUES ('$name', '$email', '$subject', '$message', NOW())";
+
+    if (mysqli_query($con, $q)) {
+        echo "<script>alert('Your message has been sent successfully!'); window.location.href='user_contact_us.php';</script>";
+    } else {
+        echo "<script>alert('Something went wrong. Please try again later.'); window.history.back();</script>";
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -72,7 +97,7 @@
             <!-- Contact Form -->
             <div class="col-lg-7">
                 <div class="contact-card p-5">
-                    <form id="contactForm">
+                    <form id="contactForm" method="POST">
                         <div class="mb-3">
                             <input type="text" class="form-control" id="name" placeholder="Your Name" name="name">
                         </div>
@@ -80,12 +105,35 @@
                             <input type="email" class="form-control" id="email" placeholder="Your Email" name="email">
                         </div>
                         <div class="mb-3">
+                            <select class="form-control" name="subject" id="subject" onchange="toggleOtherInput()">
+                                <option value="" disabled selected>Select a subject</option>
+                                <option value="Room Availability">Room Availability & Booking</option>
+                                <option value="Modify Booking">Modify or Cancel Booking</option>
+                                <option value="Payment Issues">Payment & Billing Issues</option>
+                                <option value="Discounts Offers">Discounts & Offers Inquiry</option>
+                                <option value="Checkin Checkout">Early Check-in / Late Check-out Request</option>
+                                <option value="Hotel Services">Hotel Services & Facilities Inquiry</option>
+                                <option value="Feedback">Feedback & Suggestions</option>
+                                <option value="Complaint">Complaint & Service Issues</option>
+                                <option value="Technical Issues">Technical Issues (Website / App)</option>
+                                <option value="Other">Other</option>
+                            </select>
+
+                            <!-- Floating Label Input Field for Other -->
+                            <div id="otherSubjectDiv" class="input-container" style="display: none;">
+                                <input type="text" name="other_subject" id="other_subject" required>
+                                <label for="other_subject">Specify your subject</label>
+                                <div class="underline"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
                             <textarea class="form-control" id="message" rows="4" placeholder="Your Message" name="message"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-submit btn-dark">
+                        <button type="submit" class="btn btn-submit btn-dark" name="submit">
                             Send Message
                         </button>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -104,7 +152,6 @@
             </div>
         </div>
     </div>
-    </div>
     <?php
     include_once('user_footer.php');
     ?>
@@ -116,6 +163,20 @@
     <script src="../assets/js/additional-methods.min.js"></script>
 
     <script>
+        function toggleOtherInput() {
+            var subjectDropdown = document.getElementById("subject");
+            var otherInputDiv = document.getElementById("otherSubjectDiv");
+            var otherInput = document.getElementById("other_subject");
+
+            if (subjectDropdown.value === "Other") {
+                otherInputDiv.style.display = "block";
+                otherInput.focus();
+            } else {
+                otherInputDiv.style.display = "none";
+                otherInput.value = "";
+            }
+        }
+
         $(document).ready(function() {
             $("#contactForm").validate({
                 rules: {
@@ -127,9 +188,17 @@
                         required: true,
                         email: true
                     },
+                    subject: {
+                        required: true
+                    },
                     message: {
                         required: true,
                         minlength: 10
+                    },
+                    other_subject: {
+                        required: function(element) {
+                            return $("#subject").val() === "Other";
+                        }
                     }
                 },
                 messages: {
@@ -141,9 +210,15 @@
                         required: "Please enter your email",
                         email: "Enter a valid email address"
                     },
+                    subject: {
+                        required: "Please select a subject"
+                    },
                     message: {
                         required: "Please enter your message",
                         minlength: "Message must be at least 10 characters"
+                    },
+                    other_subject: {
+                        required: "Please specify your subject"
                     }
                 },
                 errorElement: "div",
@@ -159,7 +234,6 @@
                 }
             });
 
-            // Prevent form submission if validation fails
             $("#contactForm").submit(function(e) {
                 if (!$(this).valid()) {
                     e.preventDefault();
@@ -167,6 +241,7 @@
             });
         });
     </script>
+
 </body>
 
 </html>

@@ -1,51 +1,48 @@
 <?php
 session_start();
-
 include_once('header.php');
 include_once('db_connection.php');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    // Get form data
+if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Fetch user data from the database
-    $sql = "SELECT id, fullname, email, password, status FROM users WHERE email = '$email'";
-    $result = $con->query($sql);
+    $sql = "SELECT id, fullname, email, password, role, status FROM users WHERE email = '$email' AND password = '$password'";
+    $result = mysqli_query($con, $sql);
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
 
-        // Verify password
-        if ($password === $row['password']) { // Use password_verify() if passwords are hashed
-            // Check if status is active
-            if ($row['status'] == 'active') {
-                // Set session variables
-                $_SESSION['user_id'] = $row['id'];
-                $_SESSION['fullname'] = $row['fullname'];
-                $_SESSION['email'] = $row['email'];
+        if ($row['status'] == 'active') {
+            $_SESSION['id'] = $row['id'];
+            $_SESSION['fullname'] = $row['fullname'];
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['role'] = $row['role'];
 
-                // Redirect to user_index.php
-                header("Location: user/user_index.php");
-                exit();
-            } else {
-                $alert_message = 'Your account is inactive. Please contact the administrator.';
-                $alert_type = 'danger';
+            // Redirect based on role
+            if ($row['role'] == 'guest') {
+                header("Location: http://localhost/hms/user/user_index.php");
+            } elseif ($row['role'] == 'admin') {
+                header("Location: http://localhost/hms/admin/admin_dashboard.php");
             }
+            exit();
         } else {
-            $alert_message = 'Invalid email or password.';
-            $alert_type = 'danger';
+            $_SESSION['error'] = "Your account is inactive. Contact the admin.";
+            header("Location: login.php");
+            exit();
         }
     } else {
-        $alert_message = 'Invalid email or password.';
-        $alert_type = 'danger';
+        $_SESSION['error'] = "Invalid email or password.";
+        header("Location: login.php");
+        exit();
     }
-
-    // Close the connection
-    $con->close();
 }
 ?>
+
+<?php if (isset($_SESSION['error'])): ?>
+    <div class="alert alert-danger"><?php echo $_SESSION['error']; ?></div>
+    <?php unset($_SESSION['error']); ?>
+<?php endif; ?>
 
 <section><br><br>
     <div class="container h-100">
@@ -61,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="card-body p-5">
                         <h2 class="text-uppercase text-center mb-5">Login Here</h2>
 
-                        <form id="loginform" name="loginform" method="post">
+                        <form action="login.php" id="loginform" name="loginform" method="post">
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="email"><i class="fa fa-envelope"></i> Email</label>
                                 <input type="email" id="email" name="email" class="form-control" required />
@@ -74,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <a href="forget_password.php" class="fw-bold text-body"><u>Forget Password</u></a>
                             <div class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-success btn-md" style="background-color:rgb(0, 103, 193);">Login</button>
+                                <button type="submit" class="btn btn-success btn-md" style="background-color:rgb(0, 103, 193);" name="login">Login</button>
                             </div>
 
                             <p class="text-center text-muted mt-4">Don't have an account?
@@ -102,10 +99,10 @@ include('footer.php');
 <script>
     $(document).ready(function() {
         $("#loginform").submit(function(e) {
-            e.preventDefault();
             if ($('#loginform').valid()) {
-                this.submit();
+                return true; // Allow submission
             }
+            e.preventDefault(); // Prevent only when validation fails
         });
 
         $('#loginform').validate({
