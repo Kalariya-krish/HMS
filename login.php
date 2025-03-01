@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 include_once('header.php');
 include_once('db_connection.php');
@@ -19,40 +20,35 @@ if (isset($_POST['login'])) {
             $_SESSION['email'] = $row['email'];
             $_SESSION['role'] = $row['role'];
 
-            // Redirect based on role
             if ($row['role'] == 'guest') {
-                header("Location: http://localhost/hms/user/user_index.php");
+                $redirect_url = isset($_SESSION['redirect_after_login']) ? $_SESSION['redirect_after_login'] : "http://localhost/hms/user/user_index.php";
             } elseif ($row['role'] == 'admin') {
-                header("Location: http://localhost/hms/admin/admin_dashboard.php");
+                $redirect_url = "http://localhost/hms/admin/admin_dashboard.php";
             }
+
+            unset($_SESSION['redirect_after_login']); // Remove saved redirect
+            header("Location: " . $redirect_url);
             exit();
         } else {
-            $_SESSION['error'] = "Your account is inactive. Contact the admin.";
-            header("Location: login.php");
-            exit();
+            $_SESSION['error'] = "Your account is inactive. Please check your email for activate your account.";
         }
     } else {
         $_SESSION['error'] = "Invalid email or password.";
-        header("Location: login.php");
-        exit();
     }
+    header("Location: login.php");
+    exit();
 }
+ob_end_flush();
 ?>
 
-<?php if (isset($_SESSION['error'])): ?>
-    <div class="alert alert-danger"><?php echo $_SESSION['error']; ?></div>
-    <?php unset($_SESSION['error']); ?>
-<?php endif; ?>
 
 <section><br><br>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-md-6">
-                <?php if (!empty($alert_message)) : ?>
-                    <div class="alert alert-<?php echo $alert_type; ?> alert-dismissible fade show" role="alert">
-                        <?php echo $alert_message; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+                <?php if (isset($_SESSION['error'])): ?>
+                    <div class="alert alert-danger"><?php echo $_SESSION['error']; ?></div>
+                    <?php unset($_SESSION['error']); ?>
                 <?php endif; ?>
                 <div class="card">
                     <div class="card-body p-5">

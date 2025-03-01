@@ -1,3 +1,49 @@
+<?php
+
+include_once('../db_connection.php');
+include_once('../auth_check.php');
+
+$id = $_SESSION['id'];
+$email = $_SESSION['email'];
+
+$q = "SELECT * FROM users WHERE id = '$id' AND email = '$email'";
+$res = mysqli_query($con, $q);
+while ($data = mysqli_fetch_array($res)) {
+    $photo = $data['profile_picture'];
+    $fullname = $data['fullname'];
+    $mobile_no = $data['mobile_no'];
+    $address = $data['address'];
+}
+
+if (isset($_POST['edit_profile'])) {
+    $fullname = $_POST['fullname'];
+    $mobile_no = $_POST['mobile_no'];
+    $address = $_POST['address'];
+
+    if (!empty($_FILES['profile_picture']['name'])) {
+        $profile_picture = uniqid() . "_" . $_FILES['profile_picture']['name'];
+        $profile_tmp = $_FILES['profile_picture']['tmp_name'];
+
+        // Delete old profile picture if exists
+        if (!empty($photo) && file_exists("../assets/images/profile_picture/" . $photo)) {
+            unlink("../assets/images/profile_picture/" . $photo);
+        }
+
+        move_uploaded_file($profile_tmp, "../assets/images/profile_picture/" . $profile_picture);
+
+        $query = "UPDATE users SET fullname='$fullname', mobile_no='$mobile_no', address='$address', profile_picture='$profile_picture' WHERE id='$id' AND email='$email'";
+    } else {
+        $query = "UPDATE users SET fullname='$fullname', mobile_no='$mobile_no', address='$address' WHERE id='$id' AND email='$email'";
+    }
+
+    if (mysqli_query($con, $query)) {
+        echo "<script>alert('Profile updated successfully'); window.location.href='user_edit_profile.php';</script>";
+    } else {
+        echo "<script>alert('Error updating profile: " . mysqli_error($con) . "');</script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -13,74 +59,56 @@
 <body>
     <?php
     include_once('user_header.php');
-
-    // Dummy user data (Replace this with actual database values)
-    $user = [
-        'fullname' => 'John Doe',
-        'mobileno' => '9876543210',
-        'email' => 'john@example.com',
-        'address' => '123, Sample Street, City',
-        'profile_picture' => '../assets/images/room/avatar/avatar-1.jpg' // Default profile pic
-    ];
-    ?>
-
-    <?php
-    include_once('user_header.php');
     ?>
 
     <!-- Edit Profile Section Begin -->
+
     <br>
     <section>
-        <div class="container h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-12 col-md-9 col-lg-7 col-xl-8">
-                    <div class="card">
-                        <div class="card-body p-5">
-                            <h2 class="text-uppercase text-center mb-5">Edit Your Profile</h2>
-
-                            <form id="editprofileform" name="editprofileform" method="post" enctype="multipart/form-data">
-                                <div class="row">
-                                    <!-- Left Column -->
-                                    <div class="col-md-6">
-                                        <div class="form-outline mb-4">
-                                            <label class="form-label" for="fullname"><i class="fa fa-user"></i> Full Name</label>
-                                            <input type="text" id="fullname" name="fullname" class="form-control" value="<?= $user['fullname'] ?>" required />
-                                        </div>
-
-                                        <div class="form-outline mb-4">
-                                            <label class="form-label" for="mobile"><i class="fa fa-phone"></i> Mobile No</label>
-                                            <input type="text" id="mobileno" name="mobileno" class="form-control" value="<?= $user['mobileno'] ?>" required />
-                                        </div>
-
-                                        <div class="form-outline mb-4">
-                                            <label class="form-label" for="email"><i class="fa fa-envelope"></i> Email</label>
-                                            <input type="email" id="email" name="email" class="form-control" value="<?= $user['email'] ?>" required />
-                                        </div>
-                                    </div>
-
-                                    <!-- Right Column -->
-                                    <div class="col-md-6">
-                                        <div class="form-outline mb-4">
-                                            <label class="form-label" for="address"><i class="fa fa-map-marker"></i> Address</label>
-                                            <input type="text" id="address" name="address" class="form-control" value="<?= $user['address'] ?>" required />
-                                        </div>
-
-                                        <div class="form-outline mb-4">
-                                            <label class="form-label" for="profile_picture"><i class="fa fa-image"></i> Profile Picture</label>
-                                            <input type="file" id="profile_picture" name="profile_picture" class="form-control" />
-                                            <br>
-                                            <img src="<?= $user['profile_picture'] ?>" alt="Profile Picture" class="img-thumbnail" width="150">
-                                        </div>
-                                    </div>
+        <div class="container mt-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-8">
+                    <div class="card p-4">
+                        <h2 class="text-center mb-5">Edit Your Profile</h2>
+                        <form action="user_edit_profile.php" id="editprofileform" method="post" enctype="multipart/form-data">
+                            <div class="row align-items-center">
+                                <!-- Profile Picture Section -->
+                                <div class="col-md-4 text-center">
+                                    <img src="../assets/images/profile_picture/<?php echo $photo; ?>" class="img-thumbnail" width="150" alt="Profile Picture">
+                                    <br><br>
+                                    <input type="file" id="profile_picture" name="profile_picture" class="form-control mb-3">
                                 </div>
 
-                                <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-success btn-lg" style="background-color: #0B032D;">Save Changes</button>
-                                </div>
-
-                            </form>
-
-                        </div>
+                                <!-- Form Section -->
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Full Name</label>
+                                                <input type="text" name="fullname" class="form-control" value="<?php echo $fullname; ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Mobile No</label>
+                                                <input type="text" name="mobile_no" class="form-control" value="<?php echo $mobile_no; ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" name="email" class="form-control" value="<?php echo $email; ?>" readonly>
+                                        </div>
+                                        <div class="mb-5">
+                                            <label class="form-label">Address</label>
+                                            <input type="text" name="address" class="form-control" value="<?php echo $address; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <button name="edit_profile" type="submit" class="btn btn-success btn-md" style="background-color: #0B032D;">Save Changes</button>
+                                    </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -103,7 +131,6 @@
             $("#editprofileform").submit(function(e) {
                 e.preventDefault();
                 if ($('#editprofileform').valid()) {
-                    alert('Profile updated successfully');
                     this.submit();
                 }
             });
@@ -116,7 +143,7 @@
                         maxlength: 30,
                         pattern: /^[a-zA-Z\s]+$/
                     },
-                    mobileno: {
+                    mobile_no: {
                         required: true,
                         digits: true,
                         minlength: 10,
@@ -142,7 +169,7 @@
                         maxlength: "Full name cannot exceed 30 characters",
                         pattern: "Full name should contain only letters and spaces"
                     },
-                    mobileno: {
+                    mobile_no: {
                         required: "Mobile number is required",
                         digits: "Only digits are allowed",
                         minlength: "Mobile number must be exactly 10 digits",

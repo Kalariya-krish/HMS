@@ -1,3 +1,18 @@
+<?php
+include_once('../auth_check.php');
+
+$email = $_SESSION['email'];
+$id = $_SESSION['id'];
+
+$sql = "SELECT * FROM users WHERE id = '$id' AND email = '$email'";
+$result = mysqli_query($con, $sql);
+
+if ($result && mysqli_num_rows($result) > 0) {
+    $user = mysqli_fetch_assoc($result);
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -154,13 +169,13 @@
                                     </li>
                                     <li><a href="user_contact_us.php">Contact Us</a></li>
                                     <div class="nav-profile">
-                                        <img src="../assets/images/rooms/avatar/avatar-1.jpg" alt="Profile" class="profile-pic">
+                                        <img src="../assets/images/profile_picture/<?php echo $user['profile_picture']; ?>" alt="Profile" class="profile-pic">
                                         <div class="dropdown-content">
                                             <a href="user_mybookings.php">My Bookings</a>
                                             <a href="user_edit_profile.php">Edit Profile</a>
                                             <a href="user_change_password.php">Change Password</a>
                                             <div class="dropdown-divider"></div>
-                                            <a href="logout.php" class="text-danger">Logout</a>
+                                            <a href="user_logout.php" class="text-danger">Logout</a>
                                         </div>
                                     </div>
 

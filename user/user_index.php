@@ -1,5 +1,6 @@
 <?php
-include '../db_connection.php';
+include_once('../db_connection.php');
+include_once('../auth_check.php');
 
 $slider_query = "SELECT * FROM sliders WHERE status = 'Active'";
 $slider_result = mysqli_query($con, $slider_query);

@@ -1,3 +1,8 @@
+<?php
+include_once('../db_connection.php');
+include_once('../auth_check.php');
+?>
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -11,9 +16,7 @@
 </head>
 
 <body>
-    <?php
-    include_once('user_header.php');
-    ?>
+    <?php include_once('user_header.php'); ?>
 
     <section><br><br>
         <div class="container h-100">
@@ -25,22 +28,23 @@
 
                             <form id="changepasswordform" name="changepasswordform" method="post">
                                 <div class="form-outline mb-4">
-                                    <label class="form-label" for="current_password"><i class="fa fa-lock"></i> Current Password</label>
-                                    <input type="password" id="current_password" name="current_password" class="form-control" required />
+                                    <label class="form-label"><i class="fa fa-lock"></i> Current Password</label>
+                                    <input type="password" id="current_password" name="old_password" class="form-control" required />
+                                    <div id="password_error" class="text-danger"></div> <!-- Error Message -->
                                 </div>
 
                                 <div class="form-outline mb-4">
-                                    <label class="form-label" for="new_password"><i class="fa fa-lock"></i> New Password</label>
+                                    <label class="form-label"><i class="fa fa-lock"></i> New Password</label>
                                     <input type="password" id="new_password" name="new_password" class="form-control" required />
                                 </div>
 
                                 <div class="form-outline mb-4">
-                                    <label class="form-label" for="confirm_password"><i class="fa fa-lock"></i> Confirm New Password</label>
+                                    <label class="form-label"><i class="fa fa-lock"></i> Confirm New Password</label>
                                     <input type="password" id="confirm_password" name="confirm_password" class="form-control" required />
                                 </div>
 
                                 <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-success btn-md" style="background-color: #0B032D;">Change Password</button>
+                                    <button type="submit" class="btn btn-success btn-md" id="submit_btn" style="background-color: #0B032D;" disabled>Change Password</button>
                                 </div>
                             </form>
 
@@ -51,11 +55,7 @@
         </div>
     </section><br><br>
 
-    <?php
-    include('user_footer.php');
-    ?>
-
-
+    <?php include('user_footer.php'); ?>
 
     <!-- JS -->
     <script src="../assets/js/jquery-3.7.1.min.js"></script>
@@ -64,17 +64,37 @@
 
     <script>
         $(document).ready(function() {
-            $("#changepasswordform").submit(function(e) {
-                e.preventDefault();
-                if ($('#changepasswordform').valid()) {
-                    alert('Password changed successfully');
-                    this.submit();
+            // Validate old password using AJAX when user leaves the input field
+            $("#current_password").on("blur", function() {
+                let oldPassword = $(this).val();
+
+                if (oldPassword.length >= 8) {
+                    $.ajax({
+                        url: "user_validate_oldpassword.php",
+                        type: "POST",
+                        data: {
+                            old_password: oldPassword
+                        },
+                        success: function(response) {
+                            if (response.trim() == "valid") {
+                                $("#password_error").text("Password is correct").removeClass("text-danger").addClass("text-success");
+                                $("#submit_btn").prop("disabled", false);
+                            } else {
+                                $("#password_error").text("Incorrect current password").removeClass("text-success").addClass("text-danger");
+                                $("#submit_btn").prop("disabled", true);
+                            }
+                        },
+                        error: function() {
+                            $("#password_error").text("Server error").addClass("text-danger");
+                        }
+                    });
                 }
             });
 
+            // Form validation
             $('#changepasswordform').validate({
                 rules: {
-                    current_password: {
+                    old_password: {
                         required: true,
                         minlength: 8,
                         maxlength: 20
@@ -90,7 +110,7 @@
                     }
                 },
                 messages: {
-                    current_password: {
+                    old_password: {
                         required: "Current password is required",
                         minlength: "Password must be at least 8 characters",
                         maxlength: "Password cannot exceed 20 characters"
@@ -110,10 +130,10 @@
                     error.addClass('invalid-feedback');
                     error.insertAfter(element);
                 },
-                highlight: function(element, errorClass, validClass) {
+                highlight: function(element) {
                     $(element).addClass('is-invalid').removeClass('is-valid');
                 },
-                unhighlight: function(element, errorClass, validClass) {
+                unhighlight: function(element) {
                     $(element).addClass('is-valid').removeClass('is-invalid');
                 }
             });
