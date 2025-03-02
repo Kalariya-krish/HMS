@@ -15,7 +15,7 @@ while ($data = mysqli_fetch_array($res)) {
     $address = $data['address'];
 }
 
-if (isset($_POST['edit_profile'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fullname = $_POST['fullname'];
     $mobile_no = $_POST['mobile_no'];
     $address = $_POST['address'];
@@ -108,6 +108,8 @@ if (isset($_POST['edit_profile'])) {
                                     <div class="text-center">
                                         <button name="edit_profile" type="submit" class="btn btn-success btn-md" style="background-color: #0B032D;">Save Changes</button>
                                     </div>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

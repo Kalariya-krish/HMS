@@ -29,7 +29,7 @@ include_once('../auth_check.php');
                             <form id="changepasswordform" name="changepasswordform" method="post">
                                 <div class="form-outline mb-4">
                                     <label class="form-label"><i class="fa fa-lock"></i> Current Password</label>
-                                    <input type="password" id="current_password" name="old_password" class="form-control" required />
+                                    <input type="text" id="current_password" name="old_password" class="form-control" required />
                                     <div id="password_error" class="text-danger"></div> <!-- Error Message -->
                                 </div>
 
