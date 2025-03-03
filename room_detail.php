@@ -1,3 +1,32 @@
+<?php
+include('db_connection.php'); // Include database connection
+
+if (isset($_GET['room_id'])) {
+    $room_id = $_GET['room_id'];
+
+    // Fetch room details from the database
+    $query = "SELECT * FROM rooms WHERE id = $room_id";
+    $result = mysqli_query($conn, $query);
+
+    if ($row = mysqli_fetch_assoc($result)) {
+        $room_name = $row['room_name'];
+        $price = $row['price'];
+        $size = $row['size'];
+        $capacity = $row['capacity'];
+        $bed = $row['bed'];
+        $services = $row['services'];
+        $description = $row['description'];
+        $image = $row['image'];
+    } else {
+        echo "<h2>Room Not Found!</h2>";
+        exit;
+    }
+} else {
+    echo "<h2>Invalid Room Request</h2>";
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -7,7 +36,7 @@
     <meta name="keywords" content="Sona, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Room Detail</title>
+    <title><?php echo $room_name; ?> - Room Detail</title>
 </head>
 
 <body>
