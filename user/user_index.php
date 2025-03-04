@@ -8,7 +8,9 @@ $slider_result = mysqli_query($con, $slider_query);
 $room_query = "SELECT * FROM rooms WHERE room_status = 'Available'";
 $room_result = mysqli_query($con, $room_query);
 
-$review_query = "SELECT * FROM reviews";
+$review_query = "SELECT *
+        FROM reviews
+        JOIN users";
 $review_result = mysqli_query($con, $review_query);
 ?>
 
@@ -133,12 +135,12 @@ $review_result = mysqli_query($con, $review_query);
             <?php while ($room = mysqli_fetch_assoc($room_result)): ?>
                 <div class="col-12 col-sm-6 col-lg-3">
                     <div class="card shadow-sm border-0 rounded-4">
-                        <img src="../assets/images/rooms/<?php echo $room['room_image']; ?>" alt="<?php echo $room['room_type']; ?>" class="card-img-top rounded-top-4" style="height: 250px; object-fit: cover;">
+                        <img src="../assets/images/rooms/<?php echo $room['image']; ?>" alt="<?php echo $room['room_type']; ?>" class="card-img-top rounded-top-4" style="height: 250px; object-fit: cover;">
                         <div class="card-body">
                             <h3 class="h5"><?php echo $room['room_type']; ?></h3>
-                            <p class="text-muted"><?php echo $room['room_features']; ?></p>
+                            <p class="text-muted"><?php echo $room['services']; ?></p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-bold">₹<?php echo $room['room_price']; ?>/night</span>
+                                <span class="fw-bold">₹<?php echo $room['price']; ?>/night</span>
                                 <a href="rooms.php" class="btn btn-dark">Book Now →</a>
                             </div>
                         </div>
@@ -176,7 +178,7 @@ $review_result = mysqli_query($con, $review_query);
                                 </div>
                                 <h5> - User <?php echo $review['user_id']; ?></h5>
                             </div>
-                            <img src="../assets/images/room/avatar/avatar-<?php echo $review['user_id']; ?>.jpg" alt="Testimonial" class="mx-auto d-block" style="border-radius:50%;">
+                            <img src="../assets/images/profile_picture/<?php echo $review['profile_picture']; ?>" alt="Testimonial" class="mx-auto d-block" style="border-radius:50%;" height="100px" width="100px">
                         </div>
                     </div>
                     <?php $index++; ?>

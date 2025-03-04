@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('db_connection.php'); // Include database connection
 
 if (isset($_GET['room_no'])) {
@@ -30,6 +31,32 @@ if (isset($_GET['room_no'])) {
 } else {
     echo "<h2>Invalid Room Request</h2>";
     exit;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!isset($_SESSION['id']) || !isset($_SESSION['email'])) {
+        header("Location: login.php"); // Redirect if not logged in
+        exit();
+    } else {
+        $room_no = $_POST['room_no'];
+        $user_id = $_SESSION['id']; // Get logged-in user ID
+        $check_in = $_POST['check_in'];
+        $check_out = $_POST['check_out'];
+        $guests = $_POST['guests'];
+
+        // Insert booking into database
+        $query = "INSERT INTO bookings (room_no, user_id, check_in, check_out, guests, created_at)
+              VALUES ('$room_no', '$user_id', '$check_in', '$check_out', '$guests', NOW())";
+
+        if (mysqli_query($con, $query)) {
+            $response = ['success' => true, 'message' => 'Booking successful!'];
+        } else {
+            $response = ['success' => false, 'message' => 'Booking failed. Please try again.'];
+        }
+
+        echo json_encode($response);
+        exit();
+    }
 }
 ?>
 
@@ -156,41 +183,33 @@ if (isset($_GET['room_no'])) {
                             </div>
                         </div> -->
                     </div>
+
                     <div class="col-xl-4 col-lg-4">
                         <div class="booking-form p-4 border rounded shadow">
                             <h3 class="mb-4">Your Reservation</h3>
-                            <form action="#">
+                            <form action="room_detail.php" id="bookingForm" method="post">
+                                <input type="hidden" id="room_no" name="room_no" value="<?php echo $room_no; ?>">
                                 <div class="mb-3">
                                     <label for="date-in" class="form-label">Check In:</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                                        <input type="date" class="form-control" id="date-in">
-                                    </div>
+                                    <input type="date" class="form-control" id="date-in" name="check_in">
                                 </div>
                                 <div class="mb-3">
                                     <label for="date-out" class="form-label">Check Out:</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                                        <input type="date" class="form-control" id="date-out">
-                                    </div>
+                                    <input type="date" class="form-control" id="date-out" name="check_out">
                                 </div>
                                 <div class="mb-3">
                                     <label for="guest" class="form-label">Guests:</label>
-                                    <select id="guest" class="form-select">
+                                    <select id="guest" name="guests" class="form-select">
+                                        <option value="1">1 Adult</option>
                                         <option value="2">2 Adults</option>
                                         <option value="3">3 Adults</option>
                                     </select>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="room" class="form-label">Rooms:</label>
-                                    <select id="room" class="form-select">
-                                        <option value="1">1 Room</option>
-                                        <option value="2">2 Rooms</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary w-100">Check Availability</button>
+                                <button type="submit" class="btn btn-primary w-100">Book Now</button>
                             </form>
+                            <div id="bookingMessage"></div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -276,6 +295,25 @@ if (isset($_GET['room_no'])) {
                     alert('Review submitted successfully!');
                     this.submit();
                 }
+            });
+
+            $("#bookingForm").submit(function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    type: "POST",
+                    url: window.location.href, // Submit to same page
+                    data: $("#bookingForm").serialize(),
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.success) {
+                            $("#bookingMessage").html('<div class="alert alert-success">' + response.message + '</div>');
+                            $("#bookingForm")[0].reset(); // Clear form
+                        } else {
+                            $("#bookingMessage").html('<div class="alert alert-danger">' + response.message + '</div>');
+                        }
+                    }
+                });
             });
         });
     </script>
