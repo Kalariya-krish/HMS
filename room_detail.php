@@ -1,12 +1,12 @@
 <?php
 include('db_connection.php'); // Include database connection
 
-if (isset($_GET['room_id'])) {
-    $room_id = $_GET['room_id'];
+if (isset($_GET['room_no'])) {
+    $room_no = $_GET['room_no'];
 
     // Fetch room details from the database
-    $query = "SELECT * FROM rooms WHERE id = $room_id";
-    $result = mysqli_query($conn, $query);
+    $query = "SELECT * FROM rooms WHERE room_no = $room_no";
+    $result = mysqli_query($con, $query);
 
     if ($row = mysqli_fetch_assoc($result)) {
         $room_name = $row['room_name'];
@@ -21,6 +21,12 @@ if (isset($_GET['room_id'])) {
         echo "<h2>Room Not Found!</h2>";
         exit;
     }
+
+    $reviews = "SELECT r.review_id, r.rating, r.review_text, r.created_at, u.fullname, u.profile_picture
+        FROM reviews r
+        JOIN users u ON r.user_id = u.id
+        WHERE r.room_no = $room_no";
+    $result2 = mysqli_query($con, $reviews);
 } else {
     echo "<h2>Invalid Room Request</h2>";
     exit;
@@ -47,7 +53,7 @@ if (isset($_GET['room_id'])) {
     <div class="container py-5">
         <!-- Breadcrumb Section Begin -->
         <div class="page-title text-center">
-            <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deluxe Room</h1>
+            <h1><?php echo $room_name; ?></h1>
             <p class="overlay-text">Room Details</p>
         </div>
         <!-- Breadcrumb Section End -->
@@ -58,10 +64,10 @@ if (isset($_GET['room_id'])) {
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="room-details-item">
-                            <img src="assets/images/room/room-details.jpg" alt="">
+                            <img src="assets/images/rooms/<?php echo $image; ?>" alt="Room Image" width="100%">
                             <div class="rd-text">
                                 <div class="rd-title">
-                                    <h3>Premium King Room</h3>
+                                    <h3><?php echo $room_name; ?></h3>
                                     <div class="rdt-right">
                                         <div class="rating">
                                             <i class="icon_star"></i>
@@ -73,97 +79,59 @@ if (isset($_GET['room_id'])) {
                                         <a href="#">Booking Now</a>
                                     </div>
                                 </div>
-                                <h2>1000Rs.<span>/Pernight</span></h2>
+                                <h2><?php echo $price; ?> Rs.<span>/Per Night</span></h2>
                                 <table>
                                     <tbody>
                                         <tr>
                                             <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
+                                            <td><?php echo $size; ?> ft</td>
                                         </tr>
                                         <tr>
                                             <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
+                                            <td>Max <?php echo $capacity; ?> person(s)</td>
                                         </tr>
                                         <tr>
                                             <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
+                                            <td><?php echo $bed; ?></td>
                                         </tr>
                                         <tr>
                                             <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
+                                            <td><?php echo nl2br(htmlspecialchars($services)); ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
-                                <p class="f-para">
-                                    Experience luxury and comfort in our Premium King Room, designed for ultimate relaxation.
-                                    This spacious room offers modern amenities, plush bedding, and elegant decor, ensuring
-                                    a memorable stay. Whether you're traveling for business or leisure, our room provides the
-                                    perfect retreat with scenic views and top-notch hospitality.
-                                </p>
-                                <p>
-                                    Guests can enjoy 24/7 room service, high-speed Wi-Fi, and access to our exclusive
-                                    hotel facilities, including a rooftop restaurant and spa. Book now to indulge in
-                                    an exceptional stay with world-class service.
-                                </p>
+                                <p><?php echo nl2br(htmlspecialchars($description)); ?></p>
                             </div>
                         </div>
                         <div class="rd-reviews">
                             <h4>Reviews</h4>
-                            <div class="review-item">
-                                <div class="ri-pic">
-                                    <img src="assets/images/room/avatar/avatar-1.jpg" alt="">
-                                </div>
-                                <div class="ri-text">
-                                    <span>15 Jan 2024</span>
-                                    <div class="rating">
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
+                            <?php while ($row = $result2->fetch_assoc()): ?>
+                                <div class="review-item">
+                                    <div class="ri-pic">
+                                        <img src="assets/images/profile_picture/<?php echo $row['profile_picture']; ?>" alt="User Avatar">
                                     </div>
-                                    <h5>Ava Richardson</h5>
-                                    <p>
-                                        Absolutely loved my stay here! The room was spotless, beautifully designed, and the bed was so comfortable.
-                                        The staff was extremely friendly, and the service was impeccable. Highly recommend this hotel for a perfect getaway!
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="review-item">
-                                <div class="ri-pic">
-                                    <img src="assets/images/room/avatar/avatar-2.jpg" alt="">
-                                </div>
-                                <div class="ri-text">
-                                    <span>20 Dec 2023</span>
-                                    <div class="rating">
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star-half_alt"></i>
+                                    <div class="ri-text">
+                                        <span><?php echo date("d M Y", strtotime($row['created_at'])); ?></span>
+                                        <div class="rating">
+                                            <?php
+                                            for ($i = 1; $i <= 5; $i++) {
+                                                echo $i <= $row['rating'] ? '<i class="icon_star"></i>' : '<i class="icon_star_alt"></i>';
+                                            }
+                                            ?>
+                                        </div>
+                                        <h5><?php echo htmlspecialchars($row['fullname']); ?></h5>
+                                        <p><?php echo htmlspecialchars($row['review_text']); ?></p>
                                     </div>
-                                    <h5>James Anderson</h5>
-                                    <p>
-                                        Great experience! The check-in process was smooth, and the staff was very accommodating.
-                                        The room had a fantastic city view, and I loved the complimentary breakfast. Will definitely book again!
-                                    </p>
                                 </div>
-                            </div>
+                            <?php endwhile; ?>
                         </div>
 
-                        <div class="container mt-4">
+                        <!-- <div class="container mt-4">
                             <div class="review-add card p-4 shadow-sm">
                                 <h4 class="mb-3">Add Review</h4>
                                 <form id="reviewForm" class="needs-validation">
+                                    <input type="hidden" id="room_no" name="room_no" value="101">
                                     <div class="row">
-                                        <div class="col-lg-6 mb-3">
-                                            <label for="name" class="form-label">Name*</label>
-                                            <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name">
-                                        </div>
-                                        <div class="col-lg-6 mb-3">
-                                            <label for="email" class="form-label">Email*</label>
-                                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email">
-                                        </div>
                                         <div class="col-lg-12 mb-3">
                                             <label for="rating" class="form-label">Your Rating*</label>
                                             <select id="rating" name="rating" class="form-select">
@@ -184,8 +152,9 @@ if (isset($_GET['room_id'])) {
                                         </div>
                                     </div>
                                 </form>
+                                <div id="reviewMessage"></div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-xl-4 col-lg-4">
                         <div class="booking-form p-4 border rounded shadow">

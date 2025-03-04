@@ -35,10 +35,10 @@ include_once('db_connection.php');
                     ?>
                         <div class="col-lg-4 col-md-6">
                             <div class="room-item">
-                                <img src="assets/images/rooms/<?php echo $room['room_image']; ?>" alt="Room Image" height="200px" width="200px">
+                                <img src="assets/images/rooms/<?php echo $room['image']; ?>" alt="Room Image" height="200px" width="200px">
                                 <div class="ri-text">
                                     <h4><?php echo $room['room_type']; ?></h4>
-                                    <h3><?php echo $room['room_price']; ?>Rs.<span>/Per Night</span></h3>
+                                    <h3><?php echo $room['price']; ?>Rs.<span>/Per Night</span></h3>
                                     <table>
                                         <tbody>
                                             <tr>
@@ -47,23 +47,23 @@ include_once('db_connection.php');
                                             </tr>
                                             <tr>
                                                 <td class="r-o">Size:</td>
-                                                <td>30 ft</td>
+                                                <td><?php echo $room['size']; ?> ft</td>
                                             </tr>
                                             <tr>
                                                 <td class="r-o">Capacity:</td>
-                                                <td>Max person <?php echo $room['no_of_beds']; ?></td>
+                                                <td>Max person <?php echo $room['capacity']; ?></td>
                                             </tr>
                                             <tr>
                                                 <td class="r-o">Bed:</td>
-                                                <td><?php echo $room['no_of_beds']; ?> Bed(s)</td>
+                                                <td><?php echo $room['bed']; ?> Bed(s)</td>
                                             </tr>
                                             <tr>
-                                                <td class="r-o">Features:</td>
-                                                <td><?php echo $room['room_features']; ?></td>
+                                                <td class="r-o">Services:</td>
+                                                <td><?php echo $room['services']; ?></td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <a href="room_detail.php?room_id=<?php echo $room['room_no']; ?>" class="primary-btn">More Details</a>
+                                    <a href="room_detail.php?room_no=<?php echo $room['room_no']; ?>" class="primary-btn">More Details</a>
                                 </div>
                             </div>
                         </div>
