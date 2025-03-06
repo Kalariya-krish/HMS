@@ -1,6 +1,5 @@
 <?php
-session_start();
-include('db_connection.php'); // Include database connection
+include_once('db_connection.php'); // Include database connection
 
 if (isset($_GET['room_no'])) {
     $room_no = $_GET['room_no'];
@@ -33,30 +32,63 @@ if (isset($_GET['room_no'])) {
     exit;
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Handle Booking
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["check_in"])) {
+    header('Content-Type: application/json'); // Ensure JSON response
+
     if (!isset($_SESSION['id']) || !isset($_SESSION['email'])) {
-        header("Location: login.php"); // Redirect if not logged in
-        exit();
-    } else {
-        $room_no = $_POST['room_no'];
-        $user_id = $_SESSION['id']; // Get logged-in user ID
-        $check_in = $_POST['check_in'];
-        $check_out = $_POST['check_out'];
-        $guests = $_POST['guests'];
-
-        // Insert booking into database
-        $query = "INSERT INTO bookings (room_no, user_id, check_in, check_out, guests, created_at)
-              VALUES ('$room_no', '$user_id', '$check_in', '$check_out', '$guests', NOW())";
-
-        if (mysqli_query($con, $query)) {
-            $response = ['success' => true, 'message' => 'Booking successful!'];
-        } else {
-            $response = ['success' => false, 'message' => 'Booking failed. Please try again.'];
-        }
-
-        echo json_encode($response);
+        echo json_encode(['success' => false, 'message' => 'Please log in to book a room.']);
         exit();
     }
+
+    $id = $_SESSION['id'];
+    $room_no = $_GET['room_no'];
+    $check_in = $_POST['check_in'];
+    $check_out = $_POST['check_out'];
+    $guests = $_POST['guests'];
+
+    $q = "SELECT * FROM users WHERE id = $id";
+    $result = mysqli_fetch_assoc($con->query($q));
+    $guest_name = $result['fullname'];
+
+    // Insert booking
+    $insertQuery = "INSERT INTO bookings (user_id, guest_name, room_no, check_in, check_out, guests, total_price, status, created_at, checkin_status)
+                    VALUES ('$id', '$guest_name', '$room_no', '$check_in', '$check_out', '$guests', '$price', 'Pending', NOW(), 'Not Checked-In')";
+
+    if (mysqli_query($con, $insertQuery)) {
+        echo json_encode(['success' => true, 'message' => 'Booking successful!']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Booking failed: ' . mysqli_error($con)]);
+    }
+    exit();
+}
+
+
+// Handle Reviews
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["rating"])) {
+    header('Content-Type: application/json'); // Ensure JSON response
+
+    if (!isset($_SESSION['id']) || !isset($_SESSION['email'])) {
+        echo json_encode(['success' => false, 'message' => 'Please log in to submit a review.']);
+        exit();
+    }
+
+    $user_id = $_SESSION['id'];
+    // Get room_no from the form POST data - using the correct value now
+    $review_room_no = $_POST['room_no'];
+    $rating = $_POST['rating'];
+    $review_text = $_POST['review_text'];
+
+    // Insert review
+    $insertQuery = "INSERT INTO reviews (room_no, user_id, rating, review_text, created_at)
+                    VALUES ('$review_room_no', '$user_id', '$rating', '$review_text', NOW())";
+
+    if (mysqli_query($con, $insertQuery)) {
+        echo json_encode(['success' => true, 'message' => 'Review submitted successfully!']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Failed to submit review: ' . mysqli_error($con)]);
+    }
+    exit();
 }
 ?>
 
@@ -130,65 +162,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <p><?php echo nl2br(htmlspecialchars($description)); ?></p>
                             </div>
                         </div>
-                        <div class="rd-reviews">
-                            <h4>Reviews</h4>
-                            <?php while ($row = $result2->fetch_assoc()): ?>
-                                <div class="review-item">
-                                    <div class="ri-pic">
-                                        <img src="assets/images/profile_picture/<?php echo $row['profile_picture']; ?>" alt="User Avatar">
-                                    </div>
-                                    <div class="ri-text">
-                                        <span><?php echo date("d M Y", strtotime($row['created_at'])); ?></span>
-                                        <div class="rating">
-                                            <?php
-                                            for ($i = 1; $i <= 5; $i++) {
-                                                echo $i <= $row['rating'] ? '<i class="icon_star"></i>' : '<i class="icon_star_alt"></i>';
-                                            }
-                                            ?>
-                                        </div>
-                                        <h5><?php echo htmlspecialchars($row['fullname']); ?></h5>
-                                        <p><?php echo htmlspecialchars($row['review_text']); ?></p>
-                                    </div>
-                                </div>
-                            <?php endwhile; ?>
-                        </div>
-
-                        <!-- <div class="container mt-4">
-                            <div class="review-add card p-4 shadow-sm">
-                                <h4 class="mb-3">Add Review</h4>
-                                <form id="reviewForm" class="needs-validation">
-                                    <input type="hidden" id="room_no" name="room_no" value="101">
-                                    <div class="row">
-                                        <div class="col-lg-12 mb-3">
-                                            <label for="rating" class="form-label">Your Rating*</label>
-                                            <select id="rating" name="rating" class="form-select">
-                                                <option value="">Select Rating</option>
-                                                <option value="1">1 Star</option>
-                                                <option value="2">2 Stars</option>
-                                                <option value="3">3 Stars</option>
-                                                <option value="4">4 Stars</option>
-                                                <option value="5">5 Stars</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-12 mb-3">
-                                            <label for="review" class="form-label">Your Review*</label>
-                                            <textarea id="review" name="review" class="form-control" rows="4" placeholder="Write your review here"></textarea>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <button type="submit" class="btn btn-dark w-100">Submit Now</button>
-                                        </div>
-                                    </div>
-                                </form>
-                                <div id="reviewMessage"></div>
-                            </div>
-                        </div> -->
                     </div>
-
                     <div class="col-xl-4 col-lg-4">
                         <div class="booking-form p-4 border rounded shadow">
+                            <div id="bookingMessage" class="mb-3"></div> <!-- Single instance -->
                             <h3 class="mb-4">Your Reservation</h3>
-                            <form action="room_detail.php" id="bookingForm" method="post">
-                                <input type="hidden" id="room_no" name="room_no" value="<?php echo $room_no; ?>">
+                            <form id="bookingForm">
+                                <input type="hidden" name="room_no" value="<?php echo $room_no; ?>">
                                 <div class="mb-3">
                                     <label for="date-in" class="form-label">Check In:</label>
                                     <input type="date" class="form-control" id="date-in" name="check_in">
@@ -207,9 +187,71 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100">Book Now</button>
                             </form>
-                            <div id="bookingMessage"></div>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="rd-reviews">
+                                <h4>Reviews</h4>
+                                <?php while ($row = $result2->fetch_assoc()): ?>
+                                    <div class="review-item">
+                                        <div class="ri-pic">
+                                            <img src="assets/images/profile_picture/<?php echo $row['profile_picture']; ?>" alt="User Avatar">
+                                        </div>
+                                        <div class="ri-text">
+                                            <span><?php echo date("d M Y", strtotime($row['created_at'])); ?></span>
+                                            <div class="rating">
+                                                <?php
+                                                for ($i = 1; $i <= 5; $i++) {
+                                                    echo $i <= $row['rating'] ? '<i class="icon_star"></i>' : '<i class="icon_star_alt"></i>';
+                                                }
+                                                ?>
+                                            </div>
+                                            <h5><?php echo htmlspecialchars($row['fullname']); ?></h5>
+                                            <p><?php echo htmlspecialchars($row['review_text']); ?></p>
+                                        </div>
+                                    </div>
+                                <?php endwhile; ?>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="container mt-4">
+                                <div class="review-add card p-4 shadow-sm">
+                                    <h4 class="mb-3">Add Review</h4>
+
+                                    <div id="reviewMessage" class="mb-3"></div>
+
+                                    <form id="reviewForm" class="needs-validation">
+                                        <!-- Fixed: Use dynamic room_no from URL parameter -->
+                                        <input type="hidden" id="room_no" name="room_no" value="<?php echo $room_no; ?>">
+                                        <div class="row">
+                                            <div class="col-lg-12 mb-3">
+                                                <label for="rating" class="form-label">Your Rating*</label>
+                                                <select id="rating" name="rating" class="form-select">
+                                                    <option value="">Select Rating</option>
+                                                    <option value="1">1 Star</option>
+                                                    <option value="2">2 Stars</option>
+                                                    <option value="3">3 Stars</option>
+                                                    <option value="4">4 Stars</option>
+                                                    <option value="5">5 Stars</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-12 mb-3">
+                                                <label for="review_text" class="form-label">Your Review*</label>
+                                                <!-- Fixed: Changed name to match PHP -->
+                                                <textarea id="review_text" name="review_text" class="form-control" rows="4" placeholder="Write your review here"></textarea>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <button type="submit" class="btn btn-dark w-100">Submit Now</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -226,60 +268,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="assets/js/additional-methods.min.js"></script>
     <script>
         $(document).ready(function() {
-
             // Custom regex method for name validation
             $.validator.addMethod("lettersOnly", function(value, element) {
                 return this.optional(element) || /^[a-zA-Z\s]+$/.test(value);
             }, "Only letters and spaces are allowed");
 
+            // Validate review form
             $("#reviewForm").validate({
                 rules: {
-                    name: {
-                        required: true,
-                        minlength: 3,
-                        maxlength: 30,
-                        lettersOnly: true
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    review: {
-                        required: true,
-                        minlength: 10,
-                        maxlength: 500
-                    },
                     rating: {
                         required: true
+                    },
+                    review_text: {
+                        required: true,
+                        minlength: 10
                     }
                 },
                 messages: {
-                    name: {
-                        required: "Name is required",
-                        minlength: "Name must be at least 3 characters",
-                        maxlength: "Name cannot exceed 30 characters"
-                    },
-                    email: {
-                        required: "Email is required",
-                        email: "Enter a valid email"
-                    },
-                    review: {
-                        required: "Review is required",
-                        minlength: "Review must be at least 10 characters",
-                        maxlength: "Review cannot exceed 500 characters"
-                    },
                     rating: {
                         required: "Please select a rating"
+                    },
+                    review_text: {
+                        required: "Please write your review",
+                        minlength: "Review should be at least 10 characters"
                     }
                 },
                 errorElement: "div",
                 errorPlacement: function(error, element) {
                     error.addClass('invalid-feedback');
-                    if (element.prop("tagName") === "SELECT") {
-                        error.insertAfter(element);
-                    } else {
-                        error.insertAfter(element);
-                    }
+                    element.closest(".mb-3").append(error);
                 },
                 highlight: function(element) {
                     $(element).addClass('is-invalid').removeClass('is-valid');
@@ -289,31 +306,123 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             });
 
+            // Submit review form
             $("#reviewForm").submit(function(e) {
-                e.preventDefault();
-                if ($(this).valid()) {
-                    alert('Review submitted successfully!');
-                    this.submit();
-                }
-            });
+                e.preventDefault(); // Prevent page reload
 
-            $("#bookingForm").submit(function(e) {
-                e.preventDefault();
+                if (!$(this).valid()) return; // Check if form is valid
 
                 $.ajax({
                     type: "POST",
-                    url: window.location.href, // Submit to same page
+                    url: window.location.href, // Send request to same page
+                    data: $("#reviewForm").serialize(),
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.success) {
+                            $("#reviewMessage").html('<div class="alert alert-success">' + response.message + '</div>');
+                            $("#reviewForm")[0].reset(); // Reset form
+                            // Refresh page after short delay to show the new review
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            $("#reviewMessage").html('<div class="alert alert-danger">' + response.message + '</div>');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $("#reviewMessage").html('<div class="alert alert-danger">An error occurred. Please try again.</div>');
+                        console.log(xhr.responseText); // Log any error for debugging
+                    }
+                });
+            });
+
+            // Validate booking form
+            $("#bookingForm").validate({
+                rules: {
+                    check_in: {
+                        required: true,
+                        date: true
+                    },
+                    check_out: {
+                        required: true,
+                        date: true,
+                        greaterThan: "#date-in"
+                    },
+                    guests: {
+                        required: true
+                    }
+                },
+                messages: {
+                    check_in: {
+                        required: "Please select a check-in date",
+                        date: "Enter a valid date"
+                    },
+                    check_out: {
+                        required: "Please select a check-out date",
+                        date: "Enter a valid date",
+                        greaterThan: "Check-out date must be after check-in date"
+                    },
+                    guests: {
+                        required: "Please select the number of guests"
+                    }
+                },
+                errorElement: "div",
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest(".mb-3").append(error);
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid').removeClass('is-valid');
+                },
+                unhighlight: function(element) {
+                    $(element).addClass('is-valid').removeClass('is-invalid');
+                }
+            });
+
+            // Submit booking form
+            $("#bookingForm").submit(function(e) {
+                e.preventDefault(); // Prevent page reload
+
+                if (!$(this).valid()) return; // Check if form is valid
+
+                $.ajax({
+                    type: "POST",
+                    url: window.location.href, // Send request to same page
                     data: $("#bookingForm").serialize(),
                     dataType: "json",
                     success: function(response) {
                         if (response.success) {
                             $("#bookingMessage").html('<div class="alert alert-success">' + response.message + '</div>');
-                            $("#bookingForm")[0].reset(); // Clear form
+                            $("#bookingForm")[0].reset(); // Reset form
                         } else {
                             $("#bookingMessage").html('<div class="alert alert-danger">' + response.message + '</div>');
                         }
+                    },
+                    error: function(xhr, status, error) {
+                        $("#bookingMessage").html('<div class="alert alert-danger">An error occurred. Please try again.</div>');
+                        console.log(xhr.responseText); // Log any error for debugging
                     }
                 });
+            });
+
+            $.validator.addMethod("greaterThan", function(value, element, param) {
+                var startDate = new Date($(param).val());
+                var endDate = new Date(value);
+                return !$(param).val() || startDate < endDate;
+            }, "Check-out must be after check-in.");
+
+            // Set min date for check-in to today
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+            today = yyyy + '-' + mm + '-' + dd;
+
+            $('#date-in').attr('min', today);
+
+            // Update min date for check-out when check-in changes
+            $('#date-in').change(function() {
+                $('#date-out').attr('min', $(this).val());
             });
         });
     </script>

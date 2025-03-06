@@ -9,225 +9,72 @@ include_once('../auth_check.php');
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Sona Template">
-    <meta name="keywords" content="Sona, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Rooms</title>
-
 </head>
 
 <body>
-    <?php
-    include_once('user_header.php');
-    ?>
+    <?php include_once('user_header.php'); ?>
 
     <div class="container py-5">
-        <!-- Breadcrumb Section Begin -->
+        <!-- Page Title -->
         <div class="page-title text-center">
-            <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rooms</h1>
+            <h1>&nbsp;&nbsp;&nbsp;Rooms</h1>
             <p class="overlay-text">Our Accommodations</p>
         </div>
-        <!-- Breadcrumb Section End -->
 
-        <!-- Rooms Section Begin -->
+        <!-- Rooms Section -->
         <section class="rooms-section spad">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="room-item">
-                            <img src="../assets/images/room/room-1.jpg" alt="">
-                            <div class="ri-text">
-                                <h4>Premium King Room</h4>
-                                <h3>1000Rs.<span>/Pernight</span></h3>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 3</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="user_room_detail.php" class="primary-btn">More Details</a>
+                    <?php
+                    // Fetch available rooms
+                    $sql = "SELECT * FROM rooms WHERE room_status = 'Available'";
+                    $result = mysqli_query($con, $sql);
+
+                    while ($room = mysqli_fetch_assoc($result)) :
+                    ?>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="room-item">
+                                <img src="../assets/images/rooms/<?php echo $room['image']; ?>" alt="Room Image" height="200px" width="200px">
+                                <div class="ri-text">
+                                    <h4><?php echo $room['room_type']; ?></h4>
+                                    <h3><?php echo $room['price']; ?>Rs.<span>/Per Night</span></h3>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td class="r-o">Room No:</td>
+                                                <td><?php echo $room['room_no']; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="r-o">Size:</td>
+                                                <td><?php echo $room['size']; ?> ft</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="r-o">Capacity:</td>
+                                                <td>Max person <?php echo $room['capacity']; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="r-o">Bed:</td>
+                                                <td><?php echo $room['bed']; ?> Bed(s)</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="r-o">Services:</td>
+                                                <td><?php echo $room['services']; ?></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <a href="user_room_detail.php?room_no=<?php echo $room['room_no']; ?>" class="primary-btn">More Details</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="room-item">
-                            <img src="../assets/images/room/room-2.jpg" alt="">
-                            <div class="ri-text">
-                                <h4>Deluxe Room</h4>
-                                <h3>1000Rs.<span>/Pernight</span></h3>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="user_room_detail.php" class="primary-btn">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="room-item">
-                            <img src="../assets/images/room/room-3.jpg" alt="">
-                            <div class="ri-text">
-                                <h4>Double Room</h4>
-                                <h3>1000Rs.<span>/Pernight</span></h3>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 2</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="user_room_detail.php" class="primary-btn">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="room-item">
-                            <img src="../assets/images/room/room-4.jpg" alt="">
-                            <div class="ri-text">
-                                <h4>Luxury Room</h4>
-                                <h3>1000Rs.<span>/Pernight</span></h3>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 1</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="user_room_detail.php" class="primary-btn">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="room-item">
-                            <img src="../assets/images/room/room-5.jpg" alt="">
-                            <div class="ri-text">
-                                <h4>Room With View</h4>
-                                <h3>1000Rs.<span>/Pernight</span></h3>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 1</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="user_room_detail.php" class="primary-btn">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="room-item">
-                            <img src="../assets/images/room/room-6.jpg" alt="">
-                            <div class="ri-text">
-                                <h4>Small View</h4>
-                                <h3>1000Rs.<span>/Pernight</span></h3>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 2</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="user_room_detail.php" class="primary-btn">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <div class="col-lg-12">
-                    <div class="room-pagination">
-                        <a href="#">1</a>
-                        <a href="#">2</a>
-                        <a href="#">Next <i class="fa fa-long-arrow-right"></i></a>
-                    </div>
-                </div> -->
+                    <?php endwhile; ?>
                 </div>
             </div>
         </section>
-        <!-- Rooms Section End -->
     </div>
-    <?php
-    include('user_footer.php');
-    ?>
+
+    <?php include('user_footer.php'); ?>
 </body>
 
 </html>
