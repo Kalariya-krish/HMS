@@ -116,13 +116,13 @@ if ($result && mysqli_num_rows($result) > 0) {
             <ul>
                 <li class="active"><a href="user_index.php">Home</a></li>
                 <li><a href="user_about_us.php">About Us</a>
-                <li><a href="user_rooms.php">Rooms</a></li>
-                <ul class="dropdown">
-                    <li><a href="user_rooms.php">Deluxe Room</a></li>
-                    <li><a href="user_rooms.php">Luxury Room</a></li>
-                    <li><a href="user_rooms.php">Family Room</a></li>
-                    <li><a href="user_rooms.php">Premium Room</a></li>
-                </ul>
+                <li><a href="user_rooms.php">Room</a>
+                    <ul class="dropdown">
+                        <li><a href="user_rooms.php?room_type=Deluxe">Deluxe Room</a></li>
+                        <li><a href="user_rooms.php?room_type=Luxury">Luxury Room</a></li>
+                        <li><a href="user_rooms.php?room_type=Family">Family Room</a></li>
+                        <li><a href="user_rooms.php?room_type=Premium">Premium Room</a></li>
+                    </ul>
                 </li>
                 <li><a href="user_contact_us.php">Contact Us</a></li>
                 <div class="nav-profile">
@@ -161,10 +161,10 @@ if ($result && mysqli_num_rows($result) > 0) {
                                     <li><a href="user_about_us.php">About Us</a></li>
                                     <li><a href="user_rooms.php">Rooms</a>
                                         <ul class="dropdown">
-                                            <li><a href="user_rooms.php">Deluxe Room</a></li>
-                                            <li><a href="user_rooms.php">Luxury Room</a></li>
-                                            <li><a href="user_rooms.php">Family Room</a></li>
-                                            <li><a href="user_rooms.php">Premium Room</a></li>
+                                            <li><a href="user_rooms.php?room_type=Deluxe">Deluxe Room</a></li>
+                                            <li><a href="user_rooms.php?room_type=Luxury">Luxury Room</a></li>
+                                            <li><a href="user_rooms.php?room_type=Family">Family Room</a></li>
+                                            <li><a href="user_rooms.php?room_type=Premium">Premium Room</a></li>
                                         </ul>
                                     </li>
                                     <li><a href="user_contact_us.php">Contact Us</a></li>

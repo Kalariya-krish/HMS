@@ -38,6 +38,12 @@ if (isset($_SESSION['reg_msg'])) {
                 <div class="col-12 col-md-9 col-lg-7 col-xl-8">
                     <div class="card">
                         <div class="card-body p-5">
+                            <?php
+                            if (isset($_SESSION['message'])) {
+                                echo $_SESSION['message'];
+                                unset($_SESSION['message']); // Clear message after showing
+                            }
+                            ?>
                             <h2 class="text-uppercase text-center mb-5">Register Hear ...</h2>
 
                             <form id="registerform" action="register_insert_data.php" method="post" enctype="multipart/form-data">
@@ -74,14 +80,14 @@ if (isset($_SESSION['reg_msg'])) {
 
                                         <div class="form-outline mb-4">
                                             <label class="form-label" for="address"><i class="fa fa-map-marker"></i> Address</label>
-                                            <input type="text" id="address" name="address" class="form-control" required />
+                                            <input type="text" id="address" name="address" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="profile_picture"><i class="fa fa-image"></i> Profile Picture</label>
-                                        <input type="file" id="profile_picture" name="profile_picture" class="form-control" required />
+                                        <input type="file" id="profile_picture" name="profile_picture" class="form-control" />
                                     </div>
                                 </div>
 
@@ -93,7 +99,7 @@ if (isset($_SESSION['reg_msg'])) {
                                 </div> -->
 
                                 <div class="d-flex justify-content-center">
-                                    <button type="submit" name="submit" class="btn btn-success btn-md" style="background-color:rgb(0, 103, 193);">Register</button>
+                                    <button type="submit" name="submit" class="btn btn-success btn-md" style="background-color: #0B032D;">Register</button>
                                 </div>
 
                                 <p class="text-center text-muted mt-4">Already have an account?
@@ -153,7 +159,8 @@ if (isset($_SESSION['reg_msg'])) {
                     password: {
                         required: true,
                         minlength: 8,
-                        maxlength: 20
+                        maxlength: 20,
+                        pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/
                     },
                     confirm_password: {
                         required: true,
@@ -165,7 +172,6 @@ if (isset($_SESSION['reg_msg'])) {
                         maxlength: 100
                     },
                     profile_picture: {
-                        required: true,
                         extension: "jpg|jpeg|png",
                         filesize: 2097152 // 2MB
                     }
@@ -190,7 +196,8 @@ if (isset($_SESSION['reg_msg'])) {
                     password: {
                         required: "Password is required",
                         minlength: "Password must be at least 8 characters",
-                        maxlength: "Password cannot exceed 20 characters"
+                        maxlength: "Password cannot exceed 20 characters",
+                        pattern: "Password must contain at least one letter and one number"
                     },
                     confirm_password: {
                         required: "Confirm password is required",
@@ -202,7 +209,6 @@ if (isset($_SESSION['reg_msg'])) {
                         maxlength: "Address cannot exceed 100 characters"
                     },
                     profile_picture: {
-                        required: "Profile picture is required",
                         extension: "Only JPG, JPEG, PNG files are allowed",
                         filesize: "File size must be less than 2MB"
                     }

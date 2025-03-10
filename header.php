@@ -56,13 +56,13 @@
             <ul>
                 <li class="active"><a href="index.php">Home</a></li>
                 <li><a href="about-us.php">About Us</a>
-                <li><a href="rooms.php">Rooms</a></li>
-                <ul class="dropdown">
-                    <li><a href="rooms.php">Deluxe Room</a></li>
-                    <li><a href="rooms.php">Luxury Room</a></li>
-                    <li><a href="rooms.php">Family Room</a></li>
-                    <li><a href="rooms.php">Premium Room</a></li>
-                </ul>
+                <li><a href="rooms.php">Rooms</a>
+                    <ul class="dropdown">
+                        <li><a href="rooms.php?room_type=Deluxe">Deluxe Room</a></li>
+                        <li><a href="rooms.php?room_type=Luxury">Luxury Room</a></li>
+                        <li><a href="rooms.php?room_type=Family">Family Room</a></li>
+                        <li><a href="rooms.php?room_type=Premium">Premium Room</a></li>
+                    </ul>
                 </li>
                 <li><a href="contact_us.php">Contact Us</a></li>
                 <li><a href="login.php">Login</a></li>
@@ -93,10 +93,10 @@
                                     <li><a href="about_us.php">About Us</a></li>
                                     <li><a href="rooms.php">Rooms</a>
                                         <ul class="dropdown">
-                                            <li><a href="rooms.php">Deluxe Room</a></li>
-                                            <li><a href="rooms.php">Luxury Room</a></li>
-                                            <li><a href="rooms.php">Family Room</a></li>
-                                            <li><a href="rooms.php">Premium Room</a></li>
+                                            <li><a href="rooms.php?room_type=Deluxe">Deluxe Room</a></li>
+                                            <li><a href="rooms.php?room_type=Luxury">Luxury Room</a></li>
+                                            <li><a href="rooms.php?room_type=Family">Family Room</a></li>
+                                            <li><a href="rooms.php?room_type=Premium">Premium Room</a></li>
                                         </ul>
                                     </li>
                                     <li><a href="contact_us.php">Contact Us</a></li>

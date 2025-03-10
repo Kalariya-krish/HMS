@@ -67,7 +67,7 @@ ob_end_flush();
 
                             <a href="forget_password.php" class="fw-bold text-body"><u>Forget Password</u></a>
                             <div class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-success btn-md" style="background-color:rgb(0, 103, 193);" name="login">Login</button>
+                                <button type="submit" class="btn btn-success btn-md" style="background-color: #0B032D;" name="login">Login</button>
                             </div>
 
                             <p class="text-center text-muted mt-4">Don't have an account?
