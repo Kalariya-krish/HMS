@@ -1,17 +1,4 @@
-<?php
-include_once('../auth_check.php');
 
-$email = $_SESSION['email'];
-$id = $_SESSION['id'];
-
-$sql = "SELECT * FROM users WHERE id = '$id' AND email = '$email'";
-$result = mysqli_query($con, $sql);
-
-if ($result && mysqli_num_rows($result) > 0) {
-    $user = mysqli_fetch_assoc($result);
-}
-
-?>
 
 <!DOCTYPE html>
 <html lang="zxx">

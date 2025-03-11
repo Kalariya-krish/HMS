@@ -27,7 +27,7 @@ $result = mysqli_query($con, $sql);
 
     <div class="container py-5">
         <div class="page-title text-center">
-            <h1><?php echo !empty($roomType) ? "$roomType Rooms" : "Rooms"; ?></h1>
+            <h1><?php echo !empty($roomType) ? "$roomType Rooms" : "All Rooms"; ?></h1>
             <p class="overlay-text">Our Accommodations</p>
         </div>
 
@@ -38,7 +38,7 @@ $result = mysqli_query($con, $sql);
                         <?php while ($room = mysqli_fetch_assoc($result)) : ?>
                             <div class="col-lg-4 col-md-6">
                                 <div class="room-item">
-                                    <img src="assets/images/rooms/<?php echo $room['image']; ?>" alt="Room Image" height="200px" width="200px">
+                                    <img src="../assets/images/rooms/<?php echo $room['image']; ?>" alt="Room Image" height="200px" width="200px">
                                     <div class="ri-text">
                                         <h4><?php echo $room['room_type']; ?></h4>
                                         <h3><?php echo $room['price']; ?> Rs.<span>/Per Night</span></h3>
@@ -66,7 +66,7 @@ $result = mysqli_query($con, $sql);
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <a href="room_detail.php?room_no=<?php echo $room['room_no']; ?>" class="primary-btn">More Details</a>
+                                        <a href="user_room_detail.php?room_no=<?php echo $room['room_no']; ?>" class="primary-btn">More Details</a>
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +74,7 @@ $result = mysqli_query($con, $sql);
                     <?php else : ?>
                         <div class="col-12 text-center">
                             <h4>No rooms available for <?php echo $roomType; ?></h4>
-                            <a href="user_rooms.php" class="btn btn-primary">View All Rooms</a>
+                            <a href="rooms.php" class="btn btn-primary">View All Rooms</a>
                         </div>
                     <?php endif; ?>
                 </div>

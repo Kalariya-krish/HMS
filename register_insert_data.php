@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
         $file_store = "assets/images/profile_picture/" . $profile_picture;
         move_uploaded_file($tmp_name, $file_store);
     } else {
-        $profile_picture = "default.png"; // If no file selected, use default
+        $profile_picture = "default.jpg"; // If no file selected, use default
     }
 
     // Generate Activation Code
@@ -109,12 +109,16 @@ function sendActivationEmail($email, $fullname, $activation_code)
                     padding: 15px 25px;
                     margin-top: 20px;
                     background:rgb(6, 120, 40);
-                    color: white;
+                    color: #FFFFFF !important;
                     font-size: 18px;
                     text-decoration: none;
                     border-radius: 5px;
                     font-weight: bold;
                     transition: background 0.3s;
+                }
+                a{
+                    color: #FFFFFF;
+                    text-decoration: none;
                 }
                 .activate-btn:hover {
                     background:rgb(0, 169, 56);
