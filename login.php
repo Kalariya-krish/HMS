@@ -8,7 +8,7 @@ if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $sql = "SELECT id, fullname, email, password, role, status FROM users WHERE email = '$email' AND password = '$password'";
+    $sql = "SELECT id, fullname, email, password, role, status, profile_picture FROM users WHERE email = '$email' AND password = '$password'";
     $result = mysqli_query($con, $sql);
 
     if ($result && mysqli_num_rows($result) > 0) {
@@ -19,6 +19,7 @@ if (isset($_POST['login'])) {
             $_SESSION['fullname'] = $row['fullname'];
             $_SESSION['email'] = $row['email'];
             $_SESSION['role'] = $row['role'];
+            $_SESSION['profile_picture'] = $row['profile_picture'];
 
             if ($row['role'] == 'guest') {
                 $redirect_url = isset($_SESSION['redirect_after_login']) ? $_SESSION['redirect_after_login'] : "http://localhost/hms/user/user_index.php";

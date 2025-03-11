@@ -11,7 +11,7 @@ $query = "SELECT b.*, r.image FROM bookings b
           WHERE b.user_id = $id ORDER BY b.created_at DESC";
 $result = mysqli_query($con, $query);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['user_id'])) {
     $user_id = $_POST['user_id'];
     $room_no = $_POST['room_no'];
     $rating = $_POST['rating'];
@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $checkResult = mysqli_query($con, $checkQuery);
 
     if (mysqli_num_rows($checkResult) > 0) {
-        echo "You have already reviewed this room!";
+        echo "Error: You have already reviewed this room!";
     } else {
         $query = "INSERT INTO reviews (user_id, room_no, rating, review_text, created_at) 
                   VALUES ('$user_id', '$room_no', '$rating', '$review_text', NOW())";
@@ -33,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Error: " . mysqli_error($con);
         }
     }
+    exit();
 }
 ?>
 
@@ -60,20 +61,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Room</th>
-                            <th scope="col">Check-in</th>
-                            <th scope="col">Check-out</th>
-                            <th scope="col">Guests</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Actions</th>
+                            <th>#</th>
+                            <th>Room</th>
+                            <th>Check-in</th>
+                            <th>Check-out</th>
+                            <th>Guests</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $count = 1;
-                        $modals = ""; // Store modal content separately
-
                         while ($row = mysqli_fetch_assoc($result)) {
                             $booking_id = $row['booking_id'];
                             $room_no = $row['room_no'];
@@ -105,11 +104,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <td>
                                     <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal<?php echo $booking_id; ?>">View Details</button>
 
-                                    <?php if (!$hasReviewed) { ?>
+                                    <?php if (!$hasReviewed && $status == 'Confirmed') { ?>
                                         <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#reviewModal<?php echo $room_no; ?>">Give Review</button>
                                     <?php } ?>
                                 </td>
                             </tr>
+
+                            <!-- Booking Details Modal -->
+                            <div class="modal fade" id="detailsModal<?php echo $booking_id; ?>" tabindex="-1" aria-labelledby="detailsModalLabel<?php echo $booking_id; ?>" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="detailsModalLabel<?php echo $booking_id; ?>">Booking Details</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p><strong>Room No:</strong> <?php echo $room_no; ?></p>
+                                            <p><strong>Check-in:</strong> <?php echo $check_in; ?></p>
+                                            <p><strong>Check-out:</strong> <?php echo $check_out; ?></p>
+                                            <p><strong>Guests:</strong> <?php echo $guests; ?></p>
+                                            <p><strong>Status:</strong> <?php echo $status; ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Review Modal -->
                             <div class="modal fade" id="reviewModal<?php echo $room_no; ?>" tabindex="-1" aria-labelledby="reviewModalLabel<?php echo $room_no; ?>" aria-hidden="true">
@@ -124,11 +142,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <input type="hidden" name="user_id" value="<?php echo $id; ?>">
                                                 <input type="hidden" name="room_no" value="<?php echo $room_no; ?>">
                                                 <div class="mb-3">
-                                                    <label for="rating<?php echo $room_no; ?>" class="form-label">Rating (1-5)</label>
+                                                    <label class="form-label">Rating (1-5)</label>
                                                     <input type="number" class="form-control" name="rating" min="1" max="5" required>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="review<?php echo $room_no; ?>" class="form-label">Review</label>
+                                                    <label class="form-label">Review</label>
                                                     <textarea class="form-control" name="review_text" required></textarea>
                                                 </div>
                                                 <button type="submit" class="btn btn-primary">Submit Review</button>
@@ -137,7 +155,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </div>
                                 </div>
                             </div>
-
                         <?php } ?>
                     </tbody>
                 </table>
@@ -146,36 +163,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="text-center py-5">
                 <h4>You have no current bookings</h4>
                 <p>Explore our rooms and make a reservation!</p>
-                <a href="rooms.php" class="btn btn-primary">Browse Rooms</a>
+                <a href="user_rooms.php" class="btn btn-primary">Browse Rooms</a>
             </div>
         <?php } ?>
     </div>
-
-    <?php include_once('user_footer.php'); ?>
-
-    <script src="../assets/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-        $(document).ready(function(){
-    $("form[id^='reviewForm']").submit(function(e){
-        e.preventDefault(); // Prevent page reload
-
-        var form = $(this);
-        var formData = form.serialize(); // Get form data
-
-        $.ajax({
-            type: "POST",
-            url: "insert_review.php", // Separate PHP file for inserting the review
-            data: formData,
-            success: function(response) {
-                alert(response); // Show success message
-                location.reload(); // Reload page to update UI
-            }
-        });
-    });
-});
-    </script>
 </body>
 
 </html>
