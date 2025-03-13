@@ -3,15 +3,19 @@ include '../db_connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
-    $room_no = mysqli_real_escape_string($con, $_POST['room_number']);
-    $room_type = mysqli_real_escape_string($con, $_POST['room_type']);
-    $price = mysqli_real_escape_string($con, $_POST['price']);
-    $beds = mysqli_real_escape_string($con, $_POST['beds']);
-    $status = mysqli_real_escape_string($con, $_POST['room_status']);
+    $room_no = $_POST['room_number'];
+    $room_name = $_POST['room_name'];
+    $room_type = $_POST['room_type'];
+    $price = $_POST['price'];
+    $size = $_POST['size'] . '.ft';
+    $capacity = $_POST['capacity'] . ' Persons';
+    $beds = $_POST['beds'];
+    $status = $_POST['room_status'];
+    $description = $_POST['description'];
 
     // Handle features array
-    $features = isset($_POST['features']) ? $_POST['features'] : array();
-    $features_string = mysqli_real_escape_string($con, implode(', ', $features));
+    $services = isset($_POST['services']) ? $_POST['services'] : array();
+    $services = implode(', ', $services);
 
     // Handle file upload
     $image_name = '';
@@ -31,8 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Insert query
-    $query = "INSERT INTO rooms (room_no, room_type, room_price, no_of_beds, room_status, room_features, room_image) 
-              VALUES ('$room_no', '$room_type', '$price', '$beds', '$status', '$features_string', '$image_name')";
+    $query = "INSERT INTO rooms (room_no, room_name, room_type, price, size, capacity, bed, room_status, description, services, image) 
+              VALUES ('$room_no', '$room_name', '$room_type', '$price', '$size', '$capacity', '$beds', '$status', '$description', '$services', '$image_name')";
 
     // Execute query
     if (mysqli_query($con, $query)) {
@@ -80,6 +84,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 </div>
                                             </div>
 
+                                            <!-- Room name -->
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Room Name</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" placeholder="Enter room name" name="room_name">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="row">
                                             <!-- Room Type -->
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -95,9 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="row">
                                             <!-- Price per Night -->
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -107,7 +123,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
 
+                                        <div class="row">
+                                            <!-- Room size -->
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Room Size in foots</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="number" class="form-control" placeholder="Enter size of the room" name="size">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Room capacity -->
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Room Capacity</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="number" class="form-control" placeholder="Enter room capacity" name="capacity">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
                                             <!-- Number of Beds -->
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -117,9 +156,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <div class="row">
                                             <!-- Room Status -->
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -134,7 +170,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
 
+                                        <div class="row">
+                                            <!-- Number of Beds -->
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Room Description</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea class="form-control" rows="3" placeholder="Enter room description" name="description"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <p class="card-description"> Features </p>
@@ -146,22 +193,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <div class="col-sm-9">
                                                         <div class="form-check">
                                                             <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" value="ac" name="features[]"> Air Conditioning <i class="input-helper"></i>
+                                                                <input type="checkbox" class="form-check-input" value="ac" name="services[]"> Air Conditioning <i class="input-helper"></i>
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
                                                             <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" value="wifi" name="features[]"> Wi-Fi <i class="input-helper"></i>
+                                                                <input type="checkbox" class="form-check-input" value="wifi" name="services[]"> Wi-Fi <i class="input-helper"></i>
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
                                                             <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" value="tv" name="features[]"> TV <i class="input-helper"></i>
+                                                                <input type="checkbox" class="form-check-input" value="tv" name="services[]"> TV <i class="input-helper"></i>
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
                                                             <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" value="minibar" name="features[]"> Mini Bar <i class="input-helper"></i>
+                                                                <input type="checkbox" class="form-check-input" value="minibar" name="services[]"> Mini Bar <i class="input-helper"></i>
                                                             </label>
                                                         </div>
                                                     </div>
@@ -211,10 +258,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         minlength: 1,
                         maxlength: 4
                     },
+                    room_name: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 30
+                    },
                     room_type: {
                         required: true
                     },
                     price: {
+                        required: true,
+                        number: true,
+                        min: 1
+                    },
+                    size: {
+                        required: true,
+                        number: true,
+                        min: 1
+                    },
+                    capacity: {
                         required: true,
                         number: true,
                         min: 1
@@ -227,6 +289,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     },
                     room_status: {
                         required: true
+                    },
+                    description: {
+                        required: true,
+                        minlength: 10
                     },
                     room_image: {
                         required: true,
@@ -241,6 +307,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         minlength: "Room number must be at least 1 digit",
                         maxlength: "Room number cannot exceed 4 digits"
                     },
+                    room_name: {
+                        required: "Room name is required",
+                        minlength: "Room name must be at least 3 character",
+                        maxlength: "Room name cannot exceed 30 characters"
+                    },
                     room_type: {
                         required: "Please select a room type"
                     },
@@ -248,6 +319,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         required: "Price is required",
                         number: "Enter a valid number",
                         min: "Price must be greater than $0"
+                    },
+                    size: {
+                        required: "Size is required",
+                        number: "Enter a valid number",
+                        min: "Size must be greater than 0"
+                    },
+                    capacity: {
+                        required: "Room capacity is required",
+                        number: "Enter a valid number",
+                        min: "Capacity must be greater than 0"
                     },
                     beds: {
                         required: "Number of beds is required",
@@ -257,6 +338,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     },
                     room_status: {
                         required: "Please select room status"
+                    },
+                    description: {
+                        required: "Room description is required",
+                        minlength: "Room description must be at least 10 characters"
                     },
                     room_image: {
                         required: "Room image is required",

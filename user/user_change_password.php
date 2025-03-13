@@ -1,17 +1,35 @@
 <?php
 include_once('../db_connection.php');
 include_once('../auth_check.php');
+
+// Process form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $new_password = $_POST['new_password'];
+    $confirm_password = $_POST['confirm_password'];
+    $email = $_SESSION['email'];
+
+    $update_query = "UPDATE users SET password = '$new_password', confirm_password = '$new_password' WHERE email = '$email'";
+
+    if ($con->query($update_query)) {
+        $_SESSION['alert'] = [
+            'type' => 'success',
+            'message' => 'Password updated successfully!'
+        ];
+    } else {
+        $_SESSION['alert'] = [
+            'type' => 'danger',
+            'message' => 'Failed to update password: ' . $con->error
+        ];
+    }
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="zxx">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Change Password">
-    <meta name="keywords" content="password, update, change">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Change Password</title>
 </head>
 
@@ -24,27 +42,39 @@ include_once('../auth_check.php');
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body p-5">
+                            <!-- Display alert if set -->
+                            <?php if (isset($_SESSION['alert'])): ?>
+                                <div class="alert alert-<?php echo $_SESSION['alert']['type']; ?> alert-dismissible fade show" role="alert">
+                                    <?php echo $_SESSION['alert']['message']; ?>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            <?php
+                                // Clear the alert after displaying
+                                unset($_SESSION['alert']);
+                            endif;
+                            ?>
+
                             <h2 class="text-uppercase text-center mb-5">Change Password</h2>
 
                             <form id="changepasswordform" name="changepasswordform" method="post">
                                 <div class="form-outline mb-4">
                                     <label class="form-label"><i class="fa fa-lock"></i> Current Password</label>
-                                    <input type="text" id="current_password" name="old_password" class="form-control" required />
-                                    <div id="password_error" class="text-danger"></div> <!-- Error Message -->
+                                    <input type="text" id="current_password" name="current_password" class="form-control" required />
+                                    <div class="error text-danger"></div> <!-- Ensure error div exists -->
                                 </div>
 
                                 <div class="form-outline mb-4">
                                     <label class="form-label"><i class="fa fa-lock"></i> New Password</label>
-                                    <input type="password" id="new_password" name="new_password" class="form-control" required />
+                                    <input type="password" id="new_password" name="new_password" class="form-control" />
                                 </div>
 
                                 <div class="form-outline mb-4">
                                     <label class="form-label"><i class="fa fa-lock"></i> Confirm New Password</label>
-                                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" required />
+                                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" />
                                 </div>
 
                                 <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-success btn-md" id="submit_btn" style="background-color: #0B032D;" disabled>Change Password</button>
+                                    <button type="submit" class="btn btn-success btn-md" id="submit_btn" style="background-color: #0B032D;">Change Password</button>
                                 </div>
                             </form>
 
@@ -64,40 +94,32 @@ include_once('../auth_check.php');
 
     <script>
         $(document).ready(function() {
-            // Validate old password using AJAX when user leaves the input field
-            $("#current_password").on("blur", function() {
-                let oldPassword = $(this).val();
-
-                if (oldPassword.length >= 8) {
-                    $.ajax({
-                        url: "user_validate_oldpassword.php",
-                        type: "POST",
-                        data: {
-                            old_password: oldPassword
-                        },
-                        success: function(response) {
-                            if (response.trim() == "valid") {
-                                $("#password_error").text("Password is correct").removeClass("text-danger").addClass("text-success");
-                                $("#submit_btn").prop("disabled", false);
-                            } else {
-                                $("#password_error").text("Incorrect current password").removeClass("text-success").addClass("text-danger");
-                                $("#submit_btn").prop("disabled", true);
-                            }
-                        },
-                        error: function() {
-                            $("#password_error").text("Server error").addClass("text-danger");
-                        }
-                    });
-                }
-            });
+            // Custom validator for checking current password via AJAX
+            $.validator.addMethod("checkCurrentPassword", function(value, element) {
+                var valid = false;
+                $.ajax({
+                    type: 'GET',
+                    url: 'user_check_oldpassword.php',
+                    data: {
+                        email: "<?php echo $_SESSION['email']; ?>",
+                        current_password: value
+                    },
+                    async: false, // Need synchronous for validator
+                    success: function(response) {
+                        valid = (response == 'true');
+                    }
+                });
+                return valid;
+            }, "Incorrect current password.");
 
             // Form validation
             $('#changepasswordform').validate({
                 rules: {
-                    old_password: {
+                    current_password: {
                         required: true,
                         minlength: 8,
-                        maxlength: 20
+                        maxlength: 20,
+                        checkCurrentPassword: true
                     },
                     new_password: {
                         required: true,
@@ -110,10 +132,11 @@ include_once('../auth_check.php');
                     }
                 },
                 messages: {
-                    old_password: {
+                    current_password: {
                         required: "Current password is required",
                         minlength: "Password must be at least 8 characters",
-                        maxlength: "Password cannot exceed 20 characters"
+                        maxlength: "Password cannot exceed 20 characters",
+                        checkCurrentPassword: "Incorrect current password."
                     },
                     new_password: {
                         required: "New password is required",
@@ -128,7 +151,12 @@ include_once('../auth_check.php');
                 errorElement: "div",
                 errorPlacement: function(error, element) {
                     error.addClass('invalid-feedback');
-                    error.insertAfter(element);
+                    // If this is the current_password field, put error in the dedicated .error div
+                    if (element.attr('id') === 'current_password') {
+                        error.appendTo(element.siblings('.error'));
+                    } else {
+                        error.insertAfter(element);
+                    }
                 },
                 highlight: function(element) {
                     $(element).addClass('is-invalid').removeClass('is-valid');
@@ -137,6 +165,9 @@ include_once('../auth_check.php');
                     $(element).addClass('is-valid').removeClass('is-invalid');
                 }
             });
+
+            // Remove the standalone blur event since we're handling it with the validator
+            // $('#current_password').off('blur');
         });
     </script>
 </body>

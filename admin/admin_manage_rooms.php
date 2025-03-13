@@ -88,12 +88,12 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
                                     <tbody>
                                         <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                                             <tr>
-                                                <td><img src="../assets/images/rooms/<?php echo $row['room_image']; ?>" class="img-fluid rounded" width="80"></td>
+                                                <td><img src="../assets/images/rooms/<?php echo $row['image']; ?>" class="img-fluid rounded" width="80"></td>
                                                 <td><?php echo $row['room_no']; ?></td>
                                                 <td><?php echo ucfirst($row['room_type']); ?></td>
-                                                <td><?php echo $row['room_price']; ?></td>
-                                                <td><?php echo $row['no_of_beds']; ?></td>
-                                                <td><?php echo $row['room_features']; ?></td>
+                                                <td><?php echo $row['price']; ?></td>
+                                                <td><?php echo $row['bed']; ?></td>
+                                                <td><?php echo $row['services']; ?></td>
                                                 <td>
                                                     <a href="?status_id=<?php echo $row['room_no']; ?>&status=<?php echo ($row['room_status'] == 'Available') ? 'Occupied' : 'Available'; ?>" class="btn btn-sm btn-<?php echo ($row['room_status'] == 'Available') ? 'success' : 'danger'; ?>">
                                                         <i class="fas fa-toggle-<?php echo ($row['room_status'] == 'Available') ? 'on' : 'off'; ?>"></i>

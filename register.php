@@ -63,6 +63,7 @@ if (isset($_SESSION['reg_msg'])) {
                                         <div class="form-outline mb-4">
                                             <label class="form-label" for="email"><i class="fa fa-envelope"></i> Email</label>
                                             <input type="email" id="email" name="email" class="form-control" />
+                                            <div class="email_error text-danger"></div> <!-- Ensure error div exists -->
                                         </div>
                                     </div>
 
@@ -90,13 +91,6 @@ if (isset($_SESSION['reg_msg'])) {
                                         <input type="file" id="profile_picture" name="profile_picture" class="form-control" />
                                     </div>
                                 </div>
-
-                                <!-- <div class="form-check d-flex justify-content-center mb-4">
-                                    <input class="form-check-input me-2" type="checkbox" value="" id="terms" required />
-                                    <label class="form-check-label" for="terms">
-                                        I agree to all statements in <a href="#" class="text-body"><u>Terms of Service</u></a>
-                                    </label>
-                                </div> -->
 
                                 <div class="d-flex justify-content-center">
                                     <button type="submit" name="submit" class="btn btn-success btn-md" style="background-color: #0B032D;">Register</button>
@@ -131,6 +125,23 @@ if (isset($_SESSION['reg_msg'])) {
     <script src="assets/js/additional-methods.min.js"></script>
 
     <script>
+        // Custom validator for checking current password via AJAX
+        $.validator.addMethod("checkEmailPresent", function(value, element) {
+            var valid = false;
+            $.ajax({
+                type: 'GET',
+                url: 'check_email_registered.php',
+                data: {
+                    email: value
+                },
+                async: false, // Need synchronous for validator
+                success: function(response) {
+                    valid = (response == 'false');
+                }
+            });
+            return valid;
+        }, "Email is valid");
+
         $(document).ready(function() {
             $("#registerform").submit(function(e) {
                 if (!$('#registerform').valid()) {
@@ -154,7 +165,8 @@ if (isset($_SESSION['reg_msg'])) {
                     },
                     email: {
                         required: true,
-                        email: true
+                        email: true,
+                        checkEmailPresent: true
                     },
                     password: {
                         required: true,
@@ -191,7 +203,8 @@ if (isset($_SESSION['reg_msg'])) {
                     },
                     email: {
                         required: "Email is required",
-                        email: "Enter a valid email"
+                        email: "Enter a valid email",
+                        checkEmailPresent: "Email already registered"
                     },
                     password: {
                         required: "Password is required",
@@ -214,6 +227,14 @@ if (isset($_SESSION['reg_msg'])) {
                     }
                 },
                 errorElement: "div",
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    if (element.attr('id') === 'email_error') {
+                        error.appendTo(element.siblings('.email_error'));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
                 errorPlacement: function(error, element) {
                     error.addClass('invalid-feedback');
                     error.insertAfter(element);

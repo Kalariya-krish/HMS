@@ -3,66 +3,89 @@ session_start();
 include_once('db_connection.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require 'PHPMailer/Exception.php';
 require 'PHPMailer/PHPMailer.php';
 require 'PHPMailer/SMTP.php';
+require 'PHPMailer/Exception.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = trim($_POST['email']);
+    $email = mysqli_real_escape_string($con, $_POST['email']);
 
-    // Check if email exists
-    $query = "SELECT id FROM users WHERE email = '$email'";
-    $result = mysqli_query($con, $query);
+    // Check if email exists in users table
+    $result = mysqli_query($con, "SELECT id FROM users WHERE email = '$email'");
 
-    if ($row = mysqli_fetch_assoc($result)) {
-        $user_id = $row['id'];
+    if (mysqli_num_rows($result) > 0) {
+        $otp = rand(100000, 999999); // Generate 6-digit OTP
+        $expiry = date("Y-m-d H:i:s", strtotime("+10 minutes"));
 
-        // Generate secure token
-        $token = bin2hex(random_bytes(20));
-        $expires_at = date("Y-m-d H:i:s", strtotime("+1 hour"));
+        // Insert OTP into password_reset_requests table
+        mysqli_query($con, "INSERT INTO password_reset_requests (email, otp, expires_at) VALUES ('$email', '$otp', '$expiry')");
 
-        // Delete old tokens
-        mysqli_query($con, "DELETE FROM password_reset_tokens WHERE user_id = '$user_id'");
-
-        // Store the new token
-        $insertQuery = "INSERT INTO password_reset_tokens (user_id, token, expires_at) 
-                        VALUES ('$user_id', '$token', '$expires_at')";
-        mysqli_query($con, $insertQuery);
-
-        // Email sending
-        $reset_link = "http://localhost/hms/reset_password.php?token=$token";
+        // Create PHPMailer instance
         $mail = new PHPMailer(true);
 
         try {
+            // Enable debugging (optional)
+            // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'kkalariya174@rku.ac.in';  // Use your email
-            $mail->Password = 'Krish@2006';    // Use App Password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Username = 'kkalariya174@rku.ac.in';
+            $mail->Password = 'Krish@2006';
+            $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 
-            $mail->setFrom('kkalariya174@rku.ac.in', 'Astoria Hotel');
+            $mail->setFrom('kkalariya174@rku.ac.in', 'Kris Kalariya');
             $mail->addAddress($email);
+
             $mail->isHTML(true);
-            $mail->Subject = "Reset Your Password";
-            $mail->Body = "Click <a href='$reset_link'>here</a> to reset your password.";
+            $mail->Subject = 'Password Reset OTP';
 
+            // Email body with styling
+            $mail->Body = "
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+            .container { max-width: 500px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; }
+            .header { background: #0B032D; color: #fff; padding: 15px; font-size: 20px; }
+            .body { padding: 20px; font-size: 14px; color: #333; }
+            .otp { display: inline-block; padding: 10px 20px; background: #0B032D; color: #fff; font-size: 18px; font-weight: bold; border-radius: 5px; letter-spacing: 3px; margin: 10px 0; }
+            .footer { font-size: 12px; color: #666; padding: 10px; background: #f8f9fa; border-top: 1px solid #eee; }
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <div class='header'>Password Reset</div>
+            <div class='body'>
+                <p>Hi, You requested to reset your password. Use the OTP below to proceed:</p>
+                <div class='otp'>$otp</div>
+                <p>This OTP will expire in 10 minutes. If you did not request a password reset, please ignore this email.</p>
+            </div>
+            <div class='footer'>&copy; " . date('Y') . " Our Hotel. All rights reserved.</div>
+        </div>
+    </body>
+    </html>
+";
             $mail->send();
-            $_SESSION['success'] = "Password reset link sent to your email.";
+            $_SESSION['success'] = "Password reset OTP sent successfully. Please check your email.";
         } catch (Exception $e) {
-            $_SESSION['error'] = "Email could not be sent. Error: " . $mail->ErrorInfo;
+            $_SESSION['error'] = "Email sending failed: " . $mail->ErrorInfo;
         }
-    } else {
-        $_SESSION['error'] = "No account found with this email.";
-    }
 
-    header("Location: forget_password.php");
-    exit();
+        $_SESSION['email'] = $email;
+        header("Location: verify_otp.php");
+        exit;
+    } else {
+        $_SESSION['error'] = "Email not found!";
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -72,7 +95,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Forgot Password</title>
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -85,6 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="card">
                         <div class="card-body p-5">
                             <h2 class="text-uppercase text-center mb-5">Forgot Password</h2>
+                            <p class="text-muted text-center mb-4">Enter your email address and we'll send you instructions to reset your password.</p>
 
                             <!-- Display session messages -->
                             <?php
@@ -101,7 +124,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <form id="forgotPasswordForm" name="forgotPasswordForm" method="post">
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="email"><i class="fa fa-envelope"></i> Enter your registered email : </label>
-                                    <input type="email" id="email" name="email" class="form-control" required />
+                                    <input type="email" id="email" name="email" class="form-control" />
+                                    <div class="error" id="emailError"></div>
                                 </div>
 
                                 <div class="d-flex justify-content-center">
