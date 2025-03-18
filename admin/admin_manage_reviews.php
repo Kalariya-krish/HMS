@@ -1,5 +1,6 @@
 <?php
-include '../db_connection.php'; // Include the database connection
+include_once('../db_connection.php');
+include_once('../auth_check.php');
 
 // Handle delete review action
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_review'])) {

@@ -1,7 +1,8 @@
 <?php
 // generate_bill_pdf.php
 
-include '../db_connection.php';
+include_once('../db_connection.php');
+include_once('../auth_check.php');
 
 // Include the FPDF library; adjust the path as needed.
 require('../assets/fpdf/fpdf.php');

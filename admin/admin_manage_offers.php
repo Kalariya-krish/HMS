@@ -1,5 +1,6 @@
 <?php
-include '../db_connection.php'; // Database connection
+include_once('../db_connection.php');
+include_once('../auth_check.php');
 
 // Handle Offer actions (Edit or Delete)
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['offer_id'])) {

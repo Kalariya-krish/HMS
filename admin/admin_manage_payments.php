@@ -1,5 +1,6 @@
 <?php
-include '../db_connection.php'; // Include database connection
+include_once('../db_connection.php');
+include_once('../auth_check.php');
 
 // Handle Delete Payment
 if (isset($_POST['delete_payment'])) {

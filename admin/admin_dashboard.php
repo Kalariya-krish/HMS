@@ -1,3 +1,9 @@
+<?php 
+include_once('../db_connection.php');
+include_once('../auth_check.php');
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

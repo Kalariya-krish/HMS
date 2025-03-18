@@ -1,5 +1,7 @@
 <?php
 include_once('../db_connection.php');
+include_once('../auth_check.php');
+
 if (isset($_GET['room_no'])) {
     $room_no = $_GET['room_no'];
     $q = "SELECT * FROM rooms WHERE room_no='$room_no'";

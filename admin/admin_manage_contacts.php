@@ -1,6 +1,6 @@
 <?php
-// Include your database connection
-include '../db_connection.php';
+include_once('../db_connection.php');
+include_once('../auth_check.php');
 
 // Delete Contact Inquiry - Perform the delete action if the 'delete_id' parameter is provided
 if (isset($_GET['delete_id'])) {

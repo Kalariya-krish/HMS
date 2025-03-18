@@ -1,6 +1,6 @@
 <?php
-// Include your database conection file
-include('../db_connection.php');
+include_once('../db_connection.php');
+include_once('../auth_check.php');
 
 // Handle admin Update
 if (isset($_POST['update_admin'])) {

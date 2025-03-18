@@ -1,5 +1,6 @@
 <?php
-include '../db_connection.php'; // Include your database connection file
+include_once('../db_connection.php');
+include_once('../auth_check.php');
 
 // Handle Confirm and Cancel actions
 if (isset($_POST['action']) && isset($_POST['booking_id'])) {

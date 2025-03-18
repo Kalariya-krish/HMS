@@ -1,5 +1,6 @@
 <?php
-include '../db_connection.php';
+include_once('../db_connection.php');
+include_once('../auth_check.php');
 
 // Handle Room Update
 if (isset($_POST['update_room'])) {

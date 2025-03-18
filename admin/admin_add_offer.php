@@ -1,5 +1,6 @@
 <?php
-include '../db_connection.php'; // Database connection
+include_once('../db_connection.php');
+include_once('../auth_check.php');
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
