@@ -95,7 +95,7 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
                                                 <td><?php echo $row['bed']; ?></td>
                                                 <td><?php echo $row['services']; ?></td>
                                                 <td>
-                                                    <a href="?status_id=<?php echo $row['room_no']; ?>&status=<?php echo ($row['room_status'] == 'Available') ? 'Occupied' : 'Available'; ?>" class="btn btn-sm btn-<?php echo ($row['room_status'] == 'Available') ? 'success' : 'danger'; ?>">
+                                                    <a href="?status_id=<?php echo $row['room_no']; ?>&status=<?php echo ($row['room_status'] == 'Available') ? 'Booked' : 'Available'; ?>" class="btn btn-sm btn-<?php echo ($row['room_status'] == 'Available') ? 'success' : 'danger'; ?>">
                                                         <i class="fas fa-toggle-<?php echo ($row['room_status'] == 'Available') ? 'on' : 'off'; ?>"></i>
                                                         <?php echo ucfirst($row['room_status']); ?>
                                                     </a>
@@ -134,7 +134,18 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
                                 </div>
                             </div>
                         </div>
-
+                        <!-- Room Name -->
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Room Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="room_name" id="editRoomName">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
                         <!-- Room Type -->
                         <div class="col-md-6">
                             <div class="form-group row">
@@ -149,9 +160,6 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
                         <!-- Price per Night -->
                         <div class="col-md-6">
                             <div class="form-group row">
@@ -161,7 +169,30 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
                                 </div>
                             </div>
                         </div>
+                    </div>
 
+                    <div class="row">
+                        <!-- Room Type -->
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Room size</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="size" id="editSize">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Price per Night -->
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Capacity</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="capacity" id="editCapacity">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
                         <!-- Number of Beds -->
                         <div class="col-md-6">
                             <div class="form-group row">
@@ -171,9 +202,6 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
                         <!-- Room Status -->
                         <div class="col-md-6">
                             <div class="form-group row">
@@ -190,10 +218,22 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
                     </div>
 
                     <div class="row">
+                        <!-- Number of Beds -->
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Room Description</label>
+                                <div class="col-sm-8">
+                                    <textarea name="description" id="editDescription" rows="3" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
                         <!-- Room Features -->
                         <div class="col-md-6">
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Room Features</label>
+                                <label class="col-sm-4 col-form-label">Room Services</label>
                                 <div class="col-sm-8">
                                     <div class="form-check">
                                         <label class="form-check-label">
@@ -224,8 +264,8 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label">Room Image</label>
                                 <div class="col-sm-8">
-                                    <img src="../assets/images/room/room-1.jpg" alt="" style="border-radius: 20%; height:100px; width:150px;"><br><br>
-                                    <input type="file" class="form-control" name="room_image">
+                                    <img id="roomImagePreview" src="../assets/images/room/room-1.jpg" alt="Room Image Preview" style="border-radius: 20%; height:100px; width:150px;"><br><br>
+                                    <input type="hidden" id="currentImage" name="current_image">
                                 </div>
                             </div>
                         </div>
@@ -238,51 +278,41 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
         </div>
         <!-- Edit Modal End -->
 
-        <script>
-            document.querySelectorAll(".edit-btn").forEach(button => {
-                button.addEventListener("click", () => {
-                    let data = JSON.parse(button.getAttribute("data-room"));
+       <script>
+document.querySelectorAll('.edit-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    try {
+      const data = JSON.parse(button.getAttribute('data-room'));
 
-                    // Populate text fields
-                    document.getElementById("editRoomNumber").value = data.room_no;
-                    document.getElementById("editRoomType").value = data.room_type.toLowerCase(); // Convert to lowercase to match option values
-                    document.getElementById("editPrice").value = data.room_price;
-                    document.getElementById("editBeds").value = data.no_of_beds;
-                    document.getElementById("editStatus").value = data.room_status.toLowerCase(); // Convert to lowercase to match option values
+      // Set form values
+      document.getElementById('editRoomNumber').value = data.room_no;
+      document.getElementById('editRoomName').value = data.room_name || '';
+      document.getElementById('editRoomType').value = data.room_type;
+      document.getElementById('editPrice').value = data.room_price;
+      document.getElementById('editSize').value = data.size || '';
+      document.getElementById('editCapacity').value = data.capacity || '';
+      document.getElementById('editBeds').value = data.no_of_beds;
+      document.getElementById('editStatus').value = data.room_status;
+      document.getElementById('editDescription').value = data.description || '';
+      document.getElementById('currentImage').value = data.room_image;
 
-                    // Update image preview
-                    let imageElement = document.querySelector("#editModal img");
-                    imageElement.src = "../assets/images/rooms/" + data.room_image;
-                    imageElement.alt = "Room Image";
+      // Show room image
+      const imagePath = `../assets/images/rooms/${data.room_image}`;
+      document.getElementById('roomImagePreview').src = imagePath;
 
-                    // Handle features checkboxes
-                    let featureCheckboxes = document.querySelectorAll(".form-check-input");
-                    let currentFeatures = data.room_features
-                        .split(", ")
-                        .map(feature => feature.toLowerCase().trim()); // Convert to lowercase and trim whitespace
+      // Open the modal
+      document.getElementById('editModal').style.display = 'flex';
+    } catch (error) {
+      console.error('Error loading room data:', error);
+    }
+  });
+});
 
-                    featureCheckboxes.forEach(checkbox => {
-                        // Check if the checkbox value exists in the currentFeatures array
-                        checkbox.checked = currentFeatures.includes(checkbox.value);
-                    });
-
-                    // Add hidden input for current image
-                    let currentImageInput = document.createElement('input');
-                    currentImageInput.type = 'hidden';
-                    currentImageInput.name = 'current_image';
-                    currentImageInput.value = data.room_image;
-                    document.getElementById("editForm").appendChild(currentImageInput);
-
-                    // Show the modal
-                    document.getElementById("editModal").style.display = "flex";
-                });
-            });
-
-            // Close modal
-            document.getElementById("closeModal").addEventListener("click", () => {
-                document.getElementById("editModal").style.display = "none";
-            });
-        </script>
+// Close Modal
+document.getElementById('closeModal').addEventListener('click', () => {
+  document.getElementById('editModal').style.display = 'none';
+});
+</script>
 
 </body>
 

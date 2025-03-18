@@ -17,6 +17,7 @@
                 display: none;
                 justify-content: center;
                 align-items: center;
+                overflow-y: auto;
                 z-index: 9999;
             }
 
@@ -28,4 +29,5 @@
                 border-radius: 10px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
                 z-index: 10000;
+                overflow-y: auto;
             }

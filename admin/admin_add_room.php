@@ -25,18 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         move_uploaded_file($_FILES['room_image']['tmp_name'], $upload_path);
     }
 
-    // Check if room number already exists
-    $check_query = "SELECT room_no FROM rooms WHERE room_no = '$room_no'";
-    $check_result = mysqli_query($con, $check_query);
-
-    if (mysqli_num_rows($check_result) > 0) {
-        echo "<script>alert('Room number already exists!'); window.location='admin_add_room.php';</script>";
-        exit();
-    }
-
     // Insert query
-    $query = "INSERT INTO rooms (room_no, room_name, room_type, price, size, capacity, bed, room_status, description, services, image) 
-              VALUES ('$room_no', '$room_name', '$room_type', '$price', '$size', '$capacity', '$beds', '$status', '$description', '$services', '$image_name')";
+    $query = "INSERT INTO rooms (room_no, room_name, room_type, price, size, capacity, bed, room_status, services, description, image) 
+              VALUES ('$room_no', '$room_name', '$room_type', '$price', '$size', '$capacity', '$beds', '$status', '$services', '$description','$image_name')";
 
     // Execute query
     if (mysqli_query($con, $query)) {
@@ -80,6 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <label class="col-sm-3 col-form-label">Room Number</label>
                                                     <div class="col-sm-9">
                                                         <input type="text" class="form-control" placeholder="Enter room number" name="room_number">
+                                                        <div class="roomno_error text-danger"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -245,6 +237,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <script>
         $(document).ready(function() {
+            // Custom validator for checking current password via AJAX
+        $.validator.addMethod("checkRoomNo", function(value, element) {
+            var valid = false;
+            $.ajax({
+                type: 'GET',
+                url: 'check_duplicate_room.php',
+                data: {
+                    room_no: value
+                },
+                async: false, // Need synchronous for validator
+                success: function(response) {
+                    valid = (response == 'false');
+                }
+            });
+            return valid;
+        }, "Room no is valid");
+
             // Custom file size validation method
             $.validator.addMethod("filesize", function(value, element, param) {
                 return this.optional(element) || (element.files[0].size <= param);
@@ -256,7 +265,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         required: true,
                         digits: true,
                         minlength: 1,
-                        maxlength: 4
+                        maxlength: 4,
+                        checkRoomNo: true
                     },
                     room_name: {
                         required: true,
@@ -305,7 +315,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         required: "Room number is required",
                         digits: "Only numeric values are allowed",
                         minlength: "Room number must be at least 1 digit",
-                        maxlength: "Room number cannot exceed 4 digits"
+                        maxlength: "Room number cannot exceed 4 digits",
+                        checkRoomNo: "Room already added"
                     },
                     room_name: {
                         required: "Room name is required",
