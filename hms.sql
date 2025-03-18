@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 10, 2025 at 04:57 PM
+-- Generation Time: Mar 18, 2025 at 04:10 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -83,7 +83,8 @@ CREATE TABLE `bookings` (
 --
 
 INSERT INTO `bookings` (`booking_id`, `user_id`, `guest_name`, `room_no`, `check_in`, `check_out`, `guests`, `total_price`, `status`, `created_at`, `checkin_status`) VALUES
-(204, 10, 'KKK', 102, '2025-03-14', '2025-03-21', 2, 150.00, 'Pending', '2025-03-08 04:58:18', 'Not Checked-In');
+(204, 10, 'KKK', 102, '2025-03-14', '2025-03-21', 2, 150.00, 'Pending', '2025-03-08 04:58:18', 'Not Checked-In'),
+(205, 10, 'KKK', 105, '2025-03-22', '2025-03-28', 3, 110.00, 'Pending', '2025-03-11 15:42:29', 'Not Checked-In');
 
 -- --------------------------------------------------------
 
@@ -143,22 +144,15 @@ INSERT INTO `offers` (`offer_id`, `offer_title`, `discount_percentage`, `valid_f
 -- --------------------------------------------------------
 
 --
--- Table structure for table `password_reset_tokens`
+-- Table structure for table `password_reset_requests`
 --
 
-CREATE TABLE `password_reset_tokens` (
+CREATE TABLE `password_reset_requests` (
   `id` int NOT NULL,
-  `user_id` int NOT NULL,
-  `token` varchar(255) NOT NULL,
-  `expires_at` datetime NOT NULL
+  `email` varchar(255) NOT NULL,
+  `otp` varchar(6) NOT NULL,
+  `expires_at` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `password_reset_tokens`
---
-
-INSERT INTO `password_reset_tokens` (`id`, `user_id`, `token`, `expires_at`) VALUES
-(7, 30, '23ea58ce13e285b3b0e4205efdbb384728f8b27f', '2025-03-10 17:49:12');
 
 -- --------------------------------------------------------
 
@@ -217,7 +211,8 @@ INSERT INTO `reviews` (`review_id`, `user_id`, `room_no`, `rating`, `review_text
 (20, 23, 103, 3, 'The hotel had a cozy vibe. Rooms were neat, but the service could be improved. Overall, a decent experience.', '2024-02-05 03:15:00'),
 (21, 24, 102, 2, 'Rooms were okay, but the WiFi was slow. Not a great experience for business travelers.', '2024-01-30 06:50:00'),
 (22, 10, 102, 2, 'dfghjnbvfgh', '2025-03-06 15:55:11'),
-(23, 10, 102, 5, 'Very Good Room\r\n', '2025-03-06 16:28:36');
+(23, 10, 102, 5, 'Very Good Room\r\n', '2025-03-06 16:28:36'),
+(24, 10, 105, 5, 'bnngnngbtgrt', '2025-03-11 15:47:26');
 
 -- --------------------------------------------------------
 
@@ -231,8 +226,8 @@ CREATE TABLE `rooms` (
   `room_name` varchar(255) NOT NULL,
   `room_type` varchar(50) NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `size` int DEFAULT '30',
-  `capacity` int NOT NULL,
+  `size` varchar(30) NOT NULL,
+  `capacity` varchar(30) NOT NULL,
   `bed` varchar(255) NOT NULL,
   `room_status` enum('Available','Booked','Maintenance') NOT NULL,
   `services` text NOT NULL,
@@ -245,11 +240,12 @@ CREATE TABLE `rooms` (
 --
 
 INSERT INTO `rooms` (`id`, `room_no`, `room_name`, `room_type`, `price`, `size`, `capacity`, `bed`, `room_status`, `services`, `description`, `image`) VALUES
-(1, 101, 'Room 101', 'Laxury', 100.00, 25, 1, 'Single Bed', 'Available', 'Basic single bed, air conditioning, desk', 'Cozy single room with modern facilities.', 'room-1.jpg'),
-(2, 102, 'Room 102', 'Luxury', 150.00, 30, 2, 'Two Single Beds', 'Maintenance', 'Two single beds, air conditioning, desk, TV', 'Spacious double room with essential amenities.', 'room-2.jpg'),
-(3, 103, 'Suite 103', 'Deluxe', 300.00, 50, 3, 'King-size Bed', 'Booked', 'King-size bed, sofa, jacuzzi, air conditioning', 'Luxurious suite with jacuzzi and extra seating.', 'room-3.jpg'),
-(4, 104, 'Penthouse 104', 'Deluxe', 500.00, 70, 4, 'Four-poster Bed', 'Available', 'Four-poster bed, private balcony, jacuzzi, minibar', 'Exclusive penthouse with private facilities.', 'room-4.jpg'),
-(5, 105, 'Room 105', 'Family', 110.00, 25, 1, 'Single Bed', 'Available', 'Single bed, air conditioning, desk, sea view', 'Comfortable single room with sea view.', 'room-5.jpg');
+(1, 101, 'Room 101', 'Laxury', 100.00, '', '', 'Single Bed', 'Available', 'Basic single bed, air conditioning, desk', 'Cozy single room with modern facilities.', 'room-1.jpg'),
+(2, 102, 'Room 102', 'Luxury', 150.00, '', '', 'Two Single Beds', 'Maintenance', 'Two single beds, air conditioning, desk, TV', 'Spacious double room with essential amenities.', 'room-2.jpg'),
+(3, 103, 'Suite 103', 'Deluxe', 300.00, '', '', 'King-size Bed', 'Booked', 'King-size bed, sofa, jacuzzi, air conditioning', 'Luxurious suite with jacuzzi and extra seating.', 'room-3.jpg'),
+(4, 104, 'Penthouse 104', 'Deluxe', 500.00, '', '', 'Four-poster Bed', 'Available', 'Four-poster bed, private balcony, jacuzzi, minibar', 'Exclusive penthouse with private facilities.', 'room-4.jpg'),
+(5, 105, 'Room 105', 'Family', 110.00, '', '', 'Single Bed', 'Available', 'Single bed, air conditioning, desk, sea view', 'Comfortable single room with sea view.', 'room-5.jpg'),
+(6, 209, 'Laxuries room', 'double', 1000.00, '30.ft', '3 Persons', '2', 'Available', 'ac', 'Its a luxuries room where you feel like a heaven', '67d281d6641d5_pexels-polina-kovaleva-6185466.jpg');
 
 -- --------------------------------------------------------
 
@@ -300,10 +296,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `confirm_password`, `mobile_no`, `address`, `role`, `status`, `profile_picture`, `activation_code`) VALUES
-(10, 'KKK', 'het12@gmail.com', '123456789', '123456789', 9727428844, 'Anida Bhalodi', 'guest', 'active', '67c44b0b88609_IMG_20210219_221851_709-removebg-preview.png', NULL),
+(10, 'KKK', 'het12@gmail.com', 'Krish@2006', 'Krish@2006', 9727428844, 'Anida Bhalodi', 'guest', 'active', '67c44b0b88609_IMG_20210219_221851_709-removebg-preview.png', NULL),
 (23, 'Admin123', 'admin123@gmail.com', '1234567890', '1234567890', NULL, NULL, 'admin', 'inactive', '67b57bfa8d6d5_IMG-20250217-WA0039.jpg', NULL),
 (24, 'Kalariya Kris K', 'kkalariya174@gmail.com', '1234567890', '1234567890', 1234567890, 'hchjnnjnvhvjf jvnnvnbrn', 'guest', 'active', '67b9e35313798IMG_20230526_225843.jpg', NULL),
-(30, 'Krish KK', 'kkalariya174@rku.ac.in', '123456789', '123456789', 1234567890, 'Anida Bhalodi', 'guest', 'inactive', '67cf0f895c8cd_Snapchat-901969128.jpg', '9eb8e96f1bbc7692987d748a6827cf44');
+(30, 'Krish KK', 'kkalariya174@rku.ac.in', 'hello123', 'hello123', 1234567890, 'Anida Bhalodi', 'guest', 'inactive', '67cf0f895c8cd_Snapchat-901969128.jpg', '9eb8e96f1bbc7692987d748a6827cf44');
 
 --
 -- Indexes for dumped tables
@@ -344,11 +340,10 @@ ALTER TABLE `offers`
   ADD PRIMARY KEY (`offer_id`);
 
 --
--- Indexes for table `password_reset_tokens`
+-- Indexes for table `password_reset_requests`
 --
-ALTER TABLE `password_reset_tokens`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
+ALTER TABLE `password_reset_requests`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `payments`
@@ -415,7 +410,7 @@ ALTER TABLE `bills`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `booking_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
 
 --
 -- AUTO_INCREMENT for table `contact_inquiries`
@@ -430,10 +425,10 @@ ALTER TABLE `offers`
   MODIFY `offer_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `password_reset_tokens`
+-- AUTO_INCREMENT for table `password_reset_requests`
 --
-ALTER TABLE `password_reset_tokens`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+ALTER TABLE `password_reset_requests`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -457,7 +452,7 @@ ALTER TABLE `reviews`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `sliders`
@@ -488,12 +483,6 @@ ALTER TABLE `bills`
 ALTER TABLE `bookings`
   ADD CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`room_no`) REFERENCES `rooms` (`room_no`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `password_reset_tokens`
---
-ALTER TABLE `password_reset_tokens`
-  ADD CONSTRAINT `password_reset_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `payments`

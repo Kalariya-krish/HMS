@@ -145,7 +145,7 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <!-- Room Type -->
                         <div class="col-md-6">
@@ -192,7 +192,7 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <!-- Number of Beds -->
                         <div class="col-md-6">
@@ -279,41 +279,41 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
         </div>
         <!-- Edit Modal End -->
 
-       <script>
-document.querySelectorAll('.edit-btn').forEach(button => {
-  button.addEventListener('click', () => {
-    try {
-      const data = JSON.parse(button.getAttribute('data-room'));
+        <script>
+            document.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    try {
+                        const data = JSON.parse(button.getAttribute('data-room'));
 
-      // Set form values
-      document.getElementById('editRoomNumber').value = data.room_no;
-      document.getElementById('editRoomName').value = data.room_name || '';
-      document.getElementById('editRoomType').value = data.room_type;
-      document.getElementById('editPrice').value = data.room_price;
-      document.getElementById('editSize').value = data.size || '';
-      document.getElementById('editCapacity').value = data.capacity || '';
-      document.getElementById('editBeds').value = data.no_of_beds;
-      document.getElementById('editStatus').value = data.room_status;
-      document.getElementById('editDescription').value = data.description || '';
-      document.getElementById('currentImage').value = data.room_image;
+                        // Set form values
+                        document.getElementById('editRoomNumber').value = data.room_no;
+                        document.getElementById('editRoomName').value = data.room_name || '';
+                        document.getElementById('editRoomType').value = data.room_type;
+                        document.getElementById('editPrice').value = data.room_price;
+                        document.getElementById('editSize').value = data.size || '';
+                        document.getElementById('editCapacity').value = data.capacity || '';
+                        document.getElementById('editBeds').value = data.no_of_beds;
+                        document.getElementById('editStatus').value = data.room_status;
+                        document.getElementById('editDescription').value = data.description || '';
+                        document.getElementById('currentImage').value = data.room_image;
 
-      // Show room image
-      const imagePath = `../assets/images/rooms/${data.room_image}`;
-      document.getElementById('roomImagePreview').src = imagePath;
+                        // Show room image
+                        const imagePath = `../assets/images/rooms/${data.room_image}`;
+                        document.getElementById('roomImagePreview').src = imagePath;
 
-      // Open the modal
-      document.getElementById('editModal').style.display = 'flex';
-    } catch (error) {
-      console.error('Error loading room data:', error);
-    }
-  });
-});
+                        // Open the modal
+                        document.getElementById('editModal').style.display = 'flex';
+                    } catch (error) {
+                        console.error('Error loading room data:', error);
+                    }
+                });
+            });
 
-// Close Modal
-document.getElementById('closeModal').addEventListener('click', () => {
-  document.getElementById('editModal').style.display = 'none';
-});
-</script>
+            // Close Modal
+            document.getElementById('closeModal').addEventListener('click', () => {
+                document.getElementById('editModal').style.display = 'none';
+            });
+        </script>
 
 </body>
 
