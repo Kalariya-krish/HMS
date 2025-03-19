@@ -1,3 +1,7 @@
+<?php
+include_once("mailer.php");
+?>
+
 <!DOCTYPE html>
 <html lang="zxx">
 

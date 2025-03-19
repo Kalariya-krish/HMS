@@ -2,50 +2,15 @@
 session_start();
 include_once('db_connection.php');
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-
-require 'PHPMailer/PHPMailer.php';
-require 'PHPMailer/SMTP.php';
-require 'PHPMailer/Exception.php';
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = mysqli_real_escape_string($con, $_POST['email']);
+    $email = $_POST['email'];
 
-    // Check if email exists in users table
-    $result = mysqli_query($con, "SELECT id FROM users WHERE email = '$email'");
+    $query = "SELECT * FROM password_reset_requests WHERE email = '$email'";
+    $result = mysqli_fetch_assoc($con->query($query));
+    $otp = rand(100000, 999999);
 
-    if (mysqli_num_rows($result) > 0) {
-        $otp = rand(100000, 999999); // Generate 6-digit OTP
-        $expiry = date("Y-m-d H:i:s", strtotime("+10 minutes"));
-
-        // Insert OTP into password_reset_requests table
-        mysqli_query($con, "INSERT INTO password_reset_requests (email, otp, expires_at) VALUES ('$email', '$otp', '$expiry')");
-
-        // Create PHPMailer instance
-        $mail = new PHPMailer(true);
-
-        try {
-            // Enable debugging (optional)
-            // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'kkalariya174@rku.ac.in';
-            $mail->Password = 'Krish@2006';
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
-
-            $mail->setFrom('kkalariya174@rku.ac.in', 'Kris Kalariya');
-            $mail->addAddress($email);
-
-            $mail->isHTML(true);
-            $mail->Subject = 'Password Reset OTP';
-
-            // Email body with styling
-            $mail->Body = "
+    // Email body with styling
+    $mail->Body = "
     <!DOCTYPE html>
     <html>
     <head>
@@ -71,17 +36,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </body>
     </html>
 ";
-            $mail->send();
-            $_SESSION['success'] = "Password reset OTP sent successfully. Please check your email.";
-        } catch (Exception $e) {
-            $_SESSION['error'] = "Email sending failed: " . $mail->ErrorInfo;
+    $subject = "Password Reset - OTP";
+    $email_time = date("Y-m-d H:i:s");
+    $expiry_time = date("Y-m-d H:i:s", strtotime('+2 minutes'));
+    if ($result) {
+        $attempts = $result['otp_attempts'];
+        if ($attempts >= 3) {
+            // Email exists, display error message and redirect to OTP form
+            setcookie('error', "The maximum limit for generating OTP is reached you can generate a new OTP after 24 hours from the last OTP generated time.", time() + 5, "/");
+?>
+            <script>
+                window.location.href = "login.php";
+            </script>
+        <?php
+        } else {
+            $q = "UPDATE password_token SET otp=$otp, otp_attempts=$attempts+1, last_resend=now(), created_at = '$email_time', expires_at='$expiry_time' WHERE email='$email'";
         }
-
-        $_SESSION['email'] = $email;
-        header("Location: verify_otp.php");
-        exit;
     } else {
-        $_SESSION['error'] = "Email not found!";
+        $attempts = 0;
+        $q = "INSERT INTO  password_token  (email, otp, created_at,expires_at,otp_attempts,last_resend) VALUES ('$email', '$otp', '$email_time','$expiry_time',$attempts,now())";
+    }
+    if (sendEmail($email, $subject, $body, "")) {
+        if ($con->query($q)) {
+            $_SESSION['forgot_email'] = $email;
+            setcookie('success', 'OTP sent to registered email address. the OTP will expire in 2 Minutes.', time() + 5);
+        ?>
+            <script>
+                window.location.href = "otp_form.php";
+            </script>
+<?php
+        } else {
+            setcookie('error', 'Failed to generate OTP and store it in the database', time() + 5);
+        }
+    } else {
+        setcookie('error', 'Failed to send the OTP in mail. Please try after sometime.', time() + 5);
     }
 }
 ?>
@@ -125,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="email"><i class="fa fa-envelope"></i> Enter your registered email : </label>
                                     <input type="email" id="email" name="email" class="form-control" />
-                                    <div class="error" id="emailError"></div>
+                                    <div class="email_error text-danger"></div>
                                 </div>
 
                                 <div class="d-flex justify-content-center">
@@ -152,17 +140,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="assets/js/jquery.validate.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Custom validator for checking current password via AJAX
+            $.validator.addMethod("checkEmailPresent", function(value, element) {
+                var valid = false;
+                $.ajax({
+                    type: 'GET',
+                    url: 'check_email_registered.php',
+                    data: {
+                        email: value
+                    },
+                    async: false, // Need synchronous for validator
+                    success: function(response) {
+                        valid = (response == 'true');
+                    }
+                });
+                return valid;
+            }, "Email is valid");
+
             $('#forgotPasswordForm').validate({
                 rules: {
                     email: {
                         required: true,
-                        email: true
+                        email: true,
+                        checkEmailPresent: true
                     }
                 },
                 messages: {
                     email: {
                         required: "Email is required",
-                        email: "Enter a valid email"
+                        email: "Enter a valid email",
+                        checkEmailPresent: 'Email is not registered. Please enter registered email addrerss'
                     }
                 },
                 errorElement: "div",
