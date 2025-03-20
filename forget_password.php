@@ -1,6 +1,7 @@
 <?php
 session_start();
 include_once('db_connection.php');
+include_once('mailer.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
@@ -10,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $otp = rand(100000, 999999);
 
     // Email body with styling
-    $mail->Body = "
+    $body = "
     <!DOCTYPE html>
     <html>
     <head>
@@ -42,34 +43,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result) {
         $attempts = $result['otp_attempts'];
         if ($attempts >= 3) {
-            // Email exists, display error message and redirect to OTP form
-            setcookie('error', "The maximum limit for generating OTP is reached you can generate a new OTP after 24 hours from the last OTP generated time.", time() + 5, "/");
-?>
-            <script>
-                window.location.href = "login.php";
-            </script>
-        <?php
+            $_SESSION['error'] = 'The maximum limit for generating OTP is reached you can generate a new OTP after 24 hours from the last OTP generated time.';
+            header("Location: login.php");
+            exit();
         } else {
-            $q = "UPDATE password_token SET otp=$otp, otp_attempts=$attempts+1, last_resend=now(), created_at = '$email_time', expires_at='$expiry_time' WHERE email='$email'";
+            $q = "UPDATE password_reset_requests SET otp=$otp, otp_attempts=$attempts+1, last_resend=now(), created_at = '$email_time', expires_at='$expiry_time' WHERE email='$email'";
         }
     } else {
         $attempts = 0;
-        $q = "INSERT INTO  password_token  (email, otp, created_at,expires_at,otp_attempts,last_resend) VALUES ('$email', '$otp', '$email_time','$expiry_time',$attempts,now())";
+        $q = "INSERT INTO  password_reset_requests  (email, otp, created_at,expires_at,otp_attempts,last_resend) VALUES ('$email', '$otp', '$email_time','$expiry_time',$attempts,now())";
     }
     if (sendEmail($email, $subject, $body, "")) {
         if ($con->query($q)) {
             $_SESSION['forgot_email'] = $email;
-            setcookie('success', 'OTP sent to registered email address. the OTP will expire in 2 Minutes.', time() + 5);
-        ?>
-            <script>
-                window.location.href = "otp_form.php";
-            </script>
-<?php
+            $_SESSION['success'] = 'OTP sent to registered email address. the OTP will expire in 2 Minutes.';
+            header("Location: verify_otp.php");
+            exit();
         } else {
-            setcookie('error', 'Failed to generate OTP and store it in the database', time() + 5);
+            $_SESSION['error'] = 'Failed to generate OTP and store it in the database';
         }
     } else {
-        setcookie('error', 'Failed to send the OTP in mail. Please try after sometime.', time() + 5);
+        $_SESSION['error'] = 'Failed to send the OTP in mail. Please try after sometime.';
     }
 }
 ?>

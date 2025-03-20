@@ -1,5 +1,15 @@
 <?php
 include_once("mailer.php");
+include_once("db_connection.php");
+
+// date_default_timezone_set('Asia/Kolkata');
+// $current_time = date("Y-m-d H:i:s");
+// // $delete_query = "DELETE FROM password_token WHERE expires_at < '$current_time'";
+// // $con->query($delete_query);
+// $q = "UPDATE password_reset_requests SET otp_attempts = 0 WHERE TIMESTAMPDIFF(HOUR, last_resend, NOW()) >= 24";
+// $con->query($q);
+// $remove_otp = "update password_reset_requests set otp=NULL WHERE expires_at < '$current_time'";
+// $con->query($remove_otp);
 ?>
 
 <!DOCTYPE html>

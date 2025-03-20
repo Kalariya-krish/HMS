@@ -1,13 +1,13 @@
 <?php
 include_once("header.php");
-// session_start();
-include 'db_connect.php';
+include_once("mailer.php");
+include 'db_connection.php';
 
 if (isset($_SESSION['forgot_email'])) {
     $email = $_SESSION['forgot_email'];
 
     // Fetch OTP attempts and last resend time
-    $query = "SELECT otp_attempts, last_resend FROM password_token WHERE email = '$email'";
+    $query = "SELECT otp_attempts, last_resend FROM password_reset_requests WHERE email = '$email'";
     $result = $con->query($query);
     $row = mysqli_fetch_assoc($result);
 
@@ -34,54 +34,52 @@ if (isset($_SESSION['forgot_email'])) {
     $expiry_time = date("Y-m-d H:i:s", strtotime('+2 minutes'));
     // Generate a new OTP
     $new_otp = rand(100000, 999999);
-    $updateQuery = "UPDATE password_token SET otp=$new_otp, otp_attempts=$attempts+1, last_resend=now(), created_at='$email_time', expires_at='$expiry_time' WHERE email='$email'";
+    $updateQuery = "UPDATE password_reset_requests SET otp=$new_otp, otp_attempts=$attempts+1, last_resend=now(), created_at='$email_time', expires_at='$expiry_time' WHERE email='$email'";
     if ($con->query($updateQuery)) {
         $to = $email;
         $subject = "Reset password";
-        $body = "<html>
-        <head>
-            <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                .container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; }
-                h1 { color: black; }
-                .otp { font-size: 24px; font-weight: bold; color:  #dc3545; }
-                .footer { margin-top: 20px; font-size: 0.8em; color: #777; }
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <h1>Forgot Your Password?</h1>
-                <p>We received a request to reset your password. Here is your One-Time Password (OTP):</p>
-                <p class='otp'>$new_otp</p>
-                <p>Please enter this OTP on the website to proceed with resetting your password.</p>
-                <p>If you did not request a password reset, please ignore this email.</p>
-                <div class='footer'>
-                    <p>This is an automated message, please do not reply to this email.</p>
-                </div>
+        $body = "
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+            .container { max-width: 500px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; }
+            .header { background: #0B032D; color: #fff; padding: 15px; font-size: 20px; }
+            .body { padding: 20px; font-size: 14px; color: #333; }
+            .otp { display: inline-block; padding: 10px 20px; background: #0B032D; color: #fff; font-size: 18px; font-weight: bold; border-radius: 5px; letter-spacing: 3px; margin: 10px 0; }
+            .footer { font-size: 12px; color: #666; padding: 10px; background: #f8f9fa; border-top: 1px solid #eee; }
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <div class='header'>Password Reset</div>
+            <div class='body'>
+                <p>Hi, You requested to reset your password. Use the OTP below to proceed:</p>
+                <div class='otp'>$otp</div>
+                <p>This OTP will expire in 10 minutes. If you did not request a password reset, please ignore this email.</p>
             </div>
-        </body>
-        </html>
-        ";
+            <div class='footer'>&copy; " . date('Y') . " Our Hotel. All rights reserved.</div>
+        </div>
+    </body>
+    </html>
+";
         if (sendEmail($to, $subject, $body, "")) {
             setcookie("success", "OTP for reset password is sent successfully", time() + 5, "/");
         ?>
             <script>
-                window.location.href = "otp_form.php";
+                window.location.href = "verify_otp.php";
             </script>
         <?php
         } else {
             setcookie("error", "Error in sending OTP for reset password", time() + 5, "/");
         ?>
             <script>
-                window.location.href = "forgot_password.php";
+                window.location.href = "forget_password.php";
             </script>
 <?php
         }
     }
-
-
-    // Send OTP via email (replace with your mailing function)
-
 
     echo "<script>alert('New OTP sent.'); window.location.href='otp_form.php';</script>";
 }

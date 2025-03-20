@@ -2,28 +2,40 @@
 session_start();
 include_once('db_connection.php');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_SESSION['email'];
-    $otp = isset($_POST['otp']) ? implode("", $_POST['otp']) : "";
+if (isset($_POST['verify_otp'])) {
+    if (isset($_SESSION['forgot_email'])) {
+        $email = $_SESSION['forgot_email'];
 
-    if (empty($otp)) {
-        $_SESSION['error'] = "OTP cannot be empty!";
-        header("Location: verify_otp.php");
-        exit;
-    }
+        $otp = isset($_POST['otp']) ? implode("", $_POST['otp']) : "";
 
-    // Check OTP in the database
-    $query = "SELECT id FROM password_reset_requests WHERE email = '$email' AND otp = '$otp' AND expires_at > UTC_TIMESTAMP()";
-    $result = mysqli_query($con, $query);
+        // Fetch the OTP from the database for the given email
+        $query = "SELECT otp FROM password_reset_requests WHERE email = '$email' ";
+        $result = mysqli_query($con, $query);
 
-    if (mysqli_num_rows($result) > 0) {
-        $_SESSION['verified'] = true;
-        header("Location: reset_password.php");
-        exit;
-    } else {
-        $_SESSION['error'] = "Invalid or expired OTP!";
-        header("Location: verify_otp.php"); // Stay on the page if OTP is wrong
-        exit;
+        if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+            $db_otp = $row['otp'];
+            if (!$db_otp) {
+                $_SESSION['error'] = 'OTP has expired. Regenerate New OTP';
+                header("Location: forget_password.php");
+                exit();
+            }
+            // Compare the OTPs
+            else {
+                if ($otp == $db_otp) {
+                    header("Location: reset_password.php");
+                    exit();
+                } else {
+                    $_SESSION['error'] = 'Incorrect OTP';
+                    header("Location: verify_otp.php");
+                    exit();
+                }
+            }
+        } else {
+            $_SESSION['error'] = 'OTP has expired. Regenerate New OTP';
+            header("Location: forget_password.php");
+            exit();
+        }
     }
 }
 ?>
@@ -47,8 +59,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h2 class="text-uppercase text-center mb-4">Enter OTP</h2>
                 <p class="text-muted text-center mb-4">Please enter the verification code sent to your email</p>
 
-                <!-- Display error messages -->
+
+                <!-- Display session messages -->
                 <?php
+                if (isset($_SESSION['success'])) {
+                    echo "<div class='alert alert-success'>" . $_SESSION['success'] . "</div>";
+                    unset($_SESSION['success']); // Clear session message
+                }
                 if (isset($_SESSION['error'])) {
                     echo "<div class='alert alert-danger'>" . $_SESSION['error'] . "</div>";
                     unset($_SESSION['error']); // Clear message after showing
@@ -64,13 +81,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="text" name="otp[]" class="form-control text-center" maxlength="1">
                         <input type="text" name="otp[]" class="form-control text-center" maxlength="1">
                     </div>
+                    <div class="error" id="otpError"></div>
+                    <div id="timer" class="text-danger"></div>
+                    <div class="d-flex justify-content-center mb-4" name="otp">
+                        <button type="button" id="resend_otp" class="btn btn-success btn-md" style="display:none; background-color: #0B032D;">Resend OTP
+                        </button>
+                    </div>
                     <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-success btn-md" style="background-color: #0B032D;">Verify OTP</button>
+                        <button type="submit" name="verify_otp" class="btn btn-success btn-md" style="background-color: #0B032D;">Verify OTP</button>
                     </div>
                 </form>
 
                 <div class="text-center mt-3">
-                    <p class="text-muted">Didn't receive the code? <a href="forget_password.php" class="text-decoration-none">Resend OTP</a></p>
+                    <!-- <p class="text-muted">Didn't receive the code? <a href="forget_password.php" class="text-decoration-none">Resend OTP</a></p> -->
                     <a href="login.php" class="text-decoration-none">Back to Login</a>
                 </div>
             </div>
@@ -115,4 +138,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             });
         });
     });
+
+    // For timer
+    let timeLeft = 120; // Default timer value
+    const timerDisplay = document.getElementById('timer');
+    const resendButton = document.getElementById('resend_otp');
+
+    // Function to check if the user is refreshing or coming from another page
+    function isPageRefresh() {
+        return !!sessionStorage.getItem('otpTimer'); // If otpTimer exists, it's a refresh
+    }
+
+    // If the page is refreshed, use sessionStorage value
+    if (isPageRefresh()) {
+        timeLeft = parseInt(sessionStorage.getItem('otpTimer'), 10);
+    } else {
+        // If the user comes from another page, reset timer
+        sessionStorage.setItem('otpTimer', 120);
+        timeLeft = 120;
+    }
+
+    function startCountdown() {
+        resendButton.style.display = "none"; // Hide the button initially
+        timerDisplay.innerHTML = `Resend OTP in ${timeLeft} seconds`;
+
+        const countdown = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerDisplay.innerHTML = "You can now resend the OTP.";
+                resendButton.style.display = "inline";
+                sessionStorage.removeItem('otpTimer'); // Clear sessionStorage after timer ends
+            } else {
+                timerDisplay.innerHTML = `Resend OTP in ${timeLeft} seconds`;
+                timeLeft -= 1;
+                sessionStorage.setItem('otpTimer', timeLeft); // Update sessionStorage
+            }
+        }, 1000);
+    }
+
+    // Start countdown only if the timer is above 0
+    if (timeLeft > 0) {
+        startCountdown();
+    } else {
+        resendButton.style.display = "inline";
+        timerDisplay.innerHTML = "You can now resend the OTP.";
+    }
+
+    resendButton.onclick = function(event) {
+        event.preventDefault(); // Prevent default form submission
+        sessionStorage.setItem('otpTimer', 120); // Reset timer
+        window.location.href = 'resend_otp_forgot_password.php';
+    };
 </script>
