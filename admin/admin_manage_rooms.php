@@ -61,6 +61,34 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Rooms</title>
     <link rel="stylesheet" href="../assets/css/admin_editform_style.css">
+    <style>
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            padding: 50px 0;
+            /* Adds space from top and bottom */
+        }
+
+        .popup-card {
+            background: white;
+            width: 60%;
+            max-height: 80vh;
+            /* Limits height */
+            overflow-y: auto;
+            /* Makes content scrollable */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 
 <body>
@@ -285,33 +313,29 @@ $result = mysqli_query($con, "SELECT * FROM rooms");
                     try {
                         const data = JSON.parse(button.getAttribute('data-room'));
 
+                        console.log("Loaded Room Data:", data); // Debugging
+
                         // Set form values
                         document.getElementById('editRoomNumber').value = data.room_no;
-                        document.getElementById('editRoomName').value = data.room_name || '';
+                        document.getElementById('editRoomName').value = data.room_name;
                         document.getElementById('editRoomType').value = data.room_type;
-                        document.getElementById('editPrice').value = data.room_price;
-                        document.getElementById('editSize').value = data.size || '';
-                        document.getElementById('editCapacity').value = data.capacity || '';
-                        document.getElementById('editBeds').value = data.no_of_beds;
+                        document.getElementById('editPrice').value = data.price;
+                        document.getElementById('editSize').value = data.size;
+                        document.getElementById('editCapacity').value = data.capacity;
+                        document.getElementById('editBeds').value = data.bed;
                         document.getElementById('editStatus').value = data.room_status;
-                        document.getElementById('editDescription').value = data.description || '';
-                        document.getElementById('currentImage').value = data.room_image;
+                        document.getElementById('editDescription').value = data.description;
+                        document.getElementById('currentImage').value = data.image;
 
-                        // Show room image
-                        const imagePath = `../assets/images/rooms/${data.room_image}`;
-                        document.getElementById('roomImagePreview').src = imagePath;
+                        // Update Room Image
+                        document.getElementById('roomImagePreview').src = `../assets/images/rooms/${data.image}`;
 
-                        // Open the modal
+                        // Open modal
                         document.getElementById('editModal').style.display = 'flex';
                     } catch (error) {
-                        console.error('Error loading room data:', error);
+                        console.error("Error parsing room data:", error);
                     }
                 });
-            });
-
-            // Close Modal
-            document.getElementById('closeModal').addEventListener('click', () => {
-                document.getElementById('editModal').style.display = 'none';
             });
         </script>
 

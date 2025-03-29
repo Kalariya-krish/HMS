@@ -14,33 +14,18 @@ if (isset($_POST['reset_password'])) {
             $delete_query = "DELETE FROM password_reset_requests WHERE email = '$email'";
             mysqli_query($con, $delete_query);
             unset($_SESSION['forgot_email']);
-
-            setcookie('success', 'Password has been reset successfully.', time() + 5, '/');
-?>
-
-            <script>
-                window.location.href = 'login.php';
-            </script>
-        <?php
-
+            $_SESSION['success'] = 'Password has been reset successfully.';
+            header("Location: login.php");
+            exit();
         } else {
-            setcookie('error', 'Error in resetting Password.', time() + 5, '/');
-        ?>
-
-            <script>
-                window.location.href = 'forget_password.php';
-            </script>
-        <?php
-
-
+            $_SESSION['error'] = 'Error in resetting Password.';
+            header("Location: forget_password.php");
+            exit();
         }
     } else {
-        setcookie('error', 'No email found for resetting password.', time() + 5, '/');
-        ?>
-        <script>
-            window.location.href = 'forget_password.php';
-        </script>
-<?php
+        $_SESSION['error'] = 'No email found for resetting password.';
+        header("Location: forget_password.php");
+        exit();
     }
 }
 ?>

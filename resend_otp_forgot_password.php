@@ -1,5 +1,5 @@
 <?php
-include_once("header.php");
+session_start();
 include_once("mailer.php");
 include 'db_connection.php';
 
@@ -22,12 +22,8 @@ if (isset($_SESSION['forgot_email'])) {
 
     // Block further resends after 3 attempts
     if ($attempts >= 3) {
-        setcookie('error', "OTP resend limit reached. you can generate a new OTP after 24 hours.", time() + 5, "/");
-?>
-        <script>
-            window.location.href = 'login.php';
-        </script>
-        <?php
+        $_SESSION['error'] = 'OTP resend limit reached. you can generate a new OTP after 24 hours.';
+        header("Location: login.php");
         exit();
     }
     $email_time = date("Y-m-d H:i:s");
@@ -56,7 +52,7 @@ if (isset($_SESSION['forgot_email'])) {
             <div class='header'>Password Reset</div>
             <div class='body'>
                 <p>Hi, You requested to reset your password. Use the OTP below to proceed:</p>
-                <div class='otp'>$otp</div>
+                <div class='otp'>$new_otp</div>
                 <p>This OTP will expire in 10 minutes. If you did not request a password reset, please ignore this email.</p>
             </div>
             <div class='footer'>&copy; " . date('Y') . " Our Hotel. All rights reserved.</div>
@@ -65,21 +61,17 @@ if (isset($_SESSION['forgot_email'])) {
     </html>
 ";
         if (sendEmail($to, $subject, $body, "")) {
-            setcookie("success", "OTP for reset password is sent successfully", time() + 5, "/");
-        ?>
-            <script>
-                window.location.href = "verify_otp.php";
-            </script>
-        <?php
+            $_SESSION['success'] = "OTP for reset password is sent successfully";
+            header("Location: verify_otp.php");
+            exit();
         } else {
-            setcookie("error", "Error in sending OTP for reset password", time() + 5, "/");
-        ?>
-            <script>
-                window.location.href = "forget_password.php";
-            </script>
-<?php
+            $_SESSION['error'] = 'Error in sending OTP for reset password';
+            header("Location: forget_password.php");
+            exit();
         }
     }
 
-    echo "<script>alert('New OTP sent.'); window.location.href='otp_form.php';</script>";
+    echo "<script>alert('New OTP sent.'); window.location.href='verify_otp.php';</script>";
+    // Include header only if needed later
+    include_once("header.php");
 }

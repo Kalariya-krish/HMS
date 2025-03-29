@@ -139,54 +139,63 @@ if (isset($_POST['verify_otp'])) {
         });
     });
 
-    // For timer
-    let timeLeft = 120; // Default timer value
+    // Timer Logic
     const timerDisplay = document.getElementById('timer');
     const resendButton = document.getElementById('resend_otp');
+    const countdownTime = 120; // 2 minutes
+    const referrerPage = document.referrer.split("/").pop(); // Get last part of referrer URL
 
-    // Function to check if the user is refreshing or coming from another page
-    function isPageRefresh() {
-        return !!sessionStorage.getItem('otpTimer'); // If otpTimer exists, it's a refresh
+    // Check if coming from forget_password.php or resend_otp_forgot_password.php
+    const resetTimerPages = ["forget_password.php", "resend_otp_forgot_password.php"];
+
+    if (resetTimerPages.includes(referrerPage)) {
+        localStorage.setItem('otpStartTime', Date.now()); // Reset timer when coming from specific pages
     }
 
-    // If the page is refreshed, use sessionStorage value
-    if (isPageRefresh()) {
-        timeLeft = parseInt(sessionStorage.getItem('otpTimer'), 10);
-    } else {
-        // If the user comes from another page, reset timer
-        sessionStorage.setItem('otpTimer', 120);
-        timeLeft = 120;
+    // Function to get remaining time
+    function getTimeRemaining() {
+        const startTime = localStorage.getItem('otpStartTime');
+        if (!startTime) return countdownTime;
+
+        const elapsed = Math.floor((Date.now() - parseInt(startTime, 10)) / 1000);
+        return Math.max(0, countdownTime - elapsed);
     }
 
     function startCountdown() {
-        resendButton.style.display = "none"; // Hide the button initially
-        timerDisplay.innerHTML = `Resend OTP in ${timeLeft} seconds`;
+        let timeLeft = getTimeRemaining();
 
-        const countdown = setInterval(() => {
-            if (timeLeft <= 0) {
-                clearInterval(countdown);
-                timerDisplay.innerHTML = "You can now resend the OTP.";
-                resendButton.style.display = "inline";
-                sessionStorage.removeItem('otpTimer'); // Clear sessionStorage after timer ends
-            } else {
-                timerDisplay.innerHTML = `Resend OTP in ${timeLeft} seconds`;
-                timeLeft -= 1;
-                sessionStorage.setItem('otpTimer', timeLeft); // Update sessionStorage
-            }
-        }, 1000);
+        if (timeLeft > 0) {
+            resendButton.style.display = "none";
+            timerDisplay.innerHTML = `Resend OTP in ${timeLeft} seconds`;
+
+            const countdown = setInterval(() => {
+                timeLeft = getTimeRemaining();
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    timerDisplay.innerHTML = "You can now resend the OTP.";
+                    resendButton.style.display = "inline";
+                    localStorage.removeItem('otpStartTime');
+                } else {
+                    timerDisplay.innerHTML = `Resend OTP in ${timeLeft} seconds`;
+                }
+            }, 1000);
+        } else {
+            resendButton.style.display = "inline";
+            timerDisplay.innerHTML = "You can now resend the OTP.";
+        }
     }
 
-    // Start countdown only if the timer is above 0
-    if (timeLeft > 0) {
-        startCountdown();
-    } else {
-        resendButton.style.display = "inline";
-        timerDisplay.innerHTML = "You can now resend the OTP.";
+    // If the timer is not started, set start time
+    if (!localStorage.getItem('otpStartTime')) {
+        localStorage.setItem('otpStartTime', Date.now());
     }
+
+    // Start the countdown
+    startCountdown();
 
     resendButton.onclick = function(event) {
-        event.preventDefault(); // Prevent default form submission
-        sessionStorage.setItem('otpTimer', 120); // Reset timer
+        event.preventDefault();
+        localStorage.setItem('otpStartTime', Date.now());
         window.location.href = 'resend_otp_forgot_password.php';
     };
 </script>
