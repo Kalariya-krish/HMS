@@ -36,9 +36,11 @@ if (isset($_GET['delete_id'])) {
     // Delete the user
     $deleteUser = "DELETE FROM users WHERE id = '$user_id'";
     if (mysqli_query($con, $deleteUser)) {
-        echo "<script>alert('User deleted successfully!'); window.location='admin_manage_users.php';</script>";
+        header("Location: admin_manage_users.php?success=User deleted successfully.");
+        exit();
     } else {
-        echo "<script>alert('Error deleting user!');</script>";
+        header("Location: admin_manage_users.php?success=Error in user deleting.");
+        exit();
     }
 }
 
@@ -72,6 +74,20 @@ $result = mysqli_query($con, "SELECT * FROM users");
 
             <div class="main-panel">
                 <div class="content-wrapper">
+                    <!-- Display Success/Error Messages -->
+                    <?php if (isset($_GET['success'])) : ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['success']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_GET['error'])) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['error']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Manage Users</h4>
@@ -116,8 +132,7 @@ $result = mysqli_query($con, "SELECT * FROM users");
                                                     <button class="btn btn-info btn-sm edit-btn" data-user='<?php echo json_encode($user); ?>'>
                                                         <i class="fas fa-edit"></i> Edit
                                                     </button>
-                                                    <a href="?delete_id=<?php echo $user['id']; ?>" class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('Are you sure you want to delete this user?');">
+                                                    <a href="?delete_id=<?php echo $user['id']; ?>" class="btn btn-danger btn-sm">
                                                         <i class="fas fa-trash"></i> Delete
                                                     </a>
                                                 </td>

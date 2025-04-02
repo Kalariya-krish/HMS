@@ -7,9 +7,11 @@ if (isset($_GET['delete_id'])) {
     $delete_id = intval($_GET['delete_id']);
     $delete_query = "DELETE FROM contact_inquiries WHERE message_id = $delete_id";
     if (mysqli_query($con, $delete_query)) {
-        echo "<script>alert('Inquiry deleted successfully!');</script>";
+        header("Location: admin_manage_contacts.php?success=Inquiry deleted successfully.");
+        exit();
     } else {
-        echo "<script>alert('Error deleting inquiry.');</script>";
+        header("Location: admin_manage_contacts.php?success=Error deleting inquiry.");
+        exit();
     }
 }
 
@@ -34,6 +36,20 @@ $result = mysqli_query($con, $query);
             <?php include 'admin_sidebar.php'; ?>
             <div class="main-panel">
                 <div class="content-wrapper">
+                    <!-- Display Success/Error Messages -->
+                    <?php if (isset($_GET['success'])) : ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['success']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_GET['error'])) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['error']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
                     <div class="row">
                         <div class="col-12 grid-margin stretch-card">
                             <div class="card">
@@ -62,7 +78,7 @@ $result = mysqli_query($con, $query);
                                                         <td>
                                                             <!-- Optionally, you can implement a view button to see full details -->
                                                             <!-- <a href="view_contact.php?message_id=<?php echo $row['message_id']; ?>" class="btn btn-info btn-sm">View</a> -->
-                                                            <a href="?delete_id=<?php echo $row['message_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this inquiry?')">Delete</a>
+                                                            <a href="?delete_id=<?php echo $row['message_id']; ?>" class="btn btn-danger btn-sm">Delete</a>
                                                         </td>
                                                     </tr>
                                                 <?php endwhile; ?>

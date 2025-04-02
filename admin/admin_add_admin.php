@@ -3,47 +3,31 @@ include_once('../db_connection.php');
 include_once('../auth_check.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $fullname = $_POST['admin_name'];
     $email = $_POST['admin_email'];
     $password = $_POST['admin_password'];
-    $confirm_password = $_POST['admin_password']; // Using the same password as confirm_password
+    $confirm_password = $_POST['admin_password'];
     $role = 'admin';
     $status = $_POST['admin_status'];
 
     // Handling file upload
     $profile_picture = $_FILES['admin_profile_picture']['name'];
-    $file_name = uniqid() . '_' . $_FILES['admin_profile_picture']['name'];
+    $file_name = uniqid() . '_' . $profile_picture;
     $target_dir = "../assets/images/profile_picture/";
     $target_file = $target_dir . $file_name;
 
-    // Move the uploaded file to the server directory
     if (move_uploaded_file($_FILES['admin_profile_picture']['tmp_name'], $target_file)) {
-        // Insert into the database
+        // Insert data into the database
         $sql = "INSERT INTO users (fullname, email, password, confirm_password, role, status, profile_picture) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)";
+                VALUES ('$fullname', '$email', '$password', '$confirm_password', '$role', '$status', '$file_name')";
 
-        $stmt = $con->prepare($sql);
-
-        // Note: We now have 7 parameters, so we use 'sssssss'
-        $stmt->bind_param(
-            "sssssss",
-            $fullname,
-            $email,
-            $password,
-            $confirm_password,
-            $role,
-            $status,
-            $file_name  // Store the new filename with unique ID
-        );
-
-        if ($stmt->execute()) {
-            $stmt->close();
-            $con->close();
+        if (mysqli_query($con, $sql)) {
+            mysqli_close($con);
             header("Location: admin_add_admin.php?success=Admin added successfully.");
             exit();
         } else {
-            $stmt->close();
-            $con->close();
+            mysqli_close($con);
             header("Location: admin_add_admin.php?error=Database error: " . mysqli_error($con));
             exit();
         }
@@ -71,6 +55,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Main Panel -->
             <div class="main-panel">
                 <div class="content-wrapper">
+                    <!-- Display Success/Error Messages -->
+                    <?php if (isset($_GET['success'])) : ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['success']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_GET['error'])) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['error']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
                     <div class="row">
                         <div class="col-12 grid-margin">
                             <div class="card">
@@ -189,7 +187,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     },
                     admin_password: {
                         required: true,
-                        minlength: 6
+                        minlength: 6,
+                        maxlength: 20,
+                        pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/
                     },
                     admin_confirm_password: {
                         required: true,
@@ -216,7 +216,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     },
                     admin_password: {
                         required: "Password is required",
-                        minlength: "Password must be at least 6 characters"
+                        minlength: "Password must be at least 6 characters",
+                        maxlength: "Password cannot exceed 20 characters",
+                        pattern: "Password must contain at least one letter and one number"
                     },
                     admin_confirm_password: {
                         required: "Please confirm your password",

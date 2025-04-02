@@ -2,41 +2,35 @@
 include_once('../db_connection.php');
 include_once('../auth_check.php');
 
-// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $offer_title = $_POST['offer_title'];
     $discount = $_POST['discount'];
     $valid_from = $_POST['valid_from'];
-    $valid_to = $_POST['valid_until'];
+    $valid_until = $_POST['valid_until'];
     $offer_description = $_POST['offer_description'];
     $status = 'Active'; // Default status
 
     // File upload handling
-    $target_dir = "../assets/images/offers/";
-    $offer_image = uniqid() . basename($_FILES["offer_image"]["name"]);
-    $target_file = $target_dir . $offer_image;
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-    $uploadOk = 1;
+    $offer_image = uniqid() . $_FILES["offer_image"]["name"];
+    $target_file = "../assets/images/offers/" . $offer_image;
 
-    // Move file to target directory
     if (move_uploaded_file($_FILES["offer_image"]["tmp_name"], $target_file)) {
-        // Insert into database
-        $query = "INSERT INTO offers (offer_title, discount_percentage, valid_from, valid_to, offer_description, offer_image, status) 
-                  VALUES ('$offer_title', '$discount', '$valid_from', '$valid_to', '$offer_description', '$offer_image', '$status')";
+        $query = "INSERT INTO offers (offer_title, discount_percentage, valid_from, valid_until, offer_description, offer_image, status) 
+                  VALUES ('$offer_title', '$discount', '$valid_from', '$valid_until', '$offer_description', '$offer_image', '$status')";
 
-        if (mysqli_query($con, $query)) {
-            header("Location: admin_add_offer.php?success=Offer added successfully.");
-            exit();
-        } else {
+        mysqli_query($con, $query) ?
+            header("Location: admin_add_offer.php?success=Offer added successfully.") :
             header("Location: admin_add_offer.php?error=Database error: " . mysqli_error($con));
-            exit();
-        }
     } else {
         header("Location: admin_add_offer.php?error=Error uploading image.");
-        exit();
     }
+
+    mysqli_close($con);
+    exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -54,23 +48,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php include 'admin_sidebar.php'; ?>
             <div class="main-panel">
                 <div class="content-wrapper">
+                    <!-- Display Success/Error Messages -->
+                    <?php if (isset($_GET['success'])) : ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['success']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_GET['error'])) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['error']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
                     <div class="row">
                         <div class="col-12 grid-margin">
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Add Offer</h4>
-
-                                    <!-- Success/Error Message -->
-                                    <?php if (isset($_GET['success']) || isset($_GET['error'])) { ?>
-                                        <div id="alert-box" class="alert <?= isset($_GET['success']) ? 'alert-success' : 'alert-danger' ?>" role="alert">
-                                            <?= isset($_GET['success']) ? $_GET['success'] : $_GET['error'] ?>
-                                        </div>
-                                        <script>
-                                            setTimeout(() => {
-                                                document.getElementById('alert-box').style.display = 'none';
-                                            }, 3000);
-                                        </script>
-                                    <?php } ?>
 
                                     <form class="form-sample" id="addoffer" action="" method="POST" enctype="multipart/form-data">
                                         <p class="card-description">Offer Details</p>

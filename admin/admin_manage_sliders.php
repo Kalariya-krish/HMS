@@ -60,6 +60,31 @@ if (isset($_GET['status_id']) && isset($_GET['status'])) {
     exit();
 }
 
+// Handle Delete Slider
+if (isset($_GET['delete_id'])) {
+    $slider_id = $_GET['delete_id'];
+
+    $query = "SELECT slider_image FROM sliders WHERE id='$slider_id'";
+    $result = mysqli_query($con, $query);
+    $row = mysqli_fetch_assoc($result);
+
+    if ($row && $row['slider_image']) {
+        $image_path = "../assets/images/sliders/" . $row['slider_image'];
+        if (file_exists($image_path)) {
+            unlink($image_path);
+        }
+    }
+
+    $delete_query = "DELETE FROM sliders WHERE id='$slider_id'";
+    if (mysqli_query($con, $delete_query)) {
+        header("Location: admin_manage_sliders.php?success=Slider deleted successfully");
+    } else {
+        header("Location: admin_manage_sliders.php?error=Failed to delete slider");
+    }
+    exit();
+}
+
+
 
 // Fetch existing sliders
 $query = "SELECT * FROM sliders ORDER BY created_at DESC";

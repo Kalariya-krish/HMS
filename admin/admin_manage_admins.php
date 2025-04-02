@@ -32,12 +32,13 @@ if (isset($_POST['update_admin'])) {
 if (isset($_GET['delete_id'])) {
     $admin_id = $_GET['delete_id'];
 
-    // Delete the admin
     $deleteadmin = "DELETE FROM users WHERE id = '$admin_id'";
     if (mysqli_query($con, $deleteadmin)) {
-        echo "<script>alert('Admin deleted successfully!'); window.location='admin_manage_admins.php';</script>";
+        header("Location: admin_manage_admins.php?success=Admin deleted successfully.");
+        exit();
     } else {
-        echo "<script>alert('Error deleting admin!');</script>";
+        header("Location: admin_manage_admins.php?success=Error in Admin deleting");
+        exit();
     }
 }
 
@@ -71,6 +72,20 @@ $result = mysqli_query($con, "SELECT * FROM users where role='admin' ORDER BY id
 
             <div class="main-panel">
                 <div class="content-wrapper">
+                    <!-- Display Success/Error Messages -->
+                    <?php if (isset($_GET['success'])) : ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['success']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_GET['error'])) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['error']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Manage Admins</h4>
@@ -109,8 +124,7 @@ $result = mysqli_query($con, "SELECT * FROM users where role='admin' ORDER BY id
                                                     <button class="btn btn-info btn-sm edit-btn" data-admin='<?php echo json_encode($admin); ?>'>
                                                         <i class="fas fa-edit"></i> Edit
                                                     </button>
-                                                    <a href="?delete_id=<?php echo $admin['id']; ?>" class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('Are you sure you want to delete this admin?');">
+                                                    <a href="?delete_id=<?php echo $admin['id']; ?>" class="btn btn-danger btn-sm">
                                                         <i class="fas fa-trash"></i> Delete
                                                     </a>
                                                 </td>

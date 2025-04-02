@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['approve_review'])) {
 }
 
 // Fetch all reviews from the database
-$query = "SELECT * FROM reviews ORDER BY review_date DESC";
+$query = "SELECT * FROM reviews ORDER BY created_at DESC";
 $result = mysqli_query($con, $query);
 ?>
 
@@ -54,31 +54,32 @@ $result = mysqli_query($con, $query);
             <?php include 'admin_sidebar.php'; ?>
             <div class="main-panel">
                 <div class="content-wrapper">
+                    <!-- Display Success/Error Messages -->
+                    <?php if (isset($_GET['success'])) : ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['success']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_GET['error'])) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['error']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
                     <div class="row">
                         <div class="col-12 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Manage Reviews</h4>
 
-                                    <!-- Show success or error message -->
-                                    <?php if (isset($_GET['success']) || isset($_GET['error'])) { ?>
-                                        <div id="alert-box" class="alert 
-                                            <?= isset($_GET['success']) ? 'alert-success' : 'alert-danger' ?>"
-                                            role="alert">
-                                            <?= isset($_GET['success']) ? $_GET['success'] : $_GET['error'] ?>
-                                        </div>
-                                        <script>
-                                            setTimeout(() => {
-                                                document.getElementById('alert-box').style.display = 'none';
-                                            }, 5000); // Hide after 5 seconds
-                                        </script>
-                                    <?php } ?>
-
                                     <div class="table-responsive">
                                         <table class="table">
                                             <thead>
                                                 <tr>
                                                     <th>User</th>
+                                                    <th>Room no.</th>
                                                     <th>Review</th>
                                                     <th>Rating</th>
                                                     <th>Date</th>
@@ -90,9 +91,10 @@ $result = mysqli_query($con, $query);
                                                 <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                                                     <tr>
                                                         <td><?= $row['user_id'] ?></td>
-                                                        <td><?= $row['comment'] ?></td>
+                                                        <td><?= $row['room_no'] ?></td>
+                                                        <td><?= $row['review_text'] ?></td>
                                                         <td><?= $row['rating'] ?> ★</td>
-                                                        <td><?= $row['review_date'] ?></td>
+                                                        <td><?= $row['created_at'] ?></td>
                                                         <td>
                                                             <?php if ($row['status'] == 'Pending') { ?>
                                                                 <label class="badge badge-warning">Pending</label>

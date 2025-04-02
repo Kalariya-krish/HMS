@@ -3,6 +3,8 @@ include_once('../db_connection.php');
 include_once('../auth_check.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    include '../config.php'; // Include database connection
+
     $fullname = $_POST['fullname'];
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -13,37 +15,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status = $_POST['status'];
 
     // Handling file upload
-    $profile_picture = $_FILES['profile_picture']['name'];
     $file_name = uniqid() . $_FILES['profile_picture']['name'];
     $target_dir = "../assets/images/profile_picture/";
     $target_file = $target_dir . $file_name;
 
-    // Move the uploaded file to the server directory
     if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $target_file)) {
-        // Insert into the database (now includes confirm_password)
+        // Insert data into the database
         $sql = "INSERT INTO users (fullname, email, password, confirm_password, mobile_no, address, role, status, profile_picture) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                VALUES ('$fullname', '$email', '$password', '$confirm_password', '$mobile_no', '$address', '$role', '$status', '$file_name')";
 
-        $stmt = $con->prepare($sql);
-        $stmt->bind_param("sssssssss", $fullname, $email, $password, $confirm_password, $mobile_no, $address, $role, $status, $file_name);
-
-        if ($stmt->execute()) {
+        if (mysqli_query($con, $sql)) {
             header("Location: admin_add_user.php?success=User added successfully.");
-            exit();
         } else {
             header("Location: admin_add_user.php?error=Database error: " . mysqli_error($con));
-            exit();
         }
-
-        $stmt->close();
     } else {
         header("Location: add_user.php?error=Error uploading profile picture.");
-        exit();
     }
 
-    $con->close();
+    mysqli_close($con);
+    exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -62,23 +56,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Main Panel -->
             <div class="main-panel">
                 <div class="content-wrapper">
+                    <!-- Display Success/Error Messages -->
+                    <?php if (isset($_GET['success'])) : ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['success']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_GET['error'])) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['error']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
                     <div class="row">
                         <div class="col-12 grid-margin">
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Add User</h4>
-
-                                    <!-- Success/Error Message -->
-                                    <?php if (isset($_GET['success']) || isset($_GET['error'])) { ?>
-                                        <div id="alert-box" class="alert <?= isset($_GET['success']) ? 'alert-success' : 'alert-danger' ?>" role="alert">
-                                            <?= isset($_GET['success']) ? $_GET['success'] : $_GET['error'] ?>
-                                        </div>
-                                        <script>
-                                            setTimeout(() => {
-                                                document.getElementById('alert-box').style.display = 'none';
-                                            }, 3000);
-                                        </script>
-                                    <?php } ?>
 
                                     <form class="form-sample" action="" method="POST" enctype="multipart/form-data">
                                         <p class="card-description"> User Details </p>
@@ -156,8 +152,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                             <select class="form-select" name="role">
                                                                 <option value="" disabled selected>Select Role</option>
                                                                 <option value="admin">Admin</option>
-                                                                <option value="manager">Manager</option>
-                                                                <option value="staff">Staff</option>
                                                                 <option value="guest">Guest</option>
                                                             </select>
                                                         </div>

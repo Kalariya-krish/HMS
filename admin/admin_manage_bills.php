@@ -43,23 +43,25 @@ $result = mysqli_query($con, $query);
             <?php include 'admin_sidebar.php'; ?>
             <div class="main-panel">
                 <div class="content-wrapper">
+                    <!-- Display Success/Error Messages -->
+                    <?php if (isset($_GET['success'])) : ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['success']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_GET['error'])) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['error']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
                     <div class="row">
                         <div class="col-12 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Manage Bills</h4>
-
-                                    <!-- Display success/error messages -->
-                                    <?php if (isset($_GET['success']) || isset($_GET['error'])) { ?>
-                                        <div id="alert-box" class="alert <?= isset($_GET['success']) ? 'alert-success' : 'alert-danger' ?>" role="alert">
-                                            <?= isset($_GET['success']) ? $_GET['success'] : $_GET['error'] ?>
-                                        </div>
-                                        <script>
-                                            setTimeout(() => {
-                                                document.getElementById('alert-box').style.display = 'none';
-                                            }, 5000);
-                                        </script>
-                                    <?php } ?>
 
                                     <div class="table-responsive">
                                         <table class="table">
