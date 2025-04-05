@@ -99,9 +99,6 @@ $result = mysqli_query($con, "SELECT * FROM users");
                                             <th>ID</th>
                                             <th>Fullname</th>
                                             <th>Email</th>
-                                            <th>Password</th>
-                                            <th>Mobile no.</th>
-                                            <th>Address</th>
                                             <th>Role</th>
                                             <th>Status</th>
                                             <th>Actions</th>
@@ -117,9 +114,6 @@ $result = mysqli_query($con, "SELECT * FROM users");
                                                 <td>#<?php echo $user['id']; ?></td>
                                                 <td><?php echo $user['fullname']; ?></td>
                                                 <td><?php echo $user['email']; ?></td>
-                                                <td><?php echo $user['password']; ?></td>
-                                                <td><?php echo $user['mobile_no']; ?></td>
-                                                <td><?php echo $user['address']; ?></td>
                                                 <td><?php echo ucfirst($user['role']); ?></td>
                                                 <td>
                                                     <a href="?status_id=<?php echo $user['id']; ?>&status=<?php echo ($user['status'] == 'active') ? 'inactive' : 'active'; ?>"
@@ -129,6 +123,9 @@ $result = mysqli_query($con, "SELECT * FROM users");
                                                     </a>
                                                 </td>
                                                 <td>
+                                                    <button class="btn btn-primary btn-sm view-user-btn" data-user='<?php echo json_encode($user); ?>'>
+                                                        <i class="fas fa-eye"></i> View
+                                                    </button>
                                                     <button class="btn btn-info btn-sm edit-btn" data-user='<?php echo json_encode($user); ?>'>
                                                         <i class="fas fa-edit"></i> Edit
                                                     </button>
@@ -147,6 +144,30 @@ $result = mysqli_query($con, "SELECT * FROM users");
             </div>
         </div>
     </div>
+
+
+    <!-- View User Modal -->
+    <div class="overlay" id="viewModal">
+        <div class="popup-card" style="display: flex; gap: 30px; align-items: center;">
+            <div class="info-section" style="flex: 1;">
+                <h4 class="card-title">User Details</h4>
+                <hr>
+                <p><strong>ID:</strong> <span id="viewUserId"></span></p>
+                <p><strong>Fullname:</strong> <span id="viewUsername"></span></p>
+                <p><strong>Email:</strong> <span id="viewEmail"></span></p>
+                <p><strong>Password:</strong> <span id="viewPassword"></span></p>
+                <p><strong>Mobile No:</strong> <span id="viewMobile"></span></p>
+                <p><strong>Address:</strong> <span id="viewAddress"></span></p>
+                <p><strong>Role:</strong> <span id="viewRole"></span></p>
+                <p><strong>Status:</strong> <span id="viewStatus"></span></p>
+                <button type="button" class="btn btn-secondary" id="closeViewModal">Close</button>
+            </div>
+            <div class="image-section" style="flex: 1; text-align: center;">
+                <img id="viewProfilePicture" src="" alt="Profile Picture" style="border-radius: 10px; max-width: 100%; max-height: 300px;">
+            </div>
+        </div>
+    </div>
+
 
     <!-- Edit Modal Start -->
     <div class="overlay" id="editModal">
@@ -202,7 +223,33 @@ $result = mysqli_query($con, "SELECT * FROM users");
                 </div>
 
                 <div class="row">
+                    <!-- Email -->
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Mobile no</label>
+                            <div class="col-sm-8">
+                                <input type="mobile_no" class="form-control" name="mobile_no" id="editMobile">
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Role</label>
+                            <div class="col-sm-8">
+                                <select class="form-select" name="role" id="editRole" readonly>
+                                    <option value="admin">Admin</option>
+                                    <option value="manager">Manager</option>
+                                    <option value="staff">Staff</option>
+                                    <option value="guest">Guest</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
                     <!-- Status -->
                     <div class="col-md-6">
                         <div class="form-group row">
@@ -238,6 +285,32 @@ $result = mysqli_query($con, "SELECT * FROM users");
     <!-- Edit Modal End -->
 
     <script>
+        document.querySelectorAll(".view-user-btn").forEach(button => {
+            button.addEventListener("click", () => {
+                let data = JSON.parse(button.getAttribute("data-user"));
+
+                document.getElementById("viewUserId").textContent = data.id;
+                document.getElementById("viewUsername").textContent = data.fullname;
+                document.getElementById("viewEmail").textContent = data.email;
+                document.getElementById("viewPassword").textContent = data.password;
+                document.getElementById("viewMobile").textContent = data.mobile_no;
+                document.getElementById("viewAddress").textContent = data.address;
+                document.getElementById("viewRole").textContent = data.role;
+                document.getElementById("viewStatus").textContent = data.status;
+
+                let img = document.getElementById("viewProfilePicture");
+                img.src = data.profile_picture ?
+                    "../assets/images/profile_picture/" + data.profile_picture :
+                    "../assets/images/default_profile.png";
+
+                document.getElementById("viewModal").style.display = "flex";
+            });
+        });
+
+        document.getElementById("closeViewModal").addEventListener("click", () => {
+            document.getElementById("viewModal").style.display = "none";
+        });
+
         document.querySelectorAll(".edit-btn").forEach(button => {
             button.addEventListener("click", () => {
                 let data = JSON.parse(button.getAttribute("data-user"));

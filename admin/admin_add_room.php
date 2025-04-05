@@ -3,43 +3,37 @@ include_once('../db_connection.php');
 include_once('../auth_check.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get form data
+    include '../config.php'; // Database connection
+
     $room_no = $_POST['room_number'];
     $room_name = $_POST['room_name'];
     $room_type = $_POST['room_type'];
     $price = $_POST['price'];
-    $size = $_POST['size'] . '.ft';
+    $size = $_POST['size'] . ' ft';
     $capacity = $_POST['capacity'] . ' Persons';
     $beds = $_POST['beds'];
     $status = $_POST['room_status'];
     $description = $_POST['description'];
 
-    // Handle features array
-    $services = isset($_POST['services']) ? $_POST['services'] : array();
-    $services = implode(', ', $services);
+    // Convert services array to string
+    $services = isset($_POST['services']) ? implode(', ', $_POST['services']) : '';
 
     // Handle file upload
-    $image_name = '';
-    if (isset($_FILES['room_image'])) {
-        $image_name = uniqid() . '_' . $_FILES['room_image']['name'];
-        $upload_path = "../assets/images/rooms/" . $image_name;
-        move_uploaded_file($_FILES['room_image']['tmp_name'], $upload_path);
-    }
+    $image_name = uniqid() . '_' . $_FILES['room_image']['name'];
+    move_uploaded_file($_FILES['room_image']['tmp_name'], "../assets/images/rooms/" . $image_name);
 
     // Insert query
     $query = "INSERT INTO rooms (room_no, room_name, room_type, price, size, capacity, bed, room_status, services, description, image) 
               VALUES ('$room_no', '$room_name', '$room_type', '$price', '$size', '$capacity', '$beds', '$status', '$services', '$description','$image_name')";
 
-    // Execute query
-    if (mysqli_query($con, $query)) {
-        echo "<script>alert('Room added successfully!'); window.location='admin_manage_rooms.php';</script>";
-    } else {
-        echo "<script>alert('Error adding room: " . mysqli_error($con) . "'); window.location='add_room.php';</script>";
-    }
+    // Execute query and redirect
+    header("Location: admin_add_room.php?" . (mysqli_query($con, $query) ? "success=Room added successfully." : "error=Error in room adding."));
 
     mysqli_close($con);
+    exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -58,6 +52,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Main Panel -->
             <div class="main-panel">
                 <div class="content-wrapper">
+                    <!-- Display Success/Error Messages -->
+                    <?php if (isset($_GET['success'])) : ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['success']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_GET['error'])) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo $_GET['error']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
                     <div class="row">
                         <div class="col-12 grid-margin">
                             <div class="card">
@@ -124,7 +132,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Room Size in foots</label>
                                                     <div class="col-sm-9">
-                                                        <input type="number" class="form-control" placeholder="Enter size of the room" name="size">
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" name="size" class="form-control" placeholder="Enter room size" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                                            <span class="input-group-text" id="basic-addon2"> .ft</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -133,7 +144,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Room Capacity</label>
                                                     <div class="col-sm-9">
-                                                        <input type="number" class="form-control" placeholder="Enter room capacity" name="capacity">
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" name="capacity" class="form-control" placeholder="Enter room capacity" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                                            <span class="input-group-text" id="basic-addon2"> Person</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -239,21 +253,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script>
         $(document).ready(function() {
             // Custom validator for checking current password via AJAX
-        $.validator.addMethod("checkRoomNo", function(value, element) {
-            var valid = false;
-            $.ajax({
-                type: 'GET',
-                url: 'check_duplicate_room.php',
-                data: {
-                    room_no: value
-                },
-                async: false, // Need synchronous for validator
-                success: function(response) {
-                    valid = (response == 'false');
-                }
-            });
-            return valid;
-        }, "Room no is valid");
+            $.validator.addMethod("checkRoomNo", function(value, element) {
+                var valid = false;
+                $.ajax({
+                    type: 'GET',
+                    url: 'check_duplicate_room.php',
+                    data: {
+                        room_no: value
+                    },
+                    async: false, // Need synchronous for validator
+                    success: function(response) {
+                        valid = (response == 'false');
+                    }
+                });
+                return valid;
+            }, "Room no is valid");
 
             // Custom file size validation method
             $.validator.addMethod("filesize", function(value, element, param) {
