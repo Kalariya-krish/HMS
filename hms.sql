@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 18, 2025 at 04:10 PM
+-- Generation Time: Apr 07, 2025 at 04:37 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -58,6 +58,14 @@ CREATE TABLE `bills` (
   `payment_status` enum('Paid','Pending','Unpaid') DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `bills`
+--
+
+INSERT INTO `bills` (`bill_id`, `booking_id`, `user_id`, `amount`, `generated_at`, `pdf_path`, `payment_status`) VALUES
+(1, 208, 30, 20000.00, '2025-04-03', 'njcnnf/edjnejn/f', 'Paid'),
+(2, 209, 30, 30000.00, '2025-04-04', 'bill_2.pdf', 'Pending');
+
 -- --------------------------------------------------------
 
 --
@@ -83,8 +91,8 @@ CREATE TABLE `bookings` (
 --
 
 INSERT INTO `bookings` (`booking_id`, `user_id`, `guest_name`, `room_no`, `check_in`, `check_out`, `guests`, `total_price`, `status`, `created_at`, `checkin_status`) VALUES
-(204, 10, 'KKK', 102, '2025-03-14', '2025-03-21', 2, 150.00, 'Pending', '2025-03-08 04:58:18', 'Not Checked-In'),
-(205, 10, 'KKK', 105, '2025-03-22', '2025-03-28', 3, 110.00, 'Pending', '2025-03-11 15:42:29', 'Not Checked-In');
+(208, 30, 'Krish KK', 101, '2025-04-18', '2025-04-25', 1, 30000.00, 'Confirmed', '2025-04-07 16:10:21', 'Not Checked-In'),
+(209, 30, 'Krish KK', 2003, '2025-04-10', '2025-04-11', 3, 5353535.00, 'Pending', '2025-04-07 16:10:40', 'Not Checked-In');
 
 -- --------------------------------------------------------
 
@@ -106,8 +114,6 @@ CREATE TABLE `contact_inquiries` (
 --
 
 INSERT INTO `contact_inquiries` (`message_id`, `name`, `email`, `subject`, `message`, `sent_at`) VALUES
-(1, 'Alice Smith', 'alice@example.com', 'Room Availability', 'Is there a deluxe room available for next week?', '2025-02-12 16:21:14'),
-(3, 'Alice Smith', 'alice@example.com', 'Room Availability', 'Is there a deluxe room available for next week?', '2025-02-12 16:21:14'),
 (4, 'Michael Johnson', 'michael@example.com', 'Feedback', 'The service was great, but I would suggest improving the breakfast options.', '2025-02-17 10:42:45'),
 (5, 'Jane Smith', 'jane@example.com', 'Payment Issue', 'My payment is not reflecting, kindly assist.', '2025-02-16 03:50:10'),
 (6, 'Bob Johnson', 'bob@example.com', 'Payment Issue', 'I made a payment but did not receive confirmation.', '2025-02-12 16:22:00'),
@@ -137,9 +143,8 @@ CREATE TABLE `offers` (
 --
 
 INSERT INTO `offers` (`offer_id`, `offer_title`, `discount_percentage`, `valid_from`, `valid_until`, `offer_description`, `offer_image`, `status`) VALUES
-(2, 'Winter Sale', 25, '2025-01-01', '2025-02-28', 'Get 25% off on all winter items.', 'winter_sale.jpg', 'Active'),
-(5, 'Summer Collection Launch', 20, '2025-06-01', '2025-08-31', 'Exclusive 20% discount on the new summer collection.', '67b4295982a29pexels-goumbik-1420709.jpg', 'Active'),
-(6, 'Summer Holiday', 40, '2025-12-01', '2025-12-25', 'Enjoy 40% off on gifts and accessories this Christmas.', '67b429e211da1pexels-polina-kovaleva-6185466.jpg', 'Active');
+(6, 'Summer Holiday', 40, '2025-12-01', '2025-12-25', 'Enjoy 40% off on gifts and accessories this Christmas.', '67b429e211da1pexels-polina-kovaleva-6185466.jpg', 'Active'),
+(7, 'Summer Holiday Week 3', 60, '2025-04-05', '2025-04-10', 'Tis is very peacefull moment', '67ecf80a1939ewp3435099-lord-krishna-3d-images-in-black-background.jpg', 'Active');
 
 -- --------------------------------------------------------
 
@@ -150,9 +155,19 @@ INSERT INTO `offers` (`offer_id`, `offer_title`, `discount_percentage`, `valid_f
 CREATE TABLE `password_reset_requests` (
   `id` int NOT NULL,
   `email` varchar(255) NOT NULL,
-  `otp` varchar(6) NOT NULL,
-  `expires_at` timestamp NOT NULL
+  `otp` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL,
+  `expires_at` timestamp NOT NULL,
+  `otp_attempts` int NOT NULL,
+  `last_resend` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `password_reset_requests`
+--
+
+INSERT INTO `password_reset_requests` (`id`, `email`, `otp`, `created_at`, `expires_at`, `otp_attempts`, `last_resend`) VALUES
+(25, 'kkalariya174@rku.ac.in', '485205', '2025-03-29 01:56:49', '2025-03-29 01:58:49', 3, '2025-03-29 07:26:49');
 
 -- --------------------------------------------------------
 
@@ -171,6 +186,13 @@ CREATE TABLE `payments` (
   `payment_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`payment_id`, `booking_id`, `user_id`, `amount`, `payment_method`, `payment_status`, `transaction_id`, `payment_date`) VALUES
+(1, 208, 30, 30000.00, 'Credit_card', 'Pending', '222', '2025-04-07 16:13:00');
+
 -- --------------------------------------------------------
 
 --
@@ -187,6 +209,14 @@ CREATE TABLE `refunds` (
   `status` enum('Pending','Approved','Rejected') DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `refunds`
+--
+
+INSERT INTO `refunds` (`refund_id`, `booking_id`, `user_id`, `guest_name`, `amount`, `refund_date`, `status`) VALUES
+(1, 209, 30, 'krish kalariya', 2000.00, '2025-04-07 16:30:40', 'Approved'),
+(2, 208, 30, 'krish kalariya', 30000.00, '2025-04-07 16:31:12', 'Rejected');
+
 -- --------------------------------------------------------
 
 --
@@ -199,20 +229,17 @@ CREATE TABLE `reviews` (
   `room_no` int NOT NULL,
   `rating` int DEFAULT NULL,
   `review_text` text,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` enum('Pending','Approved','Spam') DEFAULT 'Pending'
 ) ;
 
 --
 -- Dumping data for table `reviews`
 --
 
-INSERT INTO `reviews` (`review_id`, `user_id`, `room_no`, `rating`, `review_text`, `created_at`) VALUES
-(19, 10, 102, 4, 'Great experience! The check-in process was smooth, and the staff was very accommodating. The room had a fantastic city view!', '2023-12-20 04:45:00'),
-(20, 23, 103, 3, 'The hotel had a cozy vibe. Rooms were neat, but the service could be improved. Overall, a decent experience.', '2024-02-05 03:15:00'),
-(21, 24, 102, 2, 'Rooms were okay, but the WiFi was slow. Not a great experience for business travelers.', '2024-01-30 06:50:00'),
-(22, 10, 102, 2, 'dfghjnbvfgh', '2025-03-06 15:55:11'),
-(23, 10, 102, 5, 'Very Good Room\r\n', '2025-03-06 16:28:36'),
-(24, 10, 105, 5, 'bnngnngbtgrt', '2025-03-11 15:47:26');
+INSERT INTO `reviews` (`review_id`, `user_id`, `room_no`, `rating`, `review_text`, `created_at`, `status`) VALUES
+(1, 30, 2003, 5, 'very good room', '2025-04-07 16:32:26', 'Approved'),
+(2, 30, 311, 2, 'very bed room', '2025-04-07 16:33:57', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -240,12 +267,9 @@ CREATE TABLE `rooms` (
 --
 
 INSERT INTO `rooms` (`id`, `room_no`, `room_name`, `room_type`, `price`, `size`, `capacity`, `bed`, `room_status`, `services`, `description`, `image`) VALUES
-(1, 101, 'Room 101', 'Laxury', 100.00, '', '', 'Single Bed', 'Available', 'Basic single bed, air conditioning, desk', 'Cozy single room with modern facilities.', 'room-1.jpg'),
-(2, 102, 'Room 102', 'Luxury', 150.00, '', '', 'Two Single Beds', 'Maintenance', 'Two single beds, air conditioning, desk, TV', 'Spacious double room with essential amenities.', 'room-2.jpg'),
-(3, 103, 'Suite 103', 'Deluxe', 300.00, '', '', 'King-size Bed', 'Booked', 'King-size bed, sofa, jacuzzi, air conditioning', 'Luxurious suite with jacuzzi and extra seating.', 'room-3.jpg'),
-(4, 104, 'Penthouse 104', 'Deluxe', 500.00, '', '', 'Four-poster Bed', 'Available', 'Four-poster bed, private balcony, jacuzzi, minibar', 'Exclusive penthouse with private facilities.', 'room-4.jpg'),
-(5, 105, 'Room 105', 'Family', 110.00, '', '', 'Single Bed', 'Available', 'Single bed, air conditioning, desk, sea view', 'Comfortable single room with sea view.', 'room-5.jpg'),
-(6, 209, 'Laxuries room', 'double', 1000.00, '30.ft', '3 Persons', '2', 'Available', 'ac', 'Its a luxuries room where you feel like a heaven', '67d281d6641d5_pexels-polina-kovaleva-6185466.jpg');
+(7, 311, 'ROOM311', 'deluxe', 10000.00, '40.ft', '3 Persons', '3', 'Available', 'ac, wifi, tv', 'hdhcbhdbb cbhdbcbec ccbdhcbehcbehbfe febfhebf', '67e7f783e892b_pexels-ian-panelo-8333070.jpg'),
+(9, 2003, 'vffgvrgrg dfe', 'double', 5353535.00, '30 ft', '3 Persons', '3', 'Available', 'ac, wifi, tv', 'vfv fe gg ffrr', '67ee812137392_wp3435099-lord-krishna-3d-images-in-black-background.jpg'),
+(10, 101, 'Luxuries family room', 'deluxe', 30000.00, '30', '4', '4', 'Available', 'ac, wifi, tv, minibar', 'dffghg hgfgdhdg', '67f0eacc3fb97_room3.jpg');
 
 -- --------------------------------------------------------
 
@@ -297,9 +321,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `confirm_password`, `mobile_no`, `address`, `role`, `status`, `profile_picture`, `activation_code`) VALUES
 (10, 'KKK', 'het12@gmail.com', 'Krish@2006', 'Krish@2006', 9727428844, 'Anida Bhalodi', 'guest', 'active', '67c44b0b88609_IMG_20210219_221851_709-removebg-preview.png', NULL),
-(23, 'Admin123', 'admin123@gmail.com', '1234567890', '1234567890', NULL, NULL, 'admin', 'inactive', '67b57bfa8d6d5_IMG-20250217-WA0039.jpg', NULL),
-(24, 'Kalariya Kris K', 'kkalariya174@gmail.com', '1234567890', '1234567890', 1234567890, 'hchjnnjnvhvjf jvnnvnbrn', 'guest', 'active', '67b9e35313798IMG_20230526_225843.jpg', NULL),
-(30, 'Krish KK', 'kkalariya174@rku.ac.in', 'hello123', 'hello123', 1234567890, 'Anida Bhalodi', 'guest', 'inactive', '67cf0f895c8cd_Snapchat-901969128.jpg', '9eb8e96f1bbc7692987d748a6827cf44');
+(23, 'Admin123', 'admin123@gmail.com', '1234567890', '1234567890', NULL, NULL, 'admin', 'active', '67b57bfa8d6d5_IMG-20250217-WA0039.jpg', NULL),
+(30, 'Krish KK', 'kkalariya174@rku.ac.in', 'krish123', 'krish123', 1234567890, 'Anida Bhalodi', 'guest', 'active', '67cf0f895c8cd_Snapchat-901969128.jpg', '9eb8e96f1bbc7692987d748a6827cf44');
 
 --
 -- Indexes for dumped tables
@@ -404,13 +427,13 @@ ALTER TABLE `about_us`
 -- AUTO_INCREMENT for table `bills`
 --
 ALTER TABLE `bills`
-  MODIFY `bill_id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `bill_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
+  MODIFY `booking_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=210;
 
 --
 -- AUTO_INCREMENT for table `contact_inquiries`
@@ -422,13 +445,13 @@ ALTER TABLE `contact_inquiries`
 -- AUTO_INCREMENT for table `offers`
 --
 ALTER TABLE `offers`
-  MODIFY `offer_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `offer_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `password_reset_requests`
 --
 ALTER TABLE `password_reset_requests`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -452,19 +475,19 @@ ALTER TABLE `reviews`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `sliders`
 --
 ALTER TABLE `sliders`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- Constraints for dumped tables

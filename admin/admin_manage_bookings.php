@@ -2,43 +2,32 @@
 include_once('../db_connection.php');
 include_once('../auth_check.php');
 
-// Handle booking status updates
+// Handle actions (confirm, cancel, delete)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $booking_id = $_POST['booking_id'];
     $action = $_POST['action'];
 
-    // Convert action to proper status value - matching your database enum/varchar values exactly
     if ($action == 'confirm') {
-        $status = 'confirmed'; // Using lowercase if that's what your database expects
-    } else if ($action == 'cancel') {
-        $status = 'cancelled'; // Using lowercase if that's what your database expects
+        $query = "UPDATE bookings SET status = 'confirmed' WHERE booking_id = $booking_id";
+    } elseif ($action == 'cancel') {
+        $query = "UPDATE bookings SET status = 'cancelled' WHERE booking_id = $booking_id";
+    } elseif ($action == 'delete') {
+        $query = "DELETE FROM bookings WHERE booking_id = $booking_id";
     }
 
-    try {
-        // Update booking status
-        $query = "UPDATE bookings SET status = ? WHERE booking_id = ?";
-        $stmt = $con->prepare($query);
-        $stmt->bind_param("si", $status, $booking_id);
-
-        if ($stmt->execute()) {
-            echo "Success";
-        } else {
-            throw new Exception(mysqli_error($con));
-        }
-    } catch (Exception $e) {
-        echo "Error: " . $e->getMessage();
+    if (mysqli_query($con, $query)) {
+        echo "Success";
+    } else {
+        echo "Error: " . mysqli_error($con);
     }
     exit();
 }
 
-// Fetch all bookings
-$query = "SELECT * FROM bookings ORDER BY check_in DESC";
-$result = mysqli_query($con, $query);
-
-if (!$result) {
-    die("Error fetching bookings: " . mysqli_error($con));
-}
+// Fetch bookings
+$result = mysqli_query($con, "SELECT * FROM bookings ORDER BY check_in DESC");
+if (!$result) die("Error fetching bookings: " . mysqli_error($con));
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -91,17 +80,18 @@ if (!$result) {
                                                 </td>
                                                 <td>
                                                     <?php if (strtolower($row['status']) == 'pending') { ?>
-                                                        <button class="btn btn-success confirm-btn"
-                                                            data-id="<?php echo $row['booking_id']; ?>">
+                                                        <button class="btn btn-success confirm-btn" data-id="<?php echo $row['booking_id']; ?>">
                                                             Confirm
                                                         </button>
                                                     <?php } ?>
                                                     <?php if (strtolower($row['status']) != 'cancelled') { ?>
-                                                        <button class="btn btn-danger cancel-btn"
-                                                            data-id="<?php echo $row['booking_id']; ?>">
+                                                        <button class="btn btn-danger cancel-btn" data-id="<?php echo $row['booking_id']; ?>">
                                                             Cancel
                                                         </button>
                                                     <?php } ?>
+                                                    <button class="btn btn-danger delete-btn" data-id="<?php echo $row['booking_id']; ?>">
+                                                        Delete
+                                                    </button>
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -119,22 +109,25 @@ if (!$result) {
         // Confirm booking
         document.querySelectorAll('.confirm-btn').forEach(button => {
             button.addEventListener('click', function() {
-                if (confirm('Are you sure you want to confirm this booking?')) {
-                    updateBooking(this.dataset.id, 'confirm');
-                }
+                updateBooking(this.dataset.id, 'confirm');
             });
         });
 
         // Cancel booking
         document.querySelectorAll('.cancel-btn').forEach(button => {
             button.addEventListener('click', function() {
-                if (confirm('Are you sure you want to cancel this booking?')) {
-                    updateBooking(this.dataset.id, 'cancel');
-                }
+                updateBooking(this.dataset.id, 'cancel');
             });
         });
 
-        // Function to update booking status
+        // Delete booking
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                updateBooking(this.dataset.id, 'delete');
+            });
+        });
+
+        // Common function to handle actions
         function updateBooking(bookingId, action) {
             const formData = new FormData();
             formData.append('booking_id', bookingId);
@@ -147,16 +140,16 @@ if (!$result) {
                 .then(response => response.text())
                 .then(data => {
                     if (data.includes('Success')) {
-                        alert('Booking ' + action + 'ed successfully!');
+                        // alert('Booking ' + action + 'ed successfully!');
                         location.reload();
                     } else {
-                        alert('Error updating booking: ' + data);
-                        console.error('Server response:', data);
+                        // alert('Error: ' + data);
+                        console.error('Response:', data);
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while updating the booking');
+                    console.error('Fetch error:', error);
+                    // alert('An error occurred while updating the booking.');
                 });
         }
     </script>
