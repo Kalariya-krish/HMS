@@ -8,32 +8,32 @@ $email = $_SESSION['email'];
 // Fetch user bookings
 $query = "SELECT b.*, r.image FROM bookings b 
           JOIN rooms r ON b.room_no = r.room_no
-          WHERE b.user_id = $id ORDER BY b.created_at DESC";
+          WHERE b.user_id = '$id' ORDER BY b.created_at DESC";
 $result = mysqli_query($con, $query);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['user_id'])) {
+// Handle review submission
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review'])) {
     $user_id = $_POST['user_id'];
     $room_no = $_POST['room_no'];
     $rating = $_POST['rating'];
     $review_text = $_POST['review_text'];
 
-    // Check if the user already submitted a review for this room
+    // Check if review already exists
     $checkQuery = "SELECT * FROM reviews WHERE user_id = '$user_id' AND room_no = '$room_no'";
     $checkResult = mysqli_query($con, $checkQuery);
 
     if (mysqli_num_rows($checkResult) > 0) {
-        echo "Error: You have already reviewed this room!";
+        echo "<script>alert('You have already reviewed this room!');</script>";
     } else {
-        $query = "INSERT INTO reviews (user_id, room_no, rating, review_text, created_at) 
-                  VALUES ('$user_id', '$room_no', '$rating', '$review_text', NOW())";
+        $insertQuery = "INSERT INTO reviews (user_id, room_no, rating, review_text, created_at) 
+                        VALUES ('$user_id', '$room_no', '$rating', '$review_text', NOW())";
 
-        if (mysqli_query($con, $query)) {
-            echo "Review submitted successfully!";
+        if (mysqli_query($con, $insertQuery)) {
+            echo "<script>alert('Review submitted successfully!');</script>";
         } else {
-            echo "Error: " . mysqli_error($con);
+            echo "<script>alert('Error: " . mysqli_error($con) . "');</script>";
         }
     }
-    exit();
 }
 ?>
 
@@ -42,7 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['user_id'])) {
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Bookings</title>
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
 </head>
@@ -51,14 +50,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['user_id'])) {
     <?php include_once('user_header.php'); ?>
 
     <div class="container py-5">
-        <div class="page-header text-center">
-            <h1>My Bookings</h1>
-            <p class="overlay-text">My Reservations</p>
-        </div>
+        <h1 class="text-center mb-4">My Bookings</h1>
 
         <?php if (mysqli_num_rows($result) > 0) { ?>
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -82,41 +78,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['user_id'])) {
                             $status = $row['status'];
                             $image = $row['image'];
 
-                            // Check if the user has reviewed this room
+                            // Check if already reviewed
                             $reviewQuery = "SELECT * FROM reviews WHERE user_id = '$id' AND room_no = '$room_no'";
                             $reviewResult = mysqli_query($con, $reviewQuery);
                             $hasReviewed = mysqli_num_rows($reviewResult) > 0;
                         ?>
                             <tr>
-                                <th scope="row"><?php echo $count++; ?></th>
+                                <td><?php echo $count++; ?></td>
                                 <td>
-                                    <img src="../assets/images/rooms/<?php echo $image; ?>" alt="Room Image" width="80px" height="60px" class="rounded">
+                                    <img src="../assets/images/rooms/<?php echo $image; ?>" width="80" height="60" class="rounded mb-1">
                                     <br>Room No: <?php echo $room_no; ?>
                                 </td>
                                 <td><?php echo $check_in; ?></td>
                                 <td><?php echo $check_out; ?></td>
                                 <td><?php echo $guests; ?></td>
                                 <td>
-                                    <span class="badge <?php echo ($status == 'Confirmed') ? 'bg-success' : 'bg-warning'; ?>">
+                                    <span class="badge bg-<?php echo ($status == 'Confirmed') ? 'success' : 'warning'; ?>">
                                         <?php echo $status; ?>
                                     </span>
                                 </td>
                                 <td>
-                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal<?php echo $booking_id; ?>">View Details</button>
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal<?php echo $booking_id; ?>">View</button>
 
                                     <?php if (!$hasReviewed && $status == 'Confirmed') { ?>
-                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#reviewModal<?php echo $room_no; ?>">Give Review</button>
+                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#reviewModal<?php echo $room_no; ?>">Review</button>
                                     <?php } ?>
                                 </td>
                             </tr>
 
-                            <!-- Booking Details Modal -->
-                            <div class="modal fade" id="detailsModal<?php echo $booking_id; ?>" tabindex="-1" aria-labelledby="detailsModalLabel<?php echo $booking_id; ?>" aria-hidden="true">
+                            <!-- Details Modal -->
+                            <div class="modal fade" id="detailsModal<?php echo $booking_id; ?>" tabindex="-1">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="detailsModalLabel<?php echo $booking_id; ?>">Booking Details</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <h5 class="modal-title">Booking Details</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
                                             <p><strong>Room No:</strong> <?php echo $room_no; ?></p>
@@ -130,29 +126,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['user_id'])) {
                             </div>
 
                             <!-- Review Modal -->
-                            <div class="modal fade" id="reviewModal<?php echo $room_no; ?>" tabindex="-1" aria-labelledby="reviewModalLabel<?php echo $room_no; ?>" aria-hidden="true">
+                            <div class="modal fade" id="reviewModal<?php echo $room_no; ?>" tabindex="-1">
                                 <div class="modal-dialog">
-                                    <div class="modal-content">
+                                    <form method="POST" class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="reviewModalLabel<?php echo $room_no; ?>">Give Review for Room No: <?php echo $room_no; ?></h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <h5 class="modal-title">Review Room No: <?php echo $room_no; ?></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="reviewForm<?php echo $room_no; ?>">
-                                                <input type="hidden" name="user_id" value="<?php echo $id; ?>">
-                                                <input type="hidden" name="room_no" value="<?php echo $room_no; ?>">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Rating (1-5)</label>
-                                                    <input type="number" class="form-control" name="rating" min="1" max="5" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Review</label>
-                                                    <textarea class="form-control" name="review_text" required></textarea>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary">Submit Review</button>
-                                            </form>
+                                            <input type="hidden" name="user_id" value="<?php echo $id; ?>">
+                                            <input type="hidden" name="room_no" value="<?php echo $room_no; ?>">
+                                            <div class="mb-3">
+                                                <label>Rating (1-5)</label>
+                                                <input type="number" name="rating" class="form-control" min="1" max="5" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label>Review</label>
+                                                <textarea name="review_text" class="form-control" required></textarea>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" name="submit_review" class="btn btn-primary">Submit</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         <?php } ?>
@@ -167,6 +164,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['user_id'])) {
             </div>
         <?php } ?>
     </div>
+
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
