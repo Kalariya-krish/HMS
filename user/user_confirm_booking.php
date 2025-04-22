@@ -1,11 +1,9 @@
 <?php
-// confirm_booking.php
 require('../vendor/autoload.php');
-
-use Razorpay\Api\Api;
-
 include_once('../db_connection.php');
 include_once('../auth_check.php');
+
+use Razorpay\Api\Api;
 
 // Get and sanitize the room number from query string
 $room_no = isset($_GET['room_no']) ? intval($_GET['room_no']) : 0;
@@ -328,11 +326,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['razorpay_payment_id']
                         });
                     },
                     "theme": {
-                        "color": "#fca311"
+                        "color": "#007bff"
+                    },
+                    "modal": {
+                        "ondismiss": function() {
+                            alert("Payment cancelled.");
+                        }
+                    },
+                    "prefill": {
+                        "name": guestName,
+                        "email": "<?php echo $_SESSION['email']; ?>",
+                        "contact": guestPhone
                     }
                 };
-                const rzp1 = new Razorpay(options);
-                rzp1.open();
+                const rzp = new Razorpay(options);
+                rzp.open();
             }, 'json');
         };
     </script>
