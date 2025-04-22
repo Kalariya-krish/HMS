@@ -20,6 +20,16 @@ $result = mysqli_query($con, $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo !empty($roomType) ? $roomType . " Rooms" : "All Rooms"; ?></title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <style>
+        .price-section,
+        .price-section del,
+        .price-section span,
+        .price-section h3,
+        .table.table-sm,
+        .table.table-sm td {
+            font-family: 'Arial', sans-serif;
+        }
+    </style>
 </head>
 
 <body>
@@ -41,7 +51,17 @@ $result = mysqli_query($con, $sql);
                                     <img src="../assets/images/rooms/<?php echo $room['image']; ?>" alt="Room Image" class="img-fluid" style="height:200px; width:100%; object-fit:cover;">
                                     <div class="ri-text p-3">
                                         <h4><?php echo $room['room_type']; ?></h4>
-                                        <h3><?php echo $room['price']; ?> Rs.<span>/Per Night</span></h3>
+
+                                        <?php if ($room['discount'] > 0): ?>
+                                            <div class="price-section">
+                                                <del class="text-danger"><?php echo $room['price']; ?> Rs.</del>
+                                                <span class="badge text-white" style="background-color: #0B032D;"><?php echo $room['discount']; ?>% Off</span>
+                                                <h3><?php echo $room['discounted_price']; ?> Rs.<span>/Per Night</span></h3>
+                                            </div>
+                                        <?php else: ?>
+                                            <h3><?php echo $room['price']; ?> Rs.<span>/Per Night</span></h3>
+                                        <?php endif; ?>
+                                        <br>
                                         <table class="table table-sm mt-2">
                                             <tbody>
                                                 <tr>
@@ -68,7 +88,7 @@ $result = mysqli_query($con, $sql);
                                         </table>
                                         <div class="d-flex">
                                             <button type="button" class="btn btn-info mr-2" style="background-color: #fca311;" onclick="window.location.href='user_room_detail.php?room_no=<?php echo $room['room_no']; ?>'">More Details</button>
-                                            &nbsp;&nbsp;<button type="button" class="btn btn-success" onclick="handleBook(<?php echo $room['room_no']; ?>, <?php echo $room['price']; ?>)">Book Now</button>
+                                            &nbsp;&nbsp;<button style="background-color: #0B032D;" type="button" class="btn text-white" onclick="handleBook(<?php echo $room['room_no']; ?>, <?php echo $room['price']; ?>)">Book Now</button>
 
                                         </div>
                                     </div>

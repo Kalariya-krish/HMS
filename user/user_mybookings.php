@@ -19,10 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review'])) {
     $rating = $_POST['rating'];
     $review_text = $_POST['review_text'];
 
-    // Check if review already exists
-    $checkQuery = "SELECT * FROM reviews WHERE user_id = '$user_id' AND room_no = '$room_no'";
-    $checkResult = mysqli_query($con, $checkQuery);
-
     $insertQuery = "INSERT INTO reviews (user_id, room_no, rating, review_text, created_at) 
                         VALUES ('$user_id', '$room_no', '$rating', '$review_text', NOW())";
 

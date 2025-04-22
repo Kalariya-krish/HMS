@@ -13,6 +13,8 @@ if (isset($_GET['room_no'])) {
     if ($row = mysqli_fetch_assoc($result)) {
         $room_name = $row['room_name'];
         $price = $row['price'];
+        $discount = $row['discount'];
+        $discounted_price = $row['discounted_price'];
         $size = $row['size'];
         $capacity = $row['capacity'];
         $bed = $row['bed'];
@@ -24,10 +26,13 @@ if (isset($_GET['room_no'])) {
         exit;
     }
 
+    // Fetch top 3 reviews for this room
     $reviews = "SELECT r.review_id, r.rating, r.review_text, r.created_at, u.fullname, u.profile_picture
-        FROM reviews r
-        JOIN users u ON r.user_id = u.id
-        WHERE r.room_no = $room_no";
+    FROM reviews r
+    JOIN users u ON r.user_id = u.id
+    WHERE r.room_no = $room_no
+    ORDER BY r.rating DESC, r.created_at DESC
+    LIMIT 3";
     $result2 = mysqli_query($con, $reviews);
 } else {
     echo "<h2>Invalid Room Request</h2>";
@@ -65,33 +70,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["check_in"])) {
     exit();
 }
 
-
-// Handle Reviews
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["rating"])) {
-    header('Content-Type: application/json'); // Ensure JSON response
-
-    if (!isset($_SESSION['id']) || !isset($_SESSION['email'])) {
-        echo json_encode(['success' => false, 'message' => 'Please log in to submit a review.']);
-        exit();
-    }
-
-    $user_id = $_SESSION['id'];
-    // Get room_no from the form POST data - using the correct value now
-    $review_room_no = $_POST['room_no'];
-    $rating = $_POST['rating'];
-    $review_text = $_POST['review_text'];
-
-    // Insert review
-    $insertQuery = "INSERT INTO reviews (room_no, user_id, rating, review_text, created_at)
-                    VALUES ('$review_room_no', '$user_id', '$rating', '$review_text', NOW())";
-
-    if (mysqli_query($con, $insertQuery)) {
-        echo json_encode(['success' => true, 'message' => 'Review submitted successfully!']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Failed to submit review: ' . mysqli_error($con)]);
-    }
-    exit();
-}
 ?>
 
 <!DOCTYPE html>
@@ -137,19 +115,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["rating"])) {
                                             <i class="icon_star"></i>
                                             <i class="icon_star-half_alt"></i>
                                         </div>
-                                        <a href="#">Booking Now</a>
                                     </div>
                                 </div>
-                                <h2><?php echo $price; ?> Rs.<span>/Per Night</span></h2>
-                                <table>
+                                <?php if ($discount > 0): ?>
+                                    <div class="price-section">
+                                        <del class="text-danger"><?php echo $price; ?> Rs.</del>
+                                        <span class="badge text-white" style="background-color: #0B032D;"><?php echo $discount; ?>% Off</span>
+                                        <h4><?php echo $discounted_price; ?> Rs.<span>/Per Night</span></h4>
+                                    </div>
+                                <?php else: ?>
+                                    <h3><?php echo $price; ?> Rs.<span>/Per Night</span></h3>
+                                <?php endif; ?>
+                                <table class="mt-5">
                                     <tbody>
                                         <tr>
                                             <td class="r-o">Size:</td>
-                                            <td><?php echo $size; ?> ft</td>
+                                            <td><?php echo $size; ?></td>
                                         </tr>
                                         <tr>
                                             <td class="r-o">Capacity:</td>
-                                            <td>Max <?php echo $capacity; ?> person(s)</td>
+                                            <td>Max <?php echo $capacity; ?></td>
                                         </tr>
                                         <tr>
                                             <td class="r-o">Bed:</td>
@@ -187,7 +172,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["rating"])) {
                                         <option value="3">3 Adults</option>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-primary w-100">Book Now</button>
+                                <button type="submit" class="btn w-100 text-white" style="background-color: #0B032D;">Book Now</button>
                             </form>
                         </div>
                     </div>
@@ -218,7 +203,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["rating"])) {
                         </div>
                     </div>
 
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-8">
                             <div class="container mt-4">
                                 <div class="review-add card p-4 shadow-sm">
@@ -227,7 +212,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["rating"])) {
                                     <div id="reviewMessage" class="mb-3"></div>
 
                                     <form id="reviewForm" class="needs-validation">
-                                        <!-- Fixed: Use dynamic room_no from URL parameter -->
                                         <input type="hidden" id="room_no" name="room_no" value="<?php echo $room_no; ?>">
                                         <div class="row">
                                             <div class="col-lg-12 mb-3">
@@ -243,7 +227,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["rating"])) {
                                             </div>
                                             <div class="col-lg-12 mb-3">
                                                 <label for="review_text" class="form-label">Your Review*</label>
-                                                <!-- Fixed: Changed name to match PHP -->
                                                 <textarea id="review_text" name="review_text" class="form-control" rows="4" placeholder="Write your review here"></textarea>
                                             </div>
                                             <div class="col-lg-12">
@@ -254,7 +237,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["rating"])) {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </section>

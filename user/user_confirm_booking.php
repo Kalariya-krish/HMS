@@ -1,9 +1,11 @@
 <?php
+// confirm_booking.php
 require('../vendor/autoload.php');
-include_once('../db_connection.php');
-include_once('../auth_check.php');
 
 use Razorpay\Api\Api;
+
+include_once('../db_connection.php');
+include_once('../auth_check.php');
 
 // Get and sanitize the room number from query string
 $room_no = isset($_GET['room_no']) ? intval($_GET['room_no']) : 0;
@@ -90,6 +92,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['razorpay_payment_id']
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirm Booking - Room <?php echo $room['room_no']; ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .price-section,
+        .price-section del,
+        .price-section span,
+        .price-section h3,
+        .table.table-sm,
+        .table.table-sm td {
+            font-family: 'Arial', sans-serif;
+        }
+    </style>
 </head>
 
 <body>
@@ -107,7 +119,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['razorpay_payment_id']
                     <img src="../assets/images/rooms/<?php echo $room['image']; ?>" class="card-img-top" alt="Room Image" style="height:100%; object-fit:cover;">
                     <div class="card-body">
                         <h4 class="card-title"><?php echo $room['room_type']; ?></h4>
-                        <p class="card-text"><strong>Price:</strong> <?php echo $room['price']; ?> Rs / Night</p>
+                        <?php if ($room['discount'] > 0): ?>
+                            <div class="price-section">
+                                <del class="text-danger"><?php echo $room['price']; ?> Rs.</del>
+                                <span class="badge text-white" style="background-color: #0B032D;"><?php echo $room['discount']; ?>% Off</span>
+                                <h3><?php echo $room['discounted_price']; ?> Rs.<span>/Per Night</span></h3>
+                            </div>
+                        <?php else: ?>
+                            <h3><?php echo $room['price']; ?> Rs.<span>/Per Night</span></h3>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -256,7 +276,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['razorpay_payment_id']
         const totalAmountText = document.getElementById('totalAmountText');
         const totalAmountContainer = document.getElementById('totalAmountContainer');
 
-        const pricePerNight = <?php echo (int)$room['price']; ?>;
+        const pricePerNight = <?php echo (int)$room['discounted_price']; ?>;
 
         function calculateBookingDetails() {
             const checkIn = new Date(checkInInput.value);
@@ -326,21 +346,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['razorpay_payment_id']
                         });
                     },
                     "theme": {
-                        "color": "#007bff"
-                    },
-                    "modal": {
-                        "ondismiss": function() {
-                            alert("Payment cancelled.");
-                        }
-                    },
-                    "prefill": {
-                        "name": guestName,
-                        "email": "<?php echo $_SESSION['email']; ?>",
-                        "contact": guestPhone
+                        "color": "#fca311"
                     }
                 };
-                const rzp = new Razorpay(options);
-                rzp.open();
+                const rzp1 = new Razorpay(options);
+                rzp1.open();
             }, 'json');
         };
     </script>
