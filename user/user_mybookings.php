@@ -9,7 +9,7 @@ $email = $_SESSION['email'];
 $query = "SELECT b.*, r.image, r.room_type, r.price, r.description 
           FROM bookings b 
           JOIN rooms r ON b.room_no = r.room_no
-          WHERE b.user_id = '$id' ORDER BY b.created_at DESC";
+          WHERE b.user_id = '$id' && b.status = 'Confirmed' ORDER BY b.created_at DESC";
 $result = mysqli_query($con, $query);
 
 // Handle review submission
@@ -136,6 +136,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review'])) {
                             $price_per_night = $row['price'];
                             $description = $row['description'];
 
+                            $today = date("Y-m-d");
+
                             // Check if already reviewed
                             $reviewQuery = "SELECT * FROM reviews WHERE user_id = '$id' AND room_no = '$room_no'";
                             $reviewResult = mysqli_query($con, $reviewQuery);
@@ -157,9 +159,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review'])) {
                                 <td>
                                     <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal<?php echo $booking_id; ?>">View</button>
 
-                                    <?php if (!$hasReviewed && $status == 'Confirmed') { ?>
+                                    <?php if (!$hasReviewed && $status == 'Confirmed' && $check_out < $today) { ?>
                                         <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#reviewModal<?php echo $booking_id; ?>">Review</button>
                                     <?php } ?>
+
+                                    <a href="download_bill.php?booking_id=<?php echo $booking_id; ?>" class="btn btn-success btn-sm">
+                                        <i class="bi bi-download"></i> Download Bill
+                                    </a>
                                 </td>
                             </tr>
 
