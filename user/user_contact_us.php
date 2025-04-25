@@ -1,22 +1,52 @@
 <?php
 include_once('../db_connection.php');
 include_once('../auth_check.php');
+include_once('../mailer.php'); // Include the mailer file
 
 if (isset($_POST['submit'])) {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $subject = $_POST['subject'];
-    $message = $_POST['message'];
+    $name = mysqli_real_escape_string($con, $_POST['name']);
+    $email = mysqli_real_escape_string($con, $_POST['email']);
+    $subject = mysqli_real_escape_string($con, $_POST['subject']);
+    $message = mysqli_real_escape_string($con, $_POST['message']);
+    $status = 'pending'; // Default status
 
     if ($subject === "Other") {
-        $subject = $_POST['other_subject'];
+        $subject = mysqli_real_escape_string($con, $_POST['other_subject']);
     }
 
-    $q = "INSERT INTO contact_inquiries (name, email, subject, message, sent_at) 
-        VALUES ('$name', '$email', '$subject', '$message', NOW())";
+    // Store inquiry in database with resolution status
+    $q = "INSERT INTO contact_inquiries (name, email, subject, message, status, sent_at) 
+        VALUES ('$name', '$email', '$subject', '$message', '$status', NOW())";
 
     if (mysqli_query($con, $q)) {
-        echo "<script>alert('Your message has been sent successfully!'); window.location.href='user_contact_us.php';</script>";
+        // Prepare email content
+        $email_subject = "Thank you for contacting us - " . $subject;
+        $email_body = "
+        <html>
+        <head>
+            <title>Contact Inquiry Confirmation</title>
+        </head>
+        <body>
+            <h2>Hello $name,</h2>
+            <p>Thank you for contacting us regarding: <strong>$subject</strong></p>
+            <p>We have received your message:</p>
+            <blockquote>$message</blockquote>
+            <p>Our team will get back to you soon. Your inquiry status is currently: <strong>Pending</strong></p>
+            <p>Best regards,<br>Astoria Hotel Team</p>
+        </body>
+        </html>
+        ";
+
+        // Send email using PHPMailer
+        $email_result = sendEmail($email, $email_subject, $email_body, null);
+
+        if ($email_result === true) {
+            echo "<script>alert('Your message has been sent successfully!'); window.location.href='user_contact_us.php';</script>";
+        } else {
+            // Email failed but inquiry was saved
+            error_log("Email sending failed: " . $email_result);
+            echo "<script>alert('Your inquiry was received but we couldn't send confirmation email. Please check your email address.'); window.location.href='user_contact_us.php';</script>";
+        }
     } else {
         echo "<script>alert('Something went wrong. Please try again later.'); window.history.back();</script>";
     }

@@ -157,6 +157,7 @@
                                         <img src="../assets/images/profile_picture/<?php echo $_SESSION['profile_picture']; ?>" alt="Profile" class="profile-pic">
                                         <div class="dropdown-content">
                                             <a href="user_mybookings.php">My Bookings</a>
+                                            <a href="user_myinquiry.php">My Inquries</a>
                                             <a href="user_edit_profile.php">Edit Profile</a>
                                             <a href="user_change_password.php">Change Password</a>
                                             <div class="dropdown-divider"></div>

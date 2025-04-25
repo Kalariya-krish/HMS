@@ -3,12 +3,29 @@ include_once('../db_connection.php');
 include_once('../auth_check.php');
 $roomType = isset($_GET['room_type']) ? $_GET['room_type'] : '';
 
+// First, get all available rooms
 $sql = "SELECT * FROM rooms WHERE room_status = 'Available'";
 if (!empty($roomType)) {
     $sql .= " AND room_type = '" . mysqli_real_escape_string($con, $roomType) . "'";
 }
-
 $result = mysqli_query($con, $sql);
+
+// Create an array to store average ratings for each room
+$roomRatings = array();
+
+// Get all approved reviews and calculate average ratings
+$reviewsQuery = "SELECT room_no, AVG(rating) as avg_rating, COUNT(*) as review_count 
+                 FROM reviews 
+                 WHERE status = 'Approved' 
+                 GROUP BY room_no";
+$reviewsResult = mysqli_query($con, $reviewsQuery);
+
+while ($row = mysqli_fetch_assoc($reviewsResult)) {
+    $roomRatings[$row['room_no']] = array(
+        'avg_rating' => round($row['avg_rating'], 1),
+        'review_count' => $row['review_count']
+    );
+}
 ?>
 
 <!DOCTYPE html>
@@ -20,6 +37,7 @@ $result = mysqli_query($con, $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo !empty($roomType) ? $roomType . " Rooms" : "All Rooms"; ?></title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         .price-section,
         .price-section del,
@@ -28,6 +46,18 @@ $result = mysqli_query($con, $sql);
         .table.table-sm,
         .table.table-sm td {
             font-family: 'Arial', sans-serif;
+        }
+
+        .rating-stars {
+            color: #ffc107;
+            /* Gold color for stars */
+            font-size: 18px;
+        }
+
+        .rating-text {
+            font-size: 14px;
+            margin-left: 5px;
+            color: #6c757d;
         }
     </style>
 </head>
@@ -51,6 +81,35 @@ $result = mysqli_query($con, $sql);
                                     <img src="../assets/images/rooms/<?php echo $room['image']; ?>" alt="Room Image" class="img-fluid" style="height:200px; width:100%; object-fit:cover;">
                                     <div class="ri-text p-3">
                                         <h4><?php echo $room['room_type']; ?></h4>
+
+                                        <!-- Rating display -->
+                                        <div class="room-rating mb-2">
+                                            <?php
+                                            $roomNo = $room['room_no'];
+                                            $avgRating = isset($roomRatings[$roomNo]) ? $roomRatings[$roomNo]['avg_rating'] : 0;
+                                            $reviewCount = isset($roomRatings[$roomNo]) ? $roomRatings[$roomNo]['review_count'] : 0;
+                                            $fullStars = floor($avgRating);
+                                            $hasHalfStar = ($avgRating - $fullStars) >= 0.5;
+
+                                            // Display stars
+                                            for ($i = 1; $i <= 5; $i++) {
+                                                if ($i <= $fullStars) {
+                                                    echo '<i class="fas fa-star rating-stars"></i>';
+                                                } elseif ($i == $fullStars + 1 && $hasHalfStar) {
+                                                    echo '<i class="fas fa-star-half-alt rating-stars"></i>';
+                                                } else {
+                                                    echo '<i class="far fa-star rating-stars"></i>';
+                                                }
+                                            }
+
+                                            // Display rating text
+                                            if ($reviewCount > 0) {
+                                                echo '<span class="rating-text">' . $avgRating . ' (' . $reviewCount . ' reviews)</span>';
+                                            } else {
+                                                echo '<span class="rating-text">No reviews yet</span>';
+                                            }
+                                            ?>
+                                        </div>
 
                                         <?php if ($room['discount'] > 0): ?>
                                             <div class="price-section">
@@ -88,8 +147,7 @@ $result = mysqli_query($con, $sql);
                                         </table>
                                         <div class="d-flex">
                                             <button type="button" class="btn btn-info mr-2" style="background-color: #fca311;" onclick="window.location.href='user_room_detail.php?room_no=<?php echo $room['room_no']; ?>'">More Details</button>
-                                            &nbsp;&nbsp;<button style="background-color: #0B032D;" type="button" class="btn text-white" onclick="handleBook(<?php echo $room['room_no']; ?>, <?php echo $room['price']; ?>)">Book Now</button>
-
+                                            &nbsp;&nbsp;<button style="background-color: #0B032D;" type="button" class="btn text-white" onclick="handleBook(<?php echo $room['room_no']; ?>, <?php echo $room['discounted_price']; ?>)">Book Now</button>
                                         </div>
                                     </div>
                                 </div>

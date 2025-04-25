@@ -1,20 +1,25 @@
 <?php
-require('../vendor/autoload.php');
+require_once('../vendor/razorpay/razorpay/Razorpay.php'); // Include Razorpay SDK
+include_once('../db_connection.php');
 
 use Razorpay\Api\Api;
 
-$keyId = 'rzp_test_gKgQuJWNMwZxDg';
-$keySecret = 'qgZhV2DJb72rjR0Qc7b1lzDB';
+$api = new Api('rzp_test_gKgQuJWNMwZxDg', 'qgZhV2DJb72rjR0Qc7b1lzDB');
 
-$api = new Api($keyId, $keySecret);
+$amount = $_POST['amount'] * 100; // Convert to paise
 
-$amount = $_POST['amount']; // in rupees
+try {
+    $order = $api->order->create([
+        'amount' => $amount,
+        'currency' => 'INR',
+        'receipt' => 'receipt_' . time(),
+        'payment_capture' => 1 // auto capture
+    ]);
 
-$order = $api->order->create([
-    'receipt' => 'RCPT_' . rand(1000, 9999),
-    'amount' => $amount * 100, // amount in paisa
-    'currency' => 'INR',
-    'payment_capture' => 1
-]);
-
-echo json_encode($order);
+    header('Content-Type: application/json');
+    echo json_encode(['id' => $order->id]);
+} catch (Exception $e) {
+    header('HTTP/1.1 500 Internal Server Error');
+    header('Content-Type: application/json');
+    echo json_encode(['error' => $e->getMessage()]);
+}
